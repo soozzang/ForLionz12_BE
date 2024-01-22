@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 @Getter
 public class Tag {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tag_id")
     private Long id;
 

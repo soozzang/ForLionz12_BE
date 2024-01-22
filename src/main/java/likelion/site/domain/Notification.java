@@ -1,11 +1,17 @@
 package likelion.site.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Entity
+@NoArgsConstructor
 public class Notification {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id")
     private Long id;
 
@@ -17,5 +23,12 @@ public class Notification {
     @Enumerated(EnumType.STRING)
     private Part part;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Builder
+    public Notification(String title, Part part, String content) {
+        this.title = title;
+        this.part = part;
+        this.content = content;
+    }
 }

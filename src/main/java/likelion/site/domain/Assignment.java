@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 public class Assignment {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "assignment_id")
     private Long id;
 
