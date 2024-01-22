@@ -6,7 +6,7 @@ import lombok.Getter;
 @Entity
 @Getter
 public class QuestionTagMap {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "questiontagmap_id")
     private Long id;
 
