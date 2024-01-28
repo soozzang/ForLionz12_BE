@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
@@ -30,5 +31,11 @@ public class Notification {
         this.title = title;
         this.part = part;
         this.content = content;
+    }
+
+    public void updateNotification(String title, String content, Part part) {
+        this.title = title;
+        this.content = content;
+        this.part = part;
     }
 }
