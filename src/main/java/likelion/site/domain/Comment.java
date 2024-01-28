@@ -1,13 +1,17 @@
 package likelion.site.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Comment {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
@@ -24,15 +28,23 @@ public class Comment {
     @Column(length = 50000)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Comment parent;
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "parent")
-    private List<Comment> child = new ArrayList<>();
+    @OneToMany(mappedBy = "comment")
+    private List<ChildComment> childComments = new ArrayList<>();
 
-    public void addChildComment(Comment childToAdd) {
-        this.child.add(childToAdd);
-        //childToAdd.setParent(this); 부모 댓글 설정해주기
+    public void addChildComment(ChildComment childToAdd) {
+        this.childComments.add(childToAdd);
+    }
+
+    @Builder
+    public Comment(Member member, QuestionPost questionPost, String content) {
+        this.member = member;
+        this.questionPost = questionPost;
+        this.content = content;
+    }
+
+    public void updateComment(String content) {
+        this.content = content;
     }
 }
