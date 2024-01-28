@@ -29,11 +29,11 @@ public class SecurityConfig {
     }
 
     // h2 database 테스트가 원활하도록 관련 API 들은 전부 무시
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-                .requestMatchers("/h2-console/**", "/favicon.ico");
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring()
+//                .requestMatchers("/**");
+//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -46,10 +46,10 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
 
-//                .and()
-//                .headers()
-//                .frameOptions()
-//                .sameOrigin()
+                .and()
+                .headers()
+                .frameOptions()
+                .sameOrigin()
 
                 // 시큐리티는 기본적으로 세션을 사용
                 // 여기서는 세션을 사용하지 않기 때문에 세션 설정을 Stateless 로 설정
