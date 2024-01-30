@@ -3,6 +3,7 @@ package likelion.site.config;
 import ch.qos.logback.core.spi.ComponentTracker;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -16,7 +17,8 @@ import org.springframework.context.annotation.Configuration;
                 title = "Lionz12 API Docs",
                 description = "Lionz12 api 명세서",
                 version = "v1"
-        )
+        ),
+        servers = {@Server(url = "https://likelioninha.site", description = "HTTPS"), @Server(url = "http://localhost:8080")}
 )
 @Configuration
 public class SwaggerConfig {
