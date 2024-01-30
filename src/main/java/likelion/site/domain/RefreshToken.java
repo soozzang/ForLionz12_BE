@@ -31,5 +31,4 @@ public class RefreshToken {
         this.accessToken = accessToken;
         return this;
     }
-
 }
