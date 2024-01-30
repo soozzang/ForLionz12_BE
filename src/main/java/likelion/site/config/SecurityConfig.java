@@ -6,7 +6,9 @@ import likelion.site.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,10 +20,19 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableWebSecurity
 public class SecurityConfig {
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+    private static final String[] PERMIT_URL_ARRAY = {
+            /* swagger v3 */
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            /* auth */
+            "/auth/**"
+    };
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -60,8 +71,7 @@ public class SecurityConfig {
                 // 로그인, 회원가입 API 는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
                 .and()
                 .authorizeHttpRequests()
-                //.requestMatchers("/auth/**","/swagger-ui/**","/v3/api-docs/**", "/member/img/**", "/actuator/*").permitAll()
-                .requestMatchers("/**").permitAll()
+                .requestMatchers(PERMIT_URL_ARRAY).permitAll()
                 .anyRequest().authenticated()   // 나머지 API 는 전부 인증 필요
 
 

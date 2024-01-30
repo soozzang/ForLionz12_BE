@@ -1,5 +1,7 @@
 package likelion.site.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.*;
 import likelion.site.service.MemberService;
 import likelion.site.service.ParentTagService;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "ParentTag", description = "부모태그")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/parentTag")
@@ -20,6 +23,7 @@ public class ParentTagController {
     private final ParentTagService parentTagService;
     private final MemberService memberService;
 
+    @Operation(summary = "부모태그 생성", description = "STAFF만 가능합니다.")
     @PostMapping
     public ResponseEntity<ParentTagResponseIdDto> createParentTag(@RequestBody ParentTagRequestDto request) {
         if (memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId()).getPart() == Part.STAFF) {
@@ -32,6 +36,7 @@ public class ParentTagController {
         return null;
     }
 
+    @Operation(summary = "모든 부모태그 조회")
     @GetMapping
     public ResponseEntity<Result> getAllParentTags() {
         List<ParentTag> parentTags = parentTagService.findAll();

@@ -1,6 +1,8 @@
 package likelion.site.controller;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.Notification;
 import likelion.site.domain.Part;
 import likelion.site.service.MemberService;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Tag(name = "Notification", description = "공지사항")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/notification")
@@ -20,6 +23,7 @@ public class NotificationController {
     private final MemberService memberService;
     private final NotificationService notificationService;
 
+    @Operation(summary = "공지사항 생성", description = "STAFF인 사용자만 가능합니다.")
     @PostMapping
     public ResponseEntity<NotificationResponse> createNotification(@RequestBody NotificationRequest request) {
         if(memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId()).getPart() == Part.STAFF) {
@@ -36,12 +40,14 @@ public class NotificationController {
         return null;
     }
 
+    @Operation(summary = "id를 통해 특정 공지사항 상세 조회")
     @GetMapping
     public ResponseEntity<NotificationDto> getNotificationDetail(@RequestParam Long id) {
         Notification notification = notificationService.findNotificationById(id);
         return ResponseEntity.ok().body(new NotificationDto(notification));
     }
 
+    @Operation(summary = "모든 공지사항 조회")
     @GetMapping("/all")
     public ResponseEntity<Result> findAllNotifications() {
         List<Notification> notifications = notificationService.findAllNotifications();
@@ -51,6 +57,7 @@ public class NotificationController {
         return ResponseEntity.ok().body(new Result(collect));
     }
 
+    @Operation(summary = "파트 별 공지사항 조회" , description = "partName에는 BE/FE/ALL이 들어갈 수 있습니다.")
     @GetMapping("/part")
     public ResponseEntity<Result> findNotificationByPart(@RequestParam String partName) {
         Part part = Part.findByName(partName);
@@ -61,6 +68,7 @@ public class NotificationController {
         return ResponseEntity.ok().body(new Result(collect));
     }
 
+    @Operation(summary = "특정 id의 공지사항 업데이트")
     @PutMapping("{id}")
     public ResponseEntity<NotificationResponse> updateNotification(@PathVariable("id") Long id, @RequestBody NotificationRequest request) {
         Part part = Part.findByName(request.partName);
@@ -68,10 +76,10 @@ public class NotificationController {
         return ResponseEntity.ok().body(new NotificationResponse(id));
     }
 
-    @DeleteMapping
-    public void deleteNotification(@RequestParam Long id) {
-        notificationService.delete(id);
-    }
+//    @DeleteMapping
+//    public void deleteNotification(@RequestParam Long id) {
+//        notificationService.delete(id);
+//    }
 
     @Data
     @Setter(AccessLevel.NONE)

@@ -1,6 +1,11 @@
 package likelion.site.controller;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.*;
 import likelion.site.service.AssignmentService;
 import likelion.site.service.MemberService;
@@ -17,6 +22,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@Tag(name = "Assignment", description = "과제관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/assignment")
@@ -29,6 +35,7 @@ public class AssignmentController {
      *  관리자 전용
      */
     @PostMapping
+    @Operation(summary = "과제 생성" , description = "파트가 STAFF인 멤버만 가능합니다.")
     public ResponseEntity<AssignmentIdResponseDto> createAssignment(@RequestBody AssignmentRequestDto request) {
         if (memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId()).getPart() == Part.STAFF) {
             Part part = Part.findByName(request.partName);
@@ -45,6 +52,7 @@ public class AssignmentController {
         return null;
     }
 
+    @Operation(summary = "과제물 수정")
     @PutMapping
     public ResponseEntity<AssignmentIdResponseDto> updateAssignment(@RequestBody AssignmentRequestDto request) {
         Part part = Part.findByName(request.partName);
@@ -52,15 +60,16 @@ public class AssignmentController {
         return ResponseEntity.ok().body(new AssignmentIdResponseDto(request.getId()));
     }
 
-    @DeleteMapping
-    public void deleteAssignment(@RequestParam Long id) {
-        assignmentService.delete(id);
-    }
+//    @DeleteMapping
+//    public void deleteAssignment(@RequestParam Long id) {
+//        assignmentService.delete(id);
+//    }
 
     /**
      *  for all
      */
 
+    @Operation(summary = "모든 과제공지 조회")
     @GetMapping("all")
     public ResponseEntity<Result> findAllAssignments() {
         List<Assignment> assignments = assignmentService.findAllAssignments();
@@ -70,6 +79,7 @@ public class AssignmentController {
         return ResponseEntity.ok().body(new Result(collect));
     }
 
+    @Operation(summary = "파트별 과제공지 조회" , description = "partName에는 BE/FE/ALL이 들어갈 수 있습니다.")
     @GetMapping("/part")
     public ResponseEntity<Result> findAssignmentByPart(@RequestParam String partName) {
         Part part = Part.findByName(partName);
@@ -80,12 +90,14 @@ public class AssignmentController {
         return ResponseEntity.ok().body(new Result(collect));
     }
 
+    @Operation(summary = "id로 과제공지 상세 조회")
     @GetMapping
     public ResponseEntity<AssignmentResponseDto> getAssignmentDetail(@RequestParam Long id) {
         Assignment assignment = assignmentService.findAssignmentById(id);
         return ResponseEntity.ok().body(new AssignmentResponseDto(assignment));
     }
 
+    @Operation(summary = "특정 과제의 모든 과제 제출물 조회")
     @GetMapping("submissions")
     public ResponseEntity<Result> getSubmissions(@RequestParam Long id) {
         Assignment assignment = assignmentService.findAssignmentById(id);

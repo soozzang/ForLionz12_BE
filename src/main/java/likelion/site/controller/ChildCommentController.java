@@ -1,5 +1,7 @@
 package likelion.site.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.ChildComment;
 import likelion.site.domain.Comment;
 import likelion.site.domain.Member;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "ChildComment", description = "대댓글")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/childcomment")
@@ -24,6 +27,7 @@ public class ChildCommentController {
     private final ChildCommentService childCommentService;
     private final CommentService commentService;
 
+    @Operation(summary = "대댓글 작성")
     @PostMapping
     public ResponseEntity<ChildCommentResponseIdDto> createChildComment(@RequestBody ChildCommentRequestDto request) {
         Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
@@ -37,6 +41,7 @@ public class ChildCommentController {
         return ResponseEntity.ok().body(new ChildCommentResponseIdDto(childcomment));
     }
 
+    @Operation(summary = "특정 댓글의 모든 대댓글 조회")
     @GetMapping
     public ResponseEntity<Result> getAllChildComments(@RequestParam Long commentId) {
         Comment comment = commentService.findById(commentId);

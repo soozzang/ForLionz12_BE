@@ -1,5 +1,7 @@
 package likelion.site.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.Assignment;
 import likelion.site.domain.Member;
 import likelion.site.domain.Part;
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Submission", description = "과제 제출")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/submission")
@@ -24,6 +27,7 @@ public class SubmissionController {
     private final MemberService memberService;
     private final AssignmentService assignmentService;
 
+    @Operation(summary = "과제 제출하기")
     @PostMapping
     public ResponseEntity<SubmissionIdResponseDto> createSubmission(@RequestBody SubmissionRequestDto request) {
         Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
@@ -41,10 +45,11 @@ public class SubmissionController {
         return null;
     }
 
-    @PutMapping
-    public ResponseEntity<SubmissionIdResponseDto> updateSubmission(@RequestBody SubmissionRequestDto request) {
-        submissionService.updateSubmission(request.id, request.getDescription() , request.getAssignmentLink());
-        return ResponseEntity.ok().body(new SubmissionIdResponseDto(request.id));
+    @Operation(summary = "특정id에 해당하는 제출란 업데이트")
+    @PutMapping("{id}")
+    public ResponseEntity<SubmissionIdResponseDto> updateSubmission(@PathVariable("id") Long id, @RequestBody SubmissionRequestDto request) {
+        submissionService.updateSubmission(id, request.getDescription() , request.getAssignmentLink());
+        return ResponseEntity.ok().body(new SubmissionIdResponseDto(id));
     }
 
 
@@ -60,7 +65,6 @@ public class SubmissionController {
 
     @Data
     public static class SubmissionRequestDto {
-        Long id;
         Long assignmentId;
         String description;
         String assignmentLink;
