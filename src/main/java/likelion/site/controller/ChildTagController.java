@@ -31,12 +31,13 @@ public class ChildTagController {
     @PostMapping
     public ResponseEntity<ChildTagResponseIdDto> createChildTag(@RequestBody ChildTagRequestDto request) {
         if (memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId()).getPart() == Part.STAFF) {
+            ParentTag parentTag = parentTagService.findById(request.parentTagId);
             ChildTag childTag = ChildTag.builder()
                     .name(request.name)
-                    .parentTag(request.parentTag)
+                    .parentTag(parentTag)
                     .build();
             Long id = childTagService.addChildTag(childTag);
-            request.parentTag.addChildTag(childTag);
+            parentTag.addChildTag(childTag);
             return ResponseEntity.ok().body(new ChildTagResponseIdDto(childTag));
         }
         return null;
@@ -77,7 +78,7 @@ public class ChildTagController {
     @Data
     public static class ChildTagRequestDto {
         String name;
-        ParentTag parentTag;
+        Long parentTagId;
     }
 
     @Data
