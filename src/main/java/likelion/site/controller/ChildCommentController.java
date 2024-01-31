@@ -31,13 +31,14 @@ public class ChildCommentController {
     @PostMapping
     public ResponseEntity<ChildCommentResponseIdDto> createChildComment(@RequestBody ChildCommentRequestDto request) {
         Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
+        Comment comment = commentService.findById(request.commentId);
         ChildComment childcomment = ChildComment.builder()
                 .member(member)
-                .comment(request.comment)
+                .comment(comment)
                 .content(request.content)
                 .build();
         Long id = childCommentService.addChildComment(childcomment);
-        commentService.addChildComment(request.comment, childcomment);
+        commentService.addChildComment(comment, childcomment);
         return ResponseEntity.ok().body(new ChildCommentResponseIdDto(childcomment));
     }
 
@@ -79,7 +80,7 @@ public class ChildCommentController {
     @Data
     public static class ChildCommentRequestDto {
         String content;
-        Comment comment;
+        Long commentId;
     }
 
     @Data
