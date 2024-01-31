@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class MemberRequestDto {
 
     private String email;
+    private String name;
     private String password;
     private String partName;
 
@@ -22,6 +23,7 @@ public class MemberRequestDto {
         Part part = Part.findByName(partName);
         return Member.builder()
                 .email(email)
+                .name(name)
                 .password(passwordEncoder.encode(password))
                 .authority(Authority.ROLE_USER)
                 .part(part)

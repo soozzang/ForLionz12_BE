@@ -39,11 +39,12 @@ public class Member {
 
 
     @Builder
-    public Member(String email, String password, Authority authority, Part part) {
+    public Member(String email, String name, String password, Authority authority, Part part) {
         this.email = email;
         this.password = password;
         this.authority = authority;
         this.part = part;
+        this.name = name;
     }
 
     public void updateIntroduction(String introduction) {
