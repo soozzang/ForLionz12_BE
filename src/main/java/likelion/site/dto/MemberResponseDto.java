@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class MemberResponseDto {
     private String email;
     private Long id;
+    private String name;
     private Part part;
     private String introduction;
     private String githubAddress;
@@ -21,6 +22,6 @@ public class MemberResponseDto {
     }
 
     public static MemberResponseDto of(Member member) {
-        return new MemberResponseDto(member.getEmail(), member.getId(), member.getPart(), member.getIntroduction(), member.getGithubAddress(), member.getInstagramId());
+        return new MemberResponseDto(member.getEmail(), member.getId(),member.getName(), member.getPart(), member.getIntroduction(), member.getGithubAddress(), member.getInstagramId());
     }
 }
