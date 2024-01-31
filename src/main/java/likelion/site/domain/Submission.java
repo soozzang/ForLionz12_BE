@@ -23,7 +23,7 @@ public class Submission {
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
 
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(length = 500)
     private String description;
