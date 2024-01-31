@@ -47,9 +47,11 @@ public class ChildCommentController {
     public ResponseEntity<Result> getAllChildComments(@RequestParam Long commentId) {
         Comment comment = commentService.findById(commentId);
         List<ChildComment> childComments = childCommentService.findChildCommentsByComment(comment);
+        System.out.println("hello");
         List<ChildCommentResponseDto> collect = childComments.stream()
                 .map(ChildCommentResponseDto::new)
                 .toList();
+        System.out.println("hi");
         return ResponseEntity.ok().body(new Result(collect));
     }
 
@@ -58,13 +60,11 @@ public class ChildCommentController {
         Long id;
         Long memberId;
         String content;
-        Comment comment;
 
         public ChildCommentResponseDto(ChildComment childComment) {
             this.id = childComment.getId();
             this.memberId = childComment.getMember().getId();
             this.content = childComment.getContent();
-            this.comment = childComment.getComment();
         }
     }
 
