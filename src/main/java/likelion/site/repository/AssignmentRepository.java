@@ -3,6 +3,7 @@ package likelion.site.repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import likelion.site.domain.Assignment;
+import likelion.site.domain.AssignmentPart;
 import likelion.site.domain.Part;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -29,9 +30,9 @@ public class AssignmentRepository {
                 .getResultList();
     }
 
-    public List<Assignment> findByPart(Part part) {
-        return em.createQuery("select n from Assignment n where n.part=:part",Assignment.class)
-                .setParameter("part",part)
+    public List<Assignment> findByAssignmentAssignmentPart(AssignmentPart assignmentPart) {
+        return em.createQuery("select n from Assignment n where n.assignmentPart=:assignmentPart",Assignment.class)
+                .setParameter("assignmentPart",assignmentPart)
                 .getResultList();
     }
 

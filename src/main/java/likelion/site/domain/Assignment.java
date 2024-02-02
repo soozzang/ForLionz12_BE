@@ -23,7 +23,10 @@ public class Assignment {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    private Part part;
+    private AssignmentPart assignmentPart;
+
+    @Enumerated(EnumType.STRING)
+    private AssignmentMainContent assignmentMainContent;
 
     private final LocalDateTime createdAt = LocalDateTime.now();
 
@@ -36,18 +39,20 @@ public class Assignment {
     private List<Submission> submissions = new ArrayList<Submission>();
 
     @Builder
-    public Assignment(String title, Part part, String content, LocalDateTime expireAt, List<String> tags) {
+    public Assignment(String title, AssignmentMainContent assignmentMainContent , AssignmentPart assignmentPart, String content, LocalDateTime expireAt, List<String> tags) {
         this.title = title;
-        this.part = part;
+        this.assignmentMainContent = assignmentMainContent;
+        this.assignmentPart = assignmentPart;
         this.content = content;
         this.expireAt = expireAt;
         this.tags = tags;
     }
 
-    public void updateAssignment(String title, String content, Part part, LocalDateTime expireAt, List<String> tags) {
+    public void updateAssignment(String title, String content, AssignmentMainContent assignmentMainContent ,  AssignmentPart assignmentPart, LocalDateTime expireAt, List<String> tags) {
         this.title = title;
         this.content = content;
-        this.part = part;
+        this.assignmentPart = assignmentPart;
+        this.assignmentMainContent = assignmentMainContent;
         this.expireAt = expireAt;
         this.tags = tags;
     }

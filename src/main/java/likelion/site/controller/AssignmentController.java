@@ -38,10 +38,12 @@ public class AssignmentController {
     @Operation(summary = "과제 생성" , description = "파트가 STAFF인 멤버만 가능합니다.")
     public ResponseEntity<AssignmentIdResponseDto> createAssignment(@RequestBody AssignmentRequestDto request) {
         if (memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId()).getPart() == Part.STAFF) {
-            Part part = Part.findByName(request.partName);
+            AssignmentPart assignmentPart = AssignmentPart.findByName(request.partName);
+            AssignmentMainContent assignmentMainContent = AssignmentMainContent.findByName(request.assignmentMainContentName);
             Assignment assignment = Assignment.builder()
                     .title(request.title)
-                    .part(part)
+                    .assignmentPart(assignmentPart)
+                    .assignmentMainContent(assignmentMainContent)
                     .content(request.content)
                     .expireAt(request.expireAt)
                     .tags(request.tags)
@@ -55,8 +57,9 @@ public class AssignmentController {
     @Operation(summary = "과제물 수정")
     @PutMapping
     public ResponseEntity<AssignmentIdResponseDto> updateAssignment(@RequestBody AssignmentRequestDto request) {
-        Part part = Part.findByName(request.partName);
-        assignmentService.updateAssignment(request.getId(), request.getTitle(), request.getContent(), part, request.getExpireAt(), request.getTags());
+        AssignmentPart assignmentPart = AssignmentPart.findByName(request.partName);
+        AssignmentMainContent assignmentMainContent = AssignmentMainContent.findByName(request.assignmentMainContentName);
+        assignmentService.updateAssignment(request.getId(),assignmentMainContent,request.getTitle(), request.getContent(),assignmentPart, request.getExpireAt(), request.getTags());
         return ResponseEntity.ok().body(new AssignmentIdResponseDto(request.getId()));
     }
 
@@ -69,21 +72,11 @@ public class AssignmentController {
      *  for all
      */
 
-    @Operation(summary = "모든 과제공지 조회")
-    @GetMapping("all")
-    public ResponseEntity<Result> findAllAssignments() {
-        List<Assignment> assignments = assignmentService.findAllAssignments();
-        List<AssignmentResponseDto> collect = assignments.stream()
-                .map(AssignmentResponseDto::new)
-                .toList();
-        return ResponseEntity.ok().body(new Result(collect));
-    }
-
     @Operation(summary = "파트별 과제공지 조회" , description = "partName에는 BE/FE/ALL이 들어갈 수 있습니다.")
-    @GetMapping("/part")
+    @GetMapping("bypart")
     public ResponseEntity<Result> findAssignmentByPart(@RequestParam String partName) {
-        Part part = Part.findByName(partName);
-        List<Assignment> assignments = assignmentService.findAssignmentByPart(part);
+        AssignmentPart assignmentPart = AssignmentPart.findByName(partName);
+        List<Assignment> assignments = assignmentService.findAssignmentByPart(assignmentPart);
         List<AssignmentResponseDto> collect = assignments.stream()
                 .map(AssignmentResponseDto::new)
                 .toList();
@@ -91,13 +84,13 @@ public class AssignmentController {
     }
 
     @Operation(summary = "id로 과제공지 상세 조회")
-    @GetMapping
+    @GetMapping("byid")
     public ResponseEntity<AssignmentResponseDto> getAssignmentDetail(@RequestParam Long id) {
         Assignment assignment = assignmentService.findAssignmentById(id);
         return ResponseEntity.ok().body(new AssignmentResponseDto(assignment));
     }
 
-    @Operation(summary = "특정 과제의 모든 과제 제출물 조회")
+    @Operation(summary = "특정 과제의 id로 모든 과제 제출물 조회")
     @GetMapping("submissions")
     public ResponseEntity<Result> getSubmissions(@RequestParam Long id) {
         Assignment assignment = assignmentService.findAssignmentById(id);
@@ -112,6 +105,7 @@ public class AssignmentController {
     @AllArgsConstructor
     public static class AssignmentResponseDto {
         Long id;
+        AssignmentMainContent assignmentMainContent;
         String title;
         String content;
         Part part;
@@ -120,12 +114,14 @@ public class AssignmentController {
         List<SubmissionResponseDto> submissions;
         List<String> tags;
         Integer submissionCount;
+        AssignmentPart assignmentPart;
 
         public AssignmentResponseDto(Assignment assignment) {
             this.id = assignment.getId();
+            this.assignmentMainContent = assignment.getAssignmentMainContent();
             this.title = assignment.getTitle();
             this.content = assignment.getContent();
-            this.part = assignment.getPart();
+            this.assignmentPart = assignment.getAssignmentPart();
             this.createdAt = assignment.getCreatedAt();
             this.expireAt = assignment.getExpireAt();
             this.submissions = assignment.getSubmissions().stream()
@@ -162,6 +158,7 @@ public class AssignmentController {
     @AllArgsConstructor
     public static class AssignmentRequestDto {
         Long id;
+        String assignmentMainContentName;
         String title;
         String content;
         String partName;

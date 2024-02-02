@@ -1,8 +1,6 @@
 package likelion.site.service;
 
-import likelion.site.domain.Assignment;
-import likelion.site.domain.Notification;
-import likelion.site.domain.Part;
+import likelion.site.domain.*;
 import likelion.site.repository.AssignmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,15 +30,15 @@ public class AssignmentService {
         return assignmentRepository.findById(assignmentId);
     }
 
-    public List<Assignment> findAssignmentByPart(Part part) {
-        return assignmentRepository.findByPart(part);
+    public List<Assignment> findAssignmentByPart(AssignmentPart assignmentPart) {
+        return assignmentRepository.findByAssignmentAssignmentPart(assignmentPart);
     }
 
 
     @Transactional
-    public void updateAssignment(Long id, String title, String content, Part part, LocalDateTime expireAt, List<String> tags) {
+    public void updateAssignment(Long id, AssignmentMainContent assignmentMainContent, String title, String content, AssignmentPart assignmentPart, LocalDateTime expireAt, List<String> tags) {
         Assignment assignment = assignmentRepository.findById(id);
-        assignment.updateAssignment(title,content,part,expireAt,tags);
+        assignment.updateAssignment(title,content,assignmentMainContent,assignmentPart,expireAt,tags);
         addAssignment(assignment);
     }
 
