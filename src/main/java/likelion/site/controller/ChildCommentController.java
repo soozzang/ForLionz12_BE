@@ -27,7 +27,7 @@ public class ChildCommentController {
     private final ChildCommentService childCommentService;
     private final CommentService commentService;
 
-    @Operation(summary = "대댓글 작성")
+    @Operation(summary = "대댓글 작성" , description = "commentId 는 부모 댓글의 id입니다.")
     @PostMapping
     public ResponseEntity<ChildCommentResponseIdDto> createChildComment(@RequestBody ChildCommentRequestDto request) {
         Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
@@ -43,8 +43,8 @@ public class ChildCommentController {
     }
 
     @Operation(summary = "특정 댓글의 모든 대댓글 조회")
-    @GetMapping
-    public ResponseEntity<Result> getAllChildComments(@RequestParam Long commentId) {
+    @GetMapping("{commentId}")
+    public ResponseEntity<Result> getAllChildComments(@PathVariable Long commentId) {
         Comment comment = commentService.findById(commentId);
         List<ChildComment> childComments = childCommentService.findChildCommentsByComment(comment);
         System.out.println("hello");

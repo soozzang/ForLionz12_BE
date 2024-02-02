@@ -43,8 +43,8 @@ public class CommentController {
     }
 
     @Operation(summary = "특정 질문글에 대한 모든 댓글 조회")
-    @GetMapping
-    public ResponseEntity<Result> getAllComments(@RequestParam Long questionPostId) {
+    @GetMapping("questionPostId")
+    public ResponseEntity<Result> getAllComments(@PathVariable Long questionPostId) {
         QuestionPost questionPost = questionPostService.findQuestionPostById(questionPostId);
         List<Comment> comments = commentService.findCommentsByQuestionPost(questionPost);
         List<CommentResponseDto> collect = comments.stream()
