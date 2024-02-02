@@ -49,7 +49,7 @@ public class NotificationController {
     }
 
     @Operation(summary = "파트 별 공지사항 조회" , description = "partName에는 BE/FE/ALL이 들어갈 수 있습니다.")
-    @GetMapping("{part}")
+    @GetMapping("part/{part}")
     public ResponseEntity<Result> findNotificationByPart(@PathVariable("part") String part) {
         NotificationPart notificationPart = NotificationPart.findByName(part);
         List<Notification> notifications = notificationService.findNotificationByPart(notificationPart);
