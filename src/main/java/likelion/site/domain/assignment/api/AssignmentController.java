@@ -105,7 +105,7 @@ public class AssignmentController {
     @AllArgsConstructor
     public static class AssignmentResponseDto {
         Long id;
-        AssignmentMainContent assignmentMainContent;
+        AssignmentMainContent category;
         String title;
         String content;
         LocalDateTime createdAt;
@@ -117,7 +117,7 @@ public class AssignmentController {
 
         public AssignmentResponseDto(Assignment assignment) {
             this.id = assignment.getId();
-            this.assignmentMainContent = assignment.getAssignmentMainContent();
+            this.category = assignment.getAssignmentMainContent();
             this.title = assignment.getTitle();
             this.content = assignment.getContent();
             this.part = assignment.getAssignmentPart();
