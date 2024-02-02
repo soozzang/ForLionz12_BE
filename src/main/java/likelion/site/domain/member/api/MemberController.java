@@ -46,6 +46,14 @@ public class MemberController {
         return ResponseEntity.ok().body(new MemberResponse(member));
     }
 
+    @Operation(summary = "비밀번호 변경", description = "해당 토큰의 사용자의 비밀번호를 업데이트 합니다.")
+    @PutMapping("/password")
+    public ResponseEntity<MemberResponse> updateMemberPassword(@RequestBody MemberPasswordUpdateRequest request) {
+        Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
+        memberService.updatePassword(member.getId(), request.getPassword());
+        return ResponseEntity.ok().body(new MemberResponse(member));
+    }
+
     @Operation(summary = "나의 인스타그램 아이디 업데이트", description = "해당 토큰의 사용자의 인스타그램 아이디를 업데이트 합니다.")
     @PutMapping("/instagram")
     public ResponseEntity<MemberResponse> updateMemberInstagramId(@RequestBody MemberInstagramIdUpdateRequest request) {
@@ -66,6 +74,11 @@ public class MemberController {
     @Data
     public static class MemberIntroductionUpdateRequest {
         String introduction;
+    }
+
+    @Data
+    public static class MemberPasswordUpdateRequest {
+        String password;
     }
 
     @Data

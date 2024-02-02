@@ -53,4 +53,8 @@ public class Member {
     public void updateInstagramId(String instagramId) {
         this.instagramId = instagramId;
     }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 }

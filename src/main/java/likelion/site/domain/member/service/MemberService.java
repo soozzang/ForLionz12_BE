@@ -52,6 +52,14 @@ public class MemberService {
     }
 
     @Transactional
+    public Long updatePassword(Long id, String password) {
+        Member member = findMemberById(id).get();
+        member.updatePassword(password);
+        memberRepository.save(member);
+        return member.getId();
+    }
+
+    @Transactional
     public Long updateInstagramId(Long id, String instagramId) {
         Member member = findMemberById(id).get();
         member.updateInstagramId(instagramId);
