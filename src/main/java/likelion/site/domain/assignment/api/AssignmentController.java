@@ -38,8 +38,8 @@ public class AssignmentController {
     @Operation(summary = "과제 생성" , description = "파트가 STAFF인 멤버만 가능합니다. + assignmentMainContent에는 HTML , REACT , DJANGO , AWS , JS , CSS , Docker, Git 중 하나가 들어갈 수 있습니다.")
     public ResponseEntity<AssignmentIdResponseDto> createAssignment(@RequestBody AssignmentRequestDto request) {
         if (memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId()).getPart() == Part.STAFF) {
-            AssignmentPart assignmentPart = AssignmentPart.findByName(request.partName);
-            AssignmentMainContent assignmentMainContent = AssignmentMainContent.findByName(request.assignmentMainContentName);
+            AssignmentPart assignmentPart = AssignmentPart.findByName(request.part);
+            AssignmentMainContent assignmentMainContent = AssignmentMainContent.findByName(request.category);
             Assignment assignment = Assignment.builder()
                     .title(request.title)
                     .assignmentPart(assignmentPart)
@@ -57,8 +57,8 @@ public class AssignmentController {
     @Operation(summary = "과제물 수정")
     @PutMapping("{id}")
     public ResponseEntity<AssignmentIdResponseDto> updateAssignment(@PathVariable("id") Long id,@RequestBody AssignmentRequestDto request) {
-        AssignmentPart assignmentPart = AssignmentPart.findByName(request.partName);
-        AssignmentMainContent assignmentMainContent = AssignmentMainContent.findByName(request.assignmentMainContentName);
+        AssignmentPart assignmentPart = AssignmentPart.findByName(request.part);
+        AssignmentMainContent assignmentMainContent = AssignmentMainContent.findByName(request.category);
         assignmentService.updateAssignment(id,assignmentMainContent,request.getTitle(), request.getContent(),assignmentPart, request.getExpireAt(), request.getTags());
         return ResponseEntity.ok().body(new AssignmentIdResponseDto(id));
     }
@@ -108,20 +108,19 @@ public class AssignmentController {
         AssignmentMainContent assignmentMainContent;
         String title;
         String content;
-        Part part;
         LocalDateTime createdAt;
         LocalDateTime expireAt;
         List<SubmissionResponseDto> submissions;
         List<String> tags;
         Integer submissionCount;
-        AssignmentPart assignmentPart;
+        AssignmentPart part;
 
         public AssignmentResponseDto(Assignment assignment) {
             this.id = assignment.getId();
             this.assignmentMainContent = assignment.getAssignmentMainContent();
             this.title = assignment.getTitle();
             this.content = assignment.getContent();
-            this.assignmentPart = assignment.getAssignmentPart();
+            this.part = assignment.getAssignmentPart();
             this.createdAt = assignment.getCreatedAt();
             this.expireAt = assignment.getExpireAt();
             this.submissions = assignment.getSubmissions().stream()
@@ -157,10 +156,10 @@ public class AssignmentController {
     @Data
     @AllArgsConstructor
     public static class AssignmentRequestDto {
-        String assignmentMainContentName;
+        String category;
         String title;
         String content;
-        String partName;
+        String part;
         List<String> tags;
 
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
