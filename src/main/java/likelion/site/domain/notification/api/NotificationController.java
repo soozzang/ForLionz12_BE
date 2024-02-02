@@ -95,7 +95,7 @@ public class NotificationController {
         Long id;
         String title;
         String content;
-        NotificationPart notificationPart;
+        NotificationPart part;
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime createdAt;
 
@@ -103,7 +103,7 @@ public class NotificationController {
             this.id = notification.getId();
             this.title = notification.getTitle();
             this.content = notification.getContent();
-            this.notificationPart = notification.getNotificationPart();
+            this.part = notification.getNotificationPart();
             this.createdAt = notification.getCreatedAt();
         }
     }
