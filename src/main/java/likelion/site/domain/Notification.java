@@ -22,20 +22,20 @@ public class Notification {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    private Part part;
+    private NotificationPart notificationPart;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Builder
-    public Notification(String title, Part part, String content) {
+    public Notification(String title, NotificationPart notificationPart, String content) {
         this.title = title;
-        this.part = part;
+        this.notificationPart = notificationPart;
         this.content = content;
     }
 
-    public void updateNotification(String title, String content, Part part) {
+    public void updateNotification(String title, String content, NotificationPart notificationPart) {
         this.title = title;
         this.content = content;
-        this.part = part;
+        this.notificationPart = notificationPart;
     }
 }

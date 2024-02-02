@@ -2,6 +2,7 @@ package likelion.site.service;
 
 import likelion.site.domain.Member;
 import likelion.site.domain.Notification;
+import likelion.site.domain.NotificationPart;
 import likelion.site.domain.Part;
 import likelion.site.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +33,13 @@ public class NotificationService {
         return notificationRepository.findAll();
     }
 
-    public List<Notification> findNotificationByPart(Part part) {
-        return notificationRepository.findByPart(part);
+    public List<Notification> findNotificationByPart(NotificationPart notificationPart) {
+        return notificationRepository.findByNotificationPart(notificationPart);
     }
 
     @Transactional
-    public void update(Long id, String title, String content, Part part) {
-        notificationRepository.update(id, title, content, part);
+    public void update(Long id, String title, String content, NotificationPart notificationPart) {
+        notificationRepository.update(id, title, content, notificationPart);
     }
 
     @Transactional

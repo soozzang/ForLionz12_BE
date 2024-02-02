@@ -55,12 +55,12 @@ public class AssignmentController {
     }
 
     @Operation(summary = "과제물 수정")
-    @PutMapping
-    public ResponseEntity<AssignmentIdResponseDto> updateAssignment(@RequestBody AssignmentRequestDto request) {
+    @PutMapping("{id}")
+    public ResponseEntity<AssignmentIdResponseDto> updateAssignment(@PathVariable("id") Long id,@RequestBody AssignmentRequestDto request) {
         AssignmentPart assignmentPart = AssignmentPart.findByName(request.partName);
         AssignmentMainContent assignmentMainContent = AssignmentMainContent.findByName(request.assignmentMainContentName);
-        assignmentService.updateAssignment(request.getId(),assignmentMainContent,request.getTitle(), request.getContent(),assignmentPart, request.getExpireAt(), request.getTags());
-        return ResponseEntity.ok().body(new AssignmentIdResponseDto(request.getId()));
+        assignmentService.updateAssignment(id,assignmentMainContent,request.getTitle(), request.getContent(),assignmentPart, request.getExpireAt(), request.getTags());
+        return ResponseEntity.ok().body(new AssignmentIdResponseDto(id));
     }
 
 //    @DeleteMapping
@@ -73,9 +73,9 @@ public class AssignmentController {
      */
 
     @Operation(summary = "파트별 과제공지 조회" , description = "partName에는 BE/FE/ALL이 들어갈 수 있습니다.")
-    @GetMapping("bypart")
-    public ResponseEntity<Result> findAssignmentByPart(@RequestParam String partName) {
-        AssignmentPart assignmentPart = AssignmentPart.findByName(partName);
+    @GetMapping("{part}")
+    public ResponseEntity<Result> findAssignmentByPart(@PathVariable("part") String part) {
+        AssignmentPart assignmentPart = AssignmentPart.findByName(part);
         List<Assignment> assignments = assignmentService.findAssignmentByPart(assignmentPart);
         List<AssignmentResponseDto> collect = assignments.stream()
                 .map(AssignmentResponseDto::new)
@@ -84,15 +84,15 @@ public class AssignmentController {
     }
 
     @Operation(summary = "id로 과제공지 상세 조회")
-    @GetMapping("byid")
-    public ResponseEntity<AssignmentResponseDto> getAssignmentDetail(@RequestParam Long id) {
+    @GetMapping("{id}")
+    public ResponseEntity<AssignmentResponseDto> getAssignmentDetail(@PathVariable("id") Long id) {
         Assignment assignment = assignmentService.findAssignmentById(id);
         return ResponseEntity.ok().body(new AssignmentResponseDto(assignment));
     }
 
     @Operation(summary = "특정 과제의 id로 모든 과제 제출물 조회")
-    @GetMapping("submissions")
-    public ResponseEntity<Result> getSubmissions(@RequestParam Long id) {
+    @GetMapping("{id}/submissions")
+    public ResponseEntity<Result> getSubmissions(@PathVariable("id") Long id) {
         Assignment assignment = assignmentService.findAssignmentById(id);
         List<Submission> submissions = assignment.getSubmissions();
         List<SubmissionResponseDto> collect = submissions.stream()
@@ -157,7 +157,6 @@ public class AssignmentController {
     @Data
     @AllArgsConstructor
     public static class AssignmentRequestDto {
-        Long id;
         String assignmentMainContentName;
         String title;
         String content;

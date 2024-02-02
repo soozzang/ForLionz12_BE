@@ -3,6 +3,7 @@ package likelion.site.repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import likelion.site.domain.Notification;
+import likelion.site.domain.NotificationPart;
 import likelion.site.domain.Part;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -36,14 +37,14 @@ public class NotificationRepository {
                 .executeUpdate();
     }
 
-    public List<Notification> findByPart(Part part) {
-        return em.createQuery("select n from Notification n where n.part=:part",Notification.class)
-                .setParameter("part",part)
+    public List<Notification> findByNotificationPart(NotificationPart notificationPart) {
+        return em.createQuery("select n from Notification n where n.notificationPart=:notificationPart",Notification.class)
+                .setParameter("part",notificationPart)
                 .getResultList();
     }
 
-    public void update(Long id, String title, String content, Part part) {
+    public void update(Long id, String title, String content, NotificationPart notificationPart) {
         Notification notification = findById(id);
-        notification.updateNotification(title,content,part);
+        notification.updateNotification(title,content,notificationPart);
     }
 }

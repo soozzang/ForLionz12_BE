@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.Notification;
+import likelion.site.domain.NotificationPart;
 import likelion.site.domain.Part;
 import likelion.site.service.MemberService;
 import likelion.site.service.NotificationService;
@@ -27,10 +28,10 @@ public class NotificationController {
     @PostMapping
     public ResponseEntity<NotificationResponse> createNotification(@RequestBody NotificationRequest request) {
         if(memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId()).getPart() == Part.STAFF) {
-            Part part = Part.findByName(request.partName);
+            NotificationPart notificationPart = NotificationPart.findByName(request.part);
             Notification notification = Notification.builder()
                     .title(request.title)
-                    .part(part)
+                    .notificationPart(notificationPart)
                     .content(request.content)
                     .build();
 
@@ -41,27 +42,17 @@ public class NotificationController {
     }
 
     @Operation(summary = "id를 통해 특정 공지사항 상세 조회")
-    @GetMapping
-    public ResponseEntity<NotificationDto> getNotificationDetail(@RequestParam Long id) {
+    @GetMapping("{id}")
+    public ResponseEntity<NotificationDto> getNotificationDetail(@PathVariable("id") Long id) {
         Notification notification = notificationService.findNotificationById(id);
         return ResponseEntity.ok().body(new NotificationDto(notification));
     }
 
-    @Operation(summary = "모든 공지사항 조회")
-    @GetMapping("/all")
-    public ResponseEntity<Result> findAllNotifications() {
-        List<Notification> notifications = notificationService.findAllNotifications();
-        List<NotificationDto> collect = notifications.stream()
-                .map(NotificationDto::new)
-                .toList();
-        return ResponseEntity.ok().body(new Result(collect));
-    }
-
     @Operation(summary = "파트 별 공지사항 조회" , description = "partName에는 BE/FE/ALL이 들어갈 수 있습니다.")
-    @GetMapping("/part")
-    public ResponseEntity<Result> findNotificationByPart(@RequestParam String partName) {
-        Part part = Part.findByName(partName);
-        List<Notification> notifications = notificationService.findNotificationByPart(part);
+    @GetMapping("{part}")
+    public ResponseEntity<Result> findNotificationByPart(@PathVariable("part") String part) {
+        NotificationPart notificationPart = NotificationPart.findByName(part);
+        List<Notification> notifications = notificationService.findNotificationByPart(notificationPart);
         List<NotificationDto> collect = notifications.stream()
                 .map(NotificationDto::new)
                 .toList();
@@ -71,8 +62,8 @@ public class NotificationController {
     @Operation(summary = "특정 id의 공지사항 업데이트")
     @PutMapping("{id}")
     public ResponseEntity<NotificationResponse> updateNotification(@PathVariable("id") Long id, @RequestBody NotificationRequest request) {
-        Part part = Part.findByName(request.partName);
-        notificationService.update(id, request.getTitle(), request.getContent(), part);
+        NotificationPart notificationPart = NotificationPart.findByName(request.part);
+        notificationService.update(id, request.getTitle(), request.getContent(), notificationPart);
         return ResponseEntity.ok().body(new NotificationResponse(id));
     }
 
@@ -86,7 +77,7 @@ public class NotificationController {
     public static class NotificationRequest {
         String title;
         String content;
-        String partName;
+        String part;
     }
 
     @Data
@@ -104,7 +95,7 @@ public class NotificationController {
         Long id;
         String title;
         String content;
-        Part part;
+        NotificationPart notificationPart;
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime createdAt;
 
@@ -112,7 +103,7 @@ public class NotificationController {
             this.id = notification.getId();
             this.title = notification.getTitle();
             this.content = notification.getContent();
-            this.part = notification.getPart();
+            this.notificationPart = notification.getNotificationPart();
             this.createdAt = notification.getCreatedAt();
         }
     }
