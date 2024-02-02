@@ -23,25 +23,26 @@ public class NotificationService {
     }
 
     public Notification findNotificationById(Long notificationId) {
-        return notificationRepository.findById(notificationId);
+        return notificationRepository.findById(notificationId).get();
     }
 
     public List<Notification> findAllNotifications() {
         return notificationRepository.findAll();
     }
 
-    public List<Notification> findNotificationByPart(NotificationPart notificationPart) {
+    public List<Notification> findByNotificationPart(NotificationPart notificationPart) {
         return notificationRepository.findByNotificationPart(notificationPart);
     }
 
     @Transactional
     public void update(Long id, String title, String content, NotificationPart notificationPart) {
-        notificationRepository.update(id, title, content, notificationPart);
+        Notification notification = notificationRepository.findById(id).get();
+        notification.updateNotification(title, content, notificationPart);
     }
 
     @Transactional
     public void delete(Long id) {
-        notificationRepository.delete(id);
+        notificationRepository.delete(notificationRepository.findById(id).get());
     }
 
 }

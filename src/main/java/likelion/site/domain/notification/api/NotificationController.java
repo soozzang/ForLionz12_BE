@@ -52,7 +52,7 @@ public class NotificationController {
     @GetMapping("part/{part}")
     public ResponseEntity<Result> findNotificationByPart(@PathVariable("part") String part) {
         NotificationPart notificationPart = NotificationPart.findByName(part);
-        List<Notification> notifications = notificationService.findNotificationByPart(notificationPart);
+        List<Notification> notifications = notificationService.findByNotificationPart(notificationPart);
         List<NotificationDto> collect = notifications.stream()
                 .map(NotificationDto::new)
                 .toList();
