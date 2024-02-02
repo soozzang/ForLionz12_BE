@@ -35,7 +35,7 @@ public class AssignmentController {
      *  관리자 전용
      */
     @PostMapping
-    @Operation(summary = "과제 생성" , description = "파트가 STAFF인 멤버만 가능합니다.")
+    @Operation(summary = "과제 생성" , description = "파트가 STAFF인 멤버만 가능합니다. + assignmentMainContent에는 HTML , REACT , DJANGO , AWS , JS , CSS , Docker, Git 중 하나가 들어갈 수 있습니다.")
     public ResponseEntity<AssignmentIdResponseDto> createAssignment(@RequestBody AssignmentRequestDto request) {
         if (memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId()).getPart() == Part.STAFF) {
             AssignmentPart assignmentPart = AssignmentPart.findByName(request.partName);
