@@ -27,23 +27,23 @@ public class AssignmentService {
     }
 
     public Assignment findAssignmentById(Long assignmentId) {
-        return assignmentRepository.findById(assignmentId);
+        return assignmentRepository.findById(assignmentId).get();
     }
 
     public List<Assignment> findAssignmentByPart(AssignmentPart assignmentPart) {
-        return assignmentRepository.findByAssignmentAssignmentPart(assignmentPart);
+        return assignmentRepository.findByAssignmentPart(assignmentPart);
     }
 
 
     @Transactional
     public void updateAssignment(Long id, AssignmentMainContent assignmentMainContent, String title, String content, AssignmentPart assignmentPart, LocalDateTime expireAt, List<String> tags) {
-        Assignment assignment = assignmentRepository.findById(id);
+        Assignment assignment = assignmentRepository.findById(id).get();
         assignment.updateAssignment(title,content,assignmentMainContent,assignmentPart,expireAt,tags);
         addAssignment(assignment);
     }
 
     @Transactional
     public void delete(Long id) {
-        assignmentRepository.delete(id);
+        assignmentRepository.delete(assignmentRepository.findById(id).get());
     }
 }

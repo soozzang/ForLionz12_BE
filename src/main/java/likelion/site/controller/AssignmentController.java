@@ -72,8 +72,8 @@ public class AssignmentController {
      *  for all
      */
 
-    @Operation(summary = "파트별 과제공지 조회" , description = "partName에는 BE/FE/ALL이 들어갈 수 있습니다.")
-    @GetMapping("{part}")
+    @Operation(summary = "파트별 과제공지 조회" , description = "part에는 BE/FE/ALL이 들어갈 수 있습니다.")
+    @GetMapping("/part/{part}")
     public ResponseEntity<Result> findAssignmentByPart(@PathVariable("part") String part) {
         AssignmentPart assignmentPart = AssignmentPart.findByName(part);
         List<Assignment> assignments = assignmentService.findAssignmentByPart(assignmentPart);
