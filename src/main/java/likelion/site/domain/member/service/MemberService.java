@@ -22,9 +22,8 @@ public class MemberService {
     }
 
     public MemberResponseDto findMemberInfoById(Long memberId) {
-        return memberRepository.findById(memberId)
-                .map(MemberResponseDto::of)
-                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
+        Member member =  memberRepository.findById(memberId).get();
+        return new MemberResponseDto(member);
     }
 
     public Optional<Member> findById(Long id) {
