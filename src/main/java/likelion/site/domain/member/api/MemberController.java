@@ -70,12 +70,12 @@ public class MemberController {
 
     @Operation(summary = "모든 멤버 조회")
     @GetMapping("all")
-    public ApiResponse<List<MemberResponse>> findAllMember() {
+    public ApiResponse<List<MemberResponseDto>> findAllMember() {
         List<Member> memberList = memberService.findAll();
-        List<MemberResponse> memberResponseDtos = new ArrayList<>();
+        List<MemberResponseDto> memberResponseDtos = new ArrayList<>();
 
         for (Member member : memberList) {
-            MemberResponse dto = new MemberResponse(member);
+            MemberResponseDto dto = new MemberResponseDto(member);
             memberResponseDtos.add(dto);
         }
         return ApiResponse.createSuccess(memberResponseDtos);
