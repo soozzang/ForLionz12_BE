@@ -1,6 +1,7 @@
 package likelion.site.domain.member.service;
 
 import jakarta.transaction.Transactional;
+import likelion.site.domain.member.api.AuthController;
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.domain.RefreshToken;
 import likelion.site.domain.member.dto.MemberRequestDto;
@@ -38,9 +39,9 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenDto login(MemberRequestDto memberRequestDto) {
+    public TokenDto login(AuthController.LoginRequestDto loginRequestDto) {
         // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
-        UsernamePasswordAuthenticationToken authenticationToken = memberRequestDto.toAuthentication();
+        UsernamePasswordAuthenticationToken authenticationToken = loginRequestDto.toAuthentication();
 
         // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
         //    authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행됨

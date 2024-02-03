@@ -66,4 +66,8 @@ public class MemberService {
         memberRepository.save(member);
         return member.getId();
     }
+
+    public List<Member> findAll() {
+        return memberRepository.findAll();
+    }
 }

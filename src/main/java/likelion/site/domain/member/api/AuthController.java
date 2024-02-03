@@ -10,10 +10,12 @@ import likelion.site.domain.member.dto.TokenRequestDto;
 import likelion.site.domain.member.repository.RefreshTokenRepository;
 import likelion.site.domain.member.service.AuthService;
 import likelion.site.domain.member.service.MemberService;
+import likelion.site.global.ApiResponse;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,23 +32,23 @@ public class AuthController {
 
     @Operation(summary = "회원가입", description = "partName에는 BE/FE/ALL이 들어갈 수 있습니다.")
     @PostMapping("/signup")
-    public ResponseEntity<MemberResponseDto> signup(@RequestBody MemberRequestDto memberRequestDto) {
-        return ResponseEntity.ok(authService.signup(memberRequestDto));
+    public ApiResponse<MemberResponseDto> signup(@RequestBody MemberRequestDto memberRequestDto) {
+        return ApiResponse.createSuccess(authService.signup(memberRequestDto));
     }
 
     @Operation(summary = "로그인")
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody MemberRequestDto memberRequestDto) {
-        return ResponseEntity.ok(authService.login(memberRequestDto));
+    public ApiResponse<TokenDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+        return ApiResponse.createSuccess(authService.login(loginRequestDto));
     }
 
     @Operation(summary = "토큰 재발급")
     @PostMapping("/reissue")
-    public ResponseEntity<TokenDto> reissue(@RequestBody accessDTO accessDTO) {
+    public ApiResponse<TokenDto> reissue(@RequestBody accessDTO accessDTO) {
         TokenRequestDto tokenRequestDto = new TokenRequestDto();
         tokenRequestDto.setAccessToken(accessDTO.accessToken);
         tokenRequestDto.setRefreshToken(refreshTokenRepository.findByAccessToken(accessDTO.getAccessToken()).get().getValue());
-        return ResponseEntity.ok(authService.reissue(tokenRequestDto));
+        return ApiResponse.createSuccess(authService.reissue(tokenRequestDto));
     }
 
     @Data
@@ -54,4 +56,15 @@ public class AuthController {
     static class accessDTO {
         String accessToken;
     }
+
+    @Data
+    public static class LoginRequestDto {
+        String email;
+        String password;
+
+        public UsernamePasswordAuthenticationToken toAuthentication() {
+            return new UsernamePasswordAuthenticationToken(email, password);
+        }
+    }
+
 }

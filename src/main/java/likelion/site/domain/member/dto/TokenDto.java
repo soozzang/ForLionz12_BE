@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 @Builder
 public class TokenDto {
 
-    private String id;
-    private Integer count;
+//    private String id;
+//    private Integer count;
     private String grantType;
     private String accessToken;
     private String refreshToken;
