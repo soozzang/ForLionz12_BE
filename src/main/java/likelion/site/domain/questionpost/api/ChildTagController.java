@@ -8,6 +8,7 @@ import likelion.site.domain.member.domain.Part;
 import likelion.site.domain.questionpost.service.ChildTagService;
 import likelion.site.domain.member.service.MemberService;
 import likelion.site.domain.questionpost.service.ParentTagService;
+import likelion.site.global.ApiResponse;
 import likelion.site.global.util.SecurityUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "ChildTag", description = "자식태그")
@@ -29,7 +31,7 @@ public class ChildTagController {
 
     @Operation(summary = "자식태그 생성")
     @PostMapping
-    public ResponseEntity<ChildTagResponseIdDto> createChildTag(@RequestBody ChildTagRequestDto request) {
+    public ApiResponse<ChildTagResponseIdDto> createChildTag(@RequestBody ChildTagRequestDto request) {
         if (memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId()).getPart() == Part.STAFF) {
             ParentTag parentTag = parentTagService.findById(request.parentTagId);
             ChildTag childTag = ChildTag.builder()
@@ -38,20 +40,24 @@ public class ChildTagController {
                     .build();
             Long id = childTagService.addChildTag(childTag);
             parentTag.addChildTag(childTag);
-            return ResponseEntity.ok().body(new ChildTagResponseIdDto(childTag));
+            return ApiResponse.createSuccess(new ChildTagResponseIdDto(childTag));
         }
         return null;
     }
 
     @Operation(summary = "특정 부모 태그에 대한 자식태그들 조회")
     @GetMapping
-    public ResponseEntity<Result> getChildTags(@RequestParam Long parentTagId) {
+    public ApiResponse<List<ChildTagResponseDto>> getChildTags(@RequestParam Long parentTagId) {
         ParentTag parentTag = parentTagService.findById(parentTagId);
         List<ChildTag> childTags = childTagService.findChildTagsByParentTag(parentTag);
-        List<ChildTagResponseDto> collect = childTags.stream()
-                .map(ChildTagResponseDto::new)
-                .toList();
-        return ResponseEntity.ok().body(new Result(collect));
+        List<ChildTagResponseDto> childTagResponseDtos = new ArrayList<>();
+
+        for (ChildTag childTag : childTags) {
+            ChildTagResponseDto dto = new ChildTagResponseDto(childTag);
+            childTagResponseDtos.add(dto);
+        }
+
+        return ApiResponse.createSuccess(childTagResponseDtos);
     }
 
 

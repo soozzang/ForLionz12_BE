@@ -8,6 +8,7 @@ import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.questionpost.service.CommentService;
 import likelion.site.domain.member.service.MemberService;
 import likelion.site.domain.questionpost.service.QuestionPostService;
+import likelion.site.global.ApiResponse;
 import likelion.site.global.util.SecurityUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.lang.model.type.ArrayType;
+import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "Comment", description = "댓글")
@@ -29,7 +32,7 @@ public class CommentController {
 
     @Operation(summary = "댓글 생성")
     @PostMapping
-    public ResponseEntity<CommentResponseIdDto> createComment(@RequestBody CommentRequestDto request) {
+    public ApiResponse<CommentResponseIdDto> createComment(@RequestBody CommentRequestDto request) {
         Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
         QuestionPost questionPost = questionPostService.findQuestionPostById(request.questionPostId);
         Comment comment = Comment.builder()
@@ -38,18 +41,22 @@ public class CommentController {
                 .content(request.content)
                 .build();
         Long id = commentService.addComment(comment);
-        return ResponseEntity.ok().body(new CommentResponseIdDto(comment));
+        return ApiResponse.createSuccess(new CommentResponseIdDto(comment));
     }
 
     @Operation(summary = "특정 질문글에 대한 모든 댓글 조회")
     @GetMapping("questionPostId")
-    public ResponseEntity<Result> getAllComments(@PathVariable Long questionPostId) {
+    public ApiResponse<List<CommentResponseDto>> getAllComments(@PathVariable Long questionPostId) {
         QuestionPost questionPost = questionPostService.findQuestionPostById(questionPostId);
         List<Comment> comments = commentService.findCommentsByQuestionPost(questionPost);
-        List<CommentResponseDto> collect = comments.stream()
-                .map(CommentResponseDto::new)
-                .toList();
-        return ResponseEntity.ok().body(new Result(collect));
+        List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
+
+        for (Comment comment : comments) {
+            CommentResponseDto dto = new CommentResponseDto(comment);
+            commentResponseDtos.add(dto);
+        }
+
+        return ApiResponse.createSuccess(commentResponseDtos);
     }
 
     @Data

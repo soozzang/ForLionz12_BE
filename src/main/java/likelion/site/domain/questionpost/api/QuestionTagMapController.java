@@ -8,12 +8,14 @@ import likelion.site.domain.questionpost.domain.QuestionTagMap;
 import likelion.site.domain.questionpost.service.ChildTagService;
 import likelion.site.domain.questionpost.service.QuestionPostService;
 import likelion.site.domain.questionpost.service.QuestionTagMapService;
+import likelion.site.global.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "QuestionTagMap", description = "질문글-태그 중계모델, 태그로 조회 + 질문글 생성시 해당 질문 글에 특정 태그들 매핑")
@@ -28,7 +30,7 @@ public class QuestionTagMapController {
 
     @Operation(summary = "질문 글 생성시 특정 태그들과 매핑")
     @PostMapping
-    public ResponseEntity<QuestionTagMapResponseIdDto> createQuestionTagMap(@RequestBody QuestionTagMapRequestDto request) {
+    public ApiResponse<QuestionTagMapResponseIdDto> createQuestionTagMap(@RequestBody QuestionTagMapRequestDto request) {
         QuestionPost questionPost = questionPostService.findQuestionPostById(request.questionPostId);
         ChildTag childTag = childTagService.findById(request.childTagId);
         QuestionTagMap questionTagMap = QuestionTagMap.builder()
@@ -36,18 +38,22 @@ public class QuestionTagMapController {
                 .childTag(childTag)
                 .build();
         Long id = questionTagMapService.addQuestionTagMap(questionTagMap);
-        return ResponseEntity.ok().body(new QuestionTagMapResponseIdDto(questionTagMap));
+        return ApiResponse.createSuccess(new QuestionTagMapResponseIdDto(questionTagMap));
     }
 
     @Operation(summary = "특정 자식태그id에 해당하는 자식태그와 매핑된 질문글 리스트 조회")
     @GetMapping
-    public ResponseEntity<Result> getQuestionTagMap(@RequestParam Long childTagId) {
+    public ApiResponse<List<QuestionTagMapResponseDto>> getQuestionTagMap(@RequestParam Long childTagId) {
         ChildTag childTag = childTagService.findById(childTagId);
         List<QuestionTagMap> questionTagMaps = questionTagMapService.findByChildTag(childTag);
-        List<QuestionTagMapResponseDto> collect = questionTagMaps.stream()
-                .map(QuestionTagMapResponseDto::new)
-                .toList();
-        return ResponseEntity.ok().body(new Result(collect));
+        List<QuestionTagMapResponseDto> questionTagMapResponseDtos = new ArrayList<>();
+
+        for (QuestionTagMap questionTagMap : questionTagMaps) {
+            QuestionTagMapResponseDto dto = new QuestionTagMapResponseDto(questionTagMap);
+            questionTagMapResponseDtos.add(dto);
+        }
+
+        return ApiResponse.createSuccess(questionTagMapResponseDtos);
     }
 
     @Data

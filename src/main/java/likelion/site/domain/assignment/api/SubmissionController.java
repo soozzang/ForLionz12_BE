@@ -9,6 +9,7 @@ import likelion.site.domain.assignment.domain.Submission;
 import likelion.site.domain.assignment.service.AssignmentService;
 import likelion.site.domain.member.service.MemberService;
 import likelion.site.domain.assignment.service.SubmissionService;
+import likelion.site.global.ApiResponse;
 import likelion.site.global.util.SecurityUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,7 +29,7 @@ public class SubmissionController {
 
     @Operation(summary = "과제 제출하기")
     @PostMapping
-    public ResponseEntity<SubmissionIdResponseDto> createSubmission(@RequestBody SubmissionRequestDto request) {
+    public ApiResponse<SubmissionIdResponseDto> createSubmission(@RequestBody SubmissionRequestDto request) {
         Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
         Assignment assignment = assignmentService.findAssignmentById(request.assignmentId);
         if (member.getPart() == Part.BE || member.getPart() == Part.FE) {
@@ -39,16 +40,16 @@ public class SubmissionController {
                     .assignmentLink(request.assignmentLink)
                     .build();
             Long id = submissionService.addSubmission(submission);
-            return ResponseEntity.ok().body(new SubmissionIdResponseDto(id));
+            return ApiResponse.createSuccess(new SubmissionIdResponseDto(id));
         }
         return null;
     }
 
     @Operation(summary = "특정id에 해당하는 제출란 업데이트")
     @PutMapping("{id}")
-    public ResponseEntity<SubmissionIdResponseDto> updateSubmission(@PathVariable("id") Long id, @RequestBody SubmissionRequestDto request) {
+    public ApiResponse<SubmissionIdResponseDto> updateSubmission(@PathVariable("id") Long id, @RequestBody SubmissionRequestDto request) {
         submissionService.updateSubmission(id, request.getDescription() , request.getAssignmentLink());
-        return ResponseEntity.ok().body(new SubmissionIdResponseDto(id));
+        return ApiResponse.createSuccess(new SubmissionIdResponseDto(id));
     }
 
 
