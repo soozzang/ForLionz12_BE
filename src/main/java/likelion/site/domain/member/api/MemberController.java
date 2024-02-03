@@ -79,7 +79,6 @@ public class MemberController {
             memberResponseDtos.add(dto);
         }
         return ApiResponse.createSuccess(memberResponseDtos);
-
     }
 
     @Data

@@ -19,9 +19,12 @@ public class MemberResponseDto {
     private String instagramId;
 
     public MemberResponseDto(Member member) {
-    }
-
-    public static MemberResponseDto of(Member member) {
-        return new MemberResponseDto(member.getEmail(), member.getId(),member.getName(), member.getPart(), member.getIntroduction(), member.getGithubAddress(), member.getInstagramId());
+        this.id = member.getId();
+        this.email = member.getEmail();
+        this.name = member.getName();
+        this.part = member.getPart();
+        this.introduction = member.getIntroduction();
+        this.githubAddress = member.getGithubAddress();
+        this.instagramId = member.getInstagramId();
     }
 }
