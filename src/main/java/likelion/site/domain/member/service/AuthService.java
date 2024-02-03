@@ -35,7 +35,7 @@ public class AuthService {
         }
 
         Member member = memberRequestDto.toMember(passwordEncoder);
-        return MemberResponseDto.of(memberRepository.save(member));
+        return new MemberResponseDto(memberRepository.save(member));
     }
 
     @Transactional
