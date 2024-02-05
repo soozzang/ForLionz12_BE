@@ -64,7 +64,7 @@ public class MemberController {
     @PutMapping("/instagram")
     public ApiResponse<MemberResponse> updateMemberInstagramId(@RequestBody MemberInstagramIdUpdateRequest request) {
         Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
-        memberService.updateIntroduction(member.getId(), request.getInstagramId());
+        memberService.updateInstagramId(member.getId(), request.getInstagramId());
         return ApiResponse.createSuccess(new MemberResponse(member));
     }
 
