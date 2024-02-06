@@ -50,7 +50,7 @@ public class SubmissionController {
 
     @Operation(summary = "특정id에 해당하는 제출란 업데이트")
     @PutMapping("{id}")
-    public ApiResponse<SubmissionIdResponseDto> updateSubmission(@PathVariable("id") Long id, @RequestBody SubmissionRequestDto request) {
+    public ApiResponse<SubmissionIdResponseDto> updateSubmission(@PathVariable("id") Long id, @RequestBody SubmissionUpdateRequestDto request) {
         submissionService.updateSubmission(id, request.getDescription() , request.getAssignmentLink());
         return ApiResponse.createSuccess(new SubmissionIdResponseDto(id));
     }
@@ -69,6 +69,12 @@ public class SubmissionController {
     @Data
     public static class SubmissionRequestDto {
         Long assignmentId;
+        String description;
+        String assignmentLink;
+    }
+
+    @Data
+    public static class SubmissionUpdateRequestDto {
         String description;
         String assignmentLink;
     }
