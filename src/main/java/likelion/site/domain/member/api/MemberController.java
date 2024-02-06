@@ -1,5 +1,7 @@
 package likelion.site.domain.member.api;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.member.domain.Member;
@@ -11,9 +13,12 @@ import likelion.site.global.ApiResponse;
 import likelion.site.global.util.SecurityUtil;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +27,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/member")
 public class MemberController {
+
     private final MemberService memberService;
+    private final AmazonS3Client amazonS3Client;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     @Operation(summary = "내 정보 조회", description = "해당 토큰의 사용자의 정보를 조회합니다.")
     @GetMapping("/me")
@@ -58,6 +68,26 @@ public class MemberController {
         Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
         memberService.updatePassword(member.getId(), request.getPassword());
         return ApiResponse.createSuccess(new MemberResponse(member));
+    }
+
+    @Operation(summary = "프로필 사진 업로드", description = "해당 토큰의 사용자의 프로필 이미자를 업로드 합니다.")
+    @PostMapping("/image")
+    public ApiResponse<?> uploadFile(@RequestParam("file") MultipartFile file) {
+        try {
+            Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
+            String fileName = file.getOriginalFilename();
+            String fileUrl = "https://" + bucket + fileName;
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
+
+            amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
+            member.updateImageUrl(fileUrl);
+            return ApiResponse.createSuccess(fileUrl);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ApiResponse.createError("이미지 파일 형식 오류");
+        }
     }
 
     @Operation(summary = "나의 인스타그램 아이디 업데이트", description = "해당 토큰의 사용자의 인스타그램 아이디를 업데이트 합니다.")

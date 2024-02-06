@@ -32,6 +32,8 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Part part;
 
+    private String imageUrl;
+
     private String introduction;
 
     private String githubAddress;
@@ -58,6 +60,10 @@ public class Member {
 
     public void updateInstagramId(String instagramId) {
         this.instagramId = instagramId;
+    }
+
+    public void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void updatePassword(String password) {
