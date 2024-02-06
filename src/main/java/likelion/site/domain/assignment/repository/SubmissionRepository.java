@@ -2,22 +2,17 @@ package likelion.site.domain.assignment.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import likelion.site.domain.assignment.domain.Assignment;
 import likelion.site.domain.assignment.domain.Submission;
+import likelion.site.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.expression.spel.ast.Assign;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@RequiredArgsConstructor
-public class SubmissionRepository {
+public interface SubmissionRepository extends JpaRepository<Submission, Long> {
 
-    @PersistenceContext
-    private EntityManager em;
 
-    public void save(Submission submission){
-        em.persist(submission);
-    }
-
-    public Submission findById(Long id) {
-        return em.find(Submission.class, id);
-    }
+    public Submission findSubmissionByAssignmentAndMember(Assignment assignment , Member member);
 }
