@@ -84,7 +84,7 @@ public class MemberController {
             metadata.setContentLength(file.getSize());
 
             amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
-            member.updateImageUrl(fileUrl);
+            memberService.updateImageUrl(SecurityUtil.getCurrentMemberId(),fileUrl);
             return ApiResponse.createSuccess(fileUrl);
         } catch (IOException e) {
             e.printStackTrace();

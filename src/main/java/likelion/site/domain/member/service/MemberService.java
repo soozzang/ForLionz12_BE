@@ -66,6 +66,14 @@ public class MemberService {
         return member.getId();
     }
 
+    @Transactional
+    public Long updateImageUrl(Long id, String imageUrl) {
+        Member member = findMemberById(id).get();
+        member.updateImageUrl(imageUrl);
+        memberRepository.save(member);
+        return member.getId();
+    }
+
     public List<Member> findAll() {
         return memberRepository.findAll();
     }
