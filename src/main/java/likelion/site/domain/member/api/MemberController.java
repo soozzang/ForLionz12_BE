@@ -14,6 +14,7 @@ import likelion.site.global.util.SecurityUtil;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,7 +72,8 @@ public class MemberController {
     }
 
     @Operation(summary = "프로필 사진 업로드", description = "해당 토큰의 사용자의 프로필 이미자를 업로드 합니다.")
-    @PostMapping("/image")
+    @PostMapping(value = "/image",
+    consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiResponse<?> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
             Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();

@@ -17,6 +17,7 @@ public class MemberResponseDto {
     private String introduction;
     private String githubAddress;
     private String instagramId;
+    private String imageUrl;
 
     public MemberResponseDto(Member member) {
         this.id = member.getId();
@@ -26,5 +27,6 @@ public class MemberResponseDto {
         this.introduction = member.getIntroduction();
         this.githubAddress = member.getGithubAddress();
         this.instagramId = member.getInstagramId();
+        this.imageUrl = member.getImageUrl();
     }
 }
