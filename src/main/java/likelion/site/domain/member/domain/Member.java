@@ -1,6 +1,7 @@
 package likelion.site.domain.member.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -14,15 +15,20 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "이름을 입력하세요.")
+    @Column(unique = true)
     private String email;
 
+    @NotNull(message = "이름을 입력하세요.")
     private String name;
 
+    @NotNull(message = "비밀번호를 입력하세요.")
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    @NotNull(message = "파트를 입력하세요.")
     @Enumerated(EnumType.STRING)
     private Part part;
 
