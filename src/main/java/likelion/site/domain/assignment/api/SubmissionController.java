@@ -51,7 +51,9 @@ public class SubmissionController {
     @Operation(summary = "특정id에 해당하는 제출란 업데이트")
     @PutMapping("{id}")
     public ApiResponse<SubmissionIdResponseDto> updateSubmission(@PathVariable("id") Long id, @RequestBody SubmissionUpdateRequestDto request) {
-        submissionService.updateSubmission(id, request.getDescription() , request.getAssignmentLink());
+        Assignment assignment = assignmentService.findAssignmentById(id);
+        Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
+        submissionService.updateSubmission(assignment, member, request.getDescription() , request.getAssignmentLink());
         return ApiResponse.createSuccess(new SubmissionIdResponseDto(id));
     }
 

@@ -22,8 +22,8 @@ public class SubmissionService {
     }
 
     @Transactional
-    public void updateSubmission(Long id, String description, String assignmentLink) {
-        Submission submission = submissionRepository.findById(id).get();
+    public void updateSubmission(Assignment assignment, Member member , String description, String assignmentLink) {
+        Submission submission = submissionRepository.findSubmissionByAssignmentAndMember(assignment ,member);
         submission.updateSubmission(description,assignmentLink);
     }
 
