@@ -78,9 +78,9 @@ public class MemberController {
     public ApiResponse<?> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
             Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
-            String fileName = file.getOriginalFilename();
-            LocalDateTime date = LocalDateTime.now();
-            String fileUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + fileName + member.getName() + "." + date;
+            String fileName = file.getOriginalFilename() + "." + member.getName();
+//            LocalDateTime date = LocalDateTime.now();
+            String fileUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + fileName;
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
             metadata.setContentLength(file.getSize());
