@@ -28,11 +28,6 @@ public class SubmissionService {
     }
 
     public Submission findByAssignmentAndMember(Assignment assignment, Member member) {
-        try {
-            System.out.println("hi");
-            return submissionRepository.findSubmissionByAssignmentAndMember(assignment, member);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("해당 과제에 제출물이 없습니다.");
-        }
+        return submissionRepository.findSubmissionByAssignmentAndMember(assignment, member);
     }
 }
