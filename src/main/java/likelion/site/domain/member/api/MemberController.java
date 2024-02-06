@@ -80,7 +80,7 @@ public class MemberController {
             Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
             String fileName = file.getOriginalFilename();
             LocalDateTime date = LocalDateTime.now();
-            String fileUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + fileName + "." + date;
+            String fileUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + fileName + member.getName() + "." + date;
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
             metadata.setContentLength(file.getSize());
