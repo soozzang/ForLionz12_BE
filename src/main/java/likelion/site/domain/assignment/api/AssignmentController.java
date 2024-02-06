@@ -7,6 +7,8 @@ import likelion.site.domain.assignment.domain.AssignmentMainContent;
 import likelion.site.domain.assignment.domain.AssignmentPart;
 import likelion.site.domain.assignment.domain.Submission;
 import likelion.site.domain.assignment.service.AssignmentService;
+import likelion.site.domain.assignment.service.SubmissionService;
+import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.domain.Part;
 import likelion.site.domain.member.service.MemberService;
 import likelion.site.global.ApiResponse;
@@ -16,6 +18,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -32,6 +35,7 @@ public class AssignmentController {
 
     private final AssignmentService assignmentService;
     private final MemberService memberService;
+    private final SubmissionService submissionService;
 
     /**
      *  관리자 전용
@@ -120,6 +124,18 @@ public class AssignmentController {
             submissionResponseDtos.add(dto);
         }
         return ApiResponse.createSuccess(submissionResponseDtos);
+    }
+
+    @Operation(summary = "특정 과제의 id로 현재 접속한 사용자의 제출물을 확인", description = "제출물이 없다면, 제출물이 없다는 메시지를 응답합니다")
+    @GetMapping("{id}/mysubmission")
+    public ApiResponse<?> getMySubmission(@PathVariable("id") Long id) {
+        Assignment assignment = assignmentService.findAssignmentById(id);
+        Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
+        try{
+            return ApiResponse.createSuccess(new SubmissionResponseDto(submissionService.findByAssignmentAndMember(assignment,member)));
+        } catch (NullPointerException e){
+            return ApiResponse.createSuccessWithNoContent("해당과제에 접속 유저의 제출물이 없습니다.");
+        }
     }
 
     @Data
