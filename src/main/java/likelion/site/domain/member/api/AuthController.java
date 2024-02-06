@@ -3,6 +3,7 @@ package likelion.site.domain.member.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.ConstraintViolationException;
 import likelion.site.domain.member.dto.MemberRequestDto;
 import likelion.site.domain.member.dto.MemberResponseDto;
 import likelion.site.domain.member.dto.TokenDto;
@@ -32,8 +33,12 @@ public class AuthController {
 
     @Operation(summary = "회원가입", description = "partName에는 BE/FE/ALL이 들어갈 수 있습니다.")
     @PostMapping("/signup")
-    public ApiResponse<MemberResponseDto> signup(@RequestBody MemberRequestDto memberRequestDto) {
-        return ApiResponse.createSuccess(authService.signup(memberRequestDto));
+    public ApiResponse<?> signup(@RequestBody MemberRequestDto memberRequestDto) {
+        try {
+            return ApiResponse.createSuccess(authService.signup(memberRequestDto));
+        } catch (ConstraintViolationException e) {
+            return ApiResponse.createError("필수 값을 빼먹지 않았는지 확인해라.");
+        }
     }
 
     @Operation(summary = "로그인")
