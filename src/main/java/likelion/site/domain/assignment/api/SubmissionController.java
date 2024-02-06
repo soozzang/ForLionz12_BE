@@ -29,10 +29,13 @@ public class SubmissionController {
 
     @Operation(summary = "과제 제출하기")
     @PostMapping
-    public ApiResponse<SubmissionIdResponseDto> createSubmission(@RequestBody SubmissionRequestDto request) {
+    public ApiResponse<?> createSubmission(@RequestBody SubmissionRequestDto request) {
         Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
         Assignment assignment = assignmentService.findAssignmentById(request.assignmentId);
         if (member.getPart() == Part.BE || member.getPart() == Part.FE) {
+            if (submissionService.findByAssignmentAndMember(assignment, member)!=null) {
+                return ApiResponse.createError("특정과제엔 하나의 제출물만 제출 가능합니다.");
+            }
             Submission submission = Submission.builder()
                     .member(member)
                     .assignment(assignment)
