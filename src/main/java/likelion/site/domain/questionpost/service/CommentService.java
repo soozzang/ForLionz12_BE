@@ -4,11 +4,14 @@ import likelion.site.domain.questionpost.domain.ChildComment;
 import likelion.site.domain.questionpost.domain.Comment;
 import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.questionpost.repository.CommentRepository;
+import likelion.site.global.exception.BadElementException;
+import likelion.site.global.exception.CustomError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -31,7 +34,11 @@ public class CommentService {
     }
 
     public Comment findById(Long id) {
-        return commentRepository.findById(id).get();
+        Optional<Comment> comment = commentRepository.findById(id);
+        if (comment.isPresent()) {
+            return comment.get();
+        }
+        throw new BadElementException(CustomError.BAD_ELEMENT_ERROR);
     }
 
     public List<Comment> findAllComments() {

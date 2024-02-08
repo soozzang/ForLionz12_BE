@@ -5,8 +5,6 @@ import likelion.site.global.ApiResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Arrays;
-
 @RestControllerAdvice
 public class GlobalAdvice {
 
@@ -28,6 +26,7 @@ public class GlobalAdvice {
         return message[0];
     }
 
+
     @ExceptionHandler(CurrentMemberException.class)
     public ApiResponse<?> currentMemberException(CurrentMemberException e) {
         return ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage());
@@ -44,7 +43,17 @@ public class GlobalAdvice {
     }
 
     @ExceptionHandler(BadPartException.class)
-    public ApiResponse<?> badCategoryException(BadPartException e) {
+    public ApiResponse<?> badPartException(BadPartException e) {
+        return ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage());
+    }
+
+    @ExceptionHandler(BadElementException.class)
+    public ApiResponse<?> noSuchElementException(BadElementException e) {
+        return ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage());
+    }
+
+    @ExceptionHandler(OverSubmissionException.class)
+    public ApiResponse<?> overSubmissionException(OverSubmissionException e) {
         return ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage());
     }
 }

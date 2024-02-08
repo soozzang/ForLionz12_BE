@@ -11,7 +11,9 @@ public enum CustomError {
     CURRENT_MEMBER_ERROR(HttpStatus.UNAUTHORIZED, "로그인 된 사용자가 없습니다."),
     DUPLICATE_MEMBER_ERROR(HttpStatus.BAD_REQUEST, "이미 가입되어 있는 유저입니다."),
     BAD_CATEGORY_ERROR(HttpStatus.BAD_REQUEST, "카테고리 형식이 올바르지 않습니다."),
-    BAD_PART_ERROR(HttpStatus.BAD_REQUEST, "파트 형식이 올바르지 않습니다.");
+    BAD_PART_ERROR(HttpStatus.BAD_REQUEST, "파트 형식이 올바르지 않습니다."),
+    BAD_ELEMENT_ERROR(HttpStatus.BAD_REQUEST, "없는 데이터에 대한 요청입니다."),
+    OVER_SUBMISSION_EXCEPTION(HttpStatus.BAD_REQUEST, "한 과제물 당 하나의 제출물만 제출 가능합니다");
 
     private final HttpStatus httpStatus;
     private final String message;

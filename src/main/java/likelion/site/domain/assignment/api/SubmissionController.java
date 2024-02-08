@@ -10,6 +10,8 @@ import likelion.site.domain.assignment.service.AssignmentService;
 import likelion.site.domain.member.service.MemberService;
 import likelion.site.domain.assignment.service.SubmissionService;
 import likelion.site.global.ApiResponse;
+import likelion.site.global.exception.CustomError;
+import likelion.site.global.exception.OverSubmissionException;
 import likelion.site.global.util.SecurityUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,7 +36,7 @@ public class SubmissionController {
         Assignment assignment = assignmentService.findAssignmentById(request.assignmentId);
         if (member.getPart() == Part.BE || member.getPart() == Part.FE) {
             if (submissionService.findByAssignmentAndMember(assignment, member)!=null) {
-                return ApiResponse.createError("특정과제엔 하나의 제출물만 제출 가능합니다.");
+                throw new OverSubmissionException(CustomError.OVER_SUBMISSION_EXCEPTION);
             }
             Submission submission = Submission.builder()
                     .member(member)

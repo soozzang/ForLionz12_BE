@@ -75,7 +75,8 @@ public class QuestionPostController {
     @Operation(summary = "특정 id의 질문글 삭제", description = "접속 중인 사용자 본인의 글만 삭제할 수 있습니다.")
     @DeleteMapping("{id}")
     public void deleteQuestionPost(@PathVariable("id") Long id) {
-        questionPostService.delete(id);
+        QuestionPost questionPost = questionPostService.findQuestionPostById(id);
+        questionPostService.delete(questionPost);
     }
 
     @Data
