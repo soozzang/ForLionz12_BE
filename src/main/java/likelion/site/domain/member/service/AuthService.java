@@ -8,6 +8,8 @@ import likelion.site.domain.member.dto.MemberRequestDto;
 import likelion.site.domain.member.dto.MemberResponseDto;
 import likelion.site.domain.member.dto.TokenDto;
 import likelion.site.domain.member.dto.TokenRequestDto;
+import likelion.site.global.exception.CustomError;
+import likelion.site.global.exception.DuplicateMemberError;
 import likelion.site.global.jwt.TokenProvider;
 import likelion.site.domain.member.repository.MemberRepository;
 import likelion.site.domain.member.repository.RefreshTokenRepository;
@@ -31,7 +33,7 @@ public class AuthService {
     @Transactional
     public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
         if (memberRepository.existsByEmail(memberRequestDto.getEmail())) {
-            throw new RuntimeException("이미 가입되어 있는 유저입니다");
+            throw new DuplicateMemberError(CustomError.DUPLICATE_MEMBER_ERROR);
         }
 
         Member member = memberRequestDto.toMember(passwordEncoder);
