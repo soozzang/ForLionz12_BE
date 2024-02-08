@@ -34,11 +34,7 @@ public class AuthController {
     @Operation(summary = "회원가입", description = "partName에는 BE/FE/ALL이 들어갈 수 있습니다.")
     @PostMapping("/signup")
     public ApiResponse<?> signup(@RequestBody MemberRequestDto memberRequestDto) {
-        try {
-            return ApiResponse.createSuccess(authService.signup(memberRequestDto));
-        } catch (ConstraintViolationException e) {
-            return ApiResponse.createError("필수 값을 빼먹지 않았는지 확인해라.");
-        }
+        return ApiResponse.createSuccess(authService.signup(memberRequestDto));
     }
 
     @Operation(summary = "로그인")
