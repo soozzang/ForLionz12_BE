@@ -1,5 +1,8 @@
 package likelion.site.domain.assignment.domain;
 
+import likelion.site.global.exception.BadPartException;
+import likelion.site.global.exception.CustomError;
+
 public enum AssignmentPart {
     BE , FE , ALL;
 
@@ -9,6 +12,6 @@ public enum AssignmentPart {
                 return Assignmentpart;
             }
         }
-        return null;
+        throw new BadPartException(CustomError.BAD_PART_ERROR);
     }
 }

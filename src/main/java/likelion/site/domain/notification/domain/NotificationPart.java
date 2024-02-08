@@ -1,5 +1,8 @@
 package likelion.site.domain.notification.domain;
 
+import likelion.site.global.exception.BadPartException;
+import likelion.site.global.exception.CustomError;
+
 public enum NotificationPart {
     BE , FE , ALL;
 
@@ -9,6 +12,6 @@ public enum NotificationPart {
                 return notificationPart;
             }
         }
-        return null;
+        throw new BadPartException(CustomError.BAD_PART_ERROR);
     }
 }
