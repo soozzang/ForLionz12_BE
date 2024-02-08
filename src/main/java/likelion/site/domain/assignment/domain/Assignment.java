@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class Assignment {
     @NotNull(message = "과제의 카테고리는 null이 될 수 없습니다.")
     private AssignmentMainContent assignmentMainContent;
 
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
 
     @NotNull(message = "과제의 마감기한은 null이 될 수 없습니다.")
     private LocalDateTime expireAt;

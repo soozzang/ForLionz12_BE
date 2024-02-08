@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class Comment {
     @NotNull(message = "댓글의 내용은 null이 될 수 없습니다.")
     private String content;
 
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
 
     @OneToMany(mappedBy = "comment")
     private List<ChildComment> childComments = new ArrayList<>();

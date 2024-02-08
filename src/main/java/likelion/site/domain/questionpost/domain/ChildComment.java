@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Entity
 @Getter
@@ -31,7 +32,7 @@ public class ChildComment {
     @JoinColumn(name = "parent_comment_id")
     private Comment comment;
 
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
 
     @Builder
     public ChildComment(Member member, String content, Comment comment) {

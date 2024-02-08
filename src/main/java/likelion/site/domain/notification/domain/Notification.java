@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Getter
 @Entity
@@ -27,7 +28,7 @@ public class Notification {
     @Enumerated(EnumType.STRING)
     private NotificationPart notificationPart;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
 
     @Builder
     public Notification(String title, NotificationPart notificationPart, String content) {
