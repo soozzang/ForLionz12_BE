@@ -2,6 +2,7 @@ package likelion.site.global.exception;
 
 import jakarta.validation.ConstraintViolationException;
 import likelion.site.global.ApiResponse;
+import likelion.site.global.exception.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -56,6 +57,11 @@ public class GlobalAdvice {
 
     @ExceptionHandler(OverSubmissionException.class)
     public ResponseEntity<ApiResponse<?>> overSubmissionException(OverSubmissionException e) {
+        return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
+    }
+
+    @ExceptionHandler(BadFileFormatException.class)
+    public ResponseEntity<ApiResponse<?>> badFileFormatException(BadFileFormatException e) {
         return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
     }
 }

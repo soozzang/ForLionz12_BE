@@ -5,7 +5,7 @@ import likelion.site.domain.assignment.domain.AssignmentMainContent;
 import likelion.site.domain.assignment.domain.AssignmentPart;
 import likelion.site.domain.assignment.repository.AssignmentRepository;
 import likelion.site.global.exception.CustomError;
-import likelion.site.global.exception.BadElementException;
+import likelion.site.global.exception.exceptions.BadElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

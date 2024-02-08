@@ -3,7 +3,7 @@ package likelion.site.domain.questionpost.service;
 import likelion.site.domain.questionpost.domain.ChildTag;
 import likelion.site.domain.questionpost.domain.ParentTag;
 import likelion.site.domain.questionpost.repository.ChildTagRepository;
-import likelion.site.global.exception.BadElementException;
+import likelion.site.global.exception.exceptions.BadElementException;
 import likelion.site.global.exception.CustomError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

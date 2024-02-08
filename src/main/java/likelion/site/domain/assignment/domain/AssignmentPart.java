@@ -1,6 +1,6 @@
 package likelion.site.domain.assignment.domain;
 
-import likelion.site.global.exception.BadPartException;
+import likelion.site.global.exception.exceptions.BadPartException;
 import likelion.site.global.exception.CustomError;
 
 public enum AssignmentPart {

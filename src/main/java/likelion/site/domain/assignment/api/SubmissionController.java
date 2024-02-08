@@ -11,12 +11,11 @@ import likelion.site.domain.member.service.MemberService;
 import likelion.site.domain.assignment.service.SubmissionService;
 import likelion.site.global.ApiResponse;
 import likelion.site.global.exception.CustomError;
-import likelion.site.global.exception.OverSubmissionException;
+import likelion.site.global.exception.exceptions.OverSubmissionException;
 import likelion.site.global.util.SecurityUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Submission", description = "과제 제출")

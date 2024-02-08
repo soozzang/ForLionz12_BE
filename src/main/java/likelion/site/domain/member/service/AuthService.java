@@ -9,7 +9,7 @@ import likelion.site.domain.member.dto.MemberResponseDto;
 import likelion.site.domain.member.dto.TokenDto;
 import likelion.site.domain.member.dto.TokenRequestDto;
 import likelion.site.global.exception.CustomError;
-import likelion.site.global.exception.DuplicateMemberError;
+import likelion.site.global.exception.exceptions.DuplicateMemberError;
 import likelion.site.global.jwt.TokenProvider;
 import likelion.site.domain.member.repository.MemberRepository;
 import likelion.site.domain.member.repository.RefreshTokenRepository;

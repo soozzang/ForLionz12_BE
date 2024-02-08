@@ -1,6 +1,6 @@
 package likelion.site.domain.assignment.domain;
 
-import likelion.site.global.exception.BadCategoryException;
+import likelion.site.global.exception.exceptions.BadCategoryException;
 import likelion.site.global.exception.CustomError;
 
 public enum AssignmentMainContent {
