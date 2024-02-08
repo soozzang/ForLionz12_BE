@@ -1,5 +1,7 @@
 package likelion.site.global.util;
 
+import likelion.site.global.exception.CurrentMemberException;
+import likelion.site.global.exception.CustomError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,8 +15,8 @@ public class SecurityUtil {
     // Request 가 들어올 때 JwtFilter 의 doFilter 에서 저장
     public static Long getCurrentMemberId() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getName() == null) {
-            throw  new RuntimeException("Security Context 에 인증 정보가 없습니다.");
+        if (authentication == null || authentication.getName() == null || authentication.getName().equals("anonymousUser")) {
+            throw new CurrentMemberException(CustomError.CURRENT_MEMBER_ERROR);
         }
 
         return Long.parseLong(authentication.getName());
