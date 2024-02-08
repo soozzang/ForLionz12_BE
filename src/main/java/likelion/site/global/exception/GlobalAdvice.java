@@ -2,6 +2,8 @@ package likelion.site.global.exception;
 
 import jakarta.validation.ConstraintViolationException;
 import likelion.site.global.ApiResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -28,32 +30,32 @@ public class GlobalAdvice {
 
 
     @ExceptionHandler(CurrentMemberException.class)
-    public ApiResponse<?> currentMemberException(CurrentMemberException e) {
-        return ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage());
+    public ResponseEntity<ApiResponse<?>> currentMemberException(CurrentMemberException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
     }
 
     @ExceptionHandler(DuplicateMemberError.class)
-    public ApiResponse<?> duplicateMemberException(DuplicateMemberError e) {
-        return ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage());
+    public ResponseEntity<ApiResponse<?>> duplicateMemberException(DuplicateMemberError e) {
+        return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
     }
 
     @ExceptionHandler(BadCategoryException.class)
-    public ApiResponse<?> badCategoryException(BadCategoryException e) {
-        return ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage());
+    public ResponseEntity<ApiResponse<?>> badCategoryException(BadCategoryException e) {
+        return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
     }
 
     @ExceptionHandler(BadPartException.class)
-    public ApiResponse<?> badPartException(BadPartException e) {
-        return ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage());
+    public ResponseEntity<ApiResponse<?>> badPartException(BadPartException e) {
+        return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
     }
 
     @ExceptionHandler(BadElementException.class)
-    public ApiResponse<?> noSuchElementException(BadElementException e) {
-        return ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage());
+    public ResponseEntity<ApiResponse<?>> noSuchElementException(BadElementException e) {
+        return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
     }
 
     @ExceptionHandler(OverSubmissionException.class)
-    public ApiResponse<?> overSubmissionException(OverSubmissionException e) {
-        return ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage());
+    public ResponseEntity<ApiResponse<?>> overSubmissionException(OverSubmissionException e) {
+        return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
     }
 }
