@@ -1,6 +1,7 @@
 package likelion.site.domain.assignment.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import likelion.site.domain.member.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class Submission {
     @Column(length = 500)
     private String description;
 
+    @NotNull(message = "과제 링크는 null이 될 수 없습니다.")
     private String assignmentLink;
 
     @Builder

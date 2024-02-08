@@ -1,6 +1,7 @@
 package likelion.site.domain.assignment.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,19 +18,24 @@ public class Assignment {
     @Column(name = "assignment_id")
     private Long id;
 
+    @NotNull(message = "제목은 null이 될 수 없습니다.")
     private String title;
 
     @Column(length = 50000)
+    @NotNull(message = "글 내용은 null이 될 수 없습니다.")
     private String content;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "과제의 파트는 null이 될 수 없습니다.")
     private AssignmentPart assignmentPart;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "과제의 카테고리는 null이 될 수 없습니다.")
     private AssignmentMainContent assignmentMainContent;
 
     private final LocalDateTime createdAt = LocalDateTime.now();
 
+    @NotNull(message = "과제의 마감기한은 null이 될 수 없습니다.")
     private LocalDateTime expireAt;
 
     @ElementCollection

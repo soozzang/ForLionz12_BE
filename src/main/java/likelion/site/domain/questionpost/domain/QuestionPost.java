@@ -1,6 +1,7 @@
 package likelion.site.domain.questionpost.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import likelion.site.domain.member.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,9 +22,11 @@ public class QuestionPost {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @NotNull(message = "질문 글의 제목은 null이 될 수 없습니다.")
     private String title;
 
     @Column(length = 50000)
+    @NotNull(message = "질문 글의 내용은 null이 될 수 없습니다.")
     private String content;
 
     private final LocalDateTime createdAt = LocalDateTime.now();

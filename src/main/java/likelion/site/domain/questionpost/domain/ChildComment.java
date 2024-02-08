@@ -1,6 +1,7 @@
 package likelion.site.domain.questionpost.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import likelion.site.domain.member.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,9 +23,11 @@ public class ChildComment {
     private Member member;
 
     @Column(length = 50000)
+    @NotNull(message = "댓글내용은 null이 될 수 없습니다.")
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull(message = "부모 댓글의 id는 null이 될 수 없습니다.")
     @JoinColumn(name = "parent_comment_id")
     private Comment comment;
 

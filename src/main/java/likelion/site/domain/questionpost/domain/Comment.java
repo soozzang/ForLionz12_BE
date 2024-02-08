@@ -1,6 +1,7 @@
 package likelion.site.domain.questionpost.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import likelion.site.domain.member.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,9 +25,11 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
+    @NotNull(message = "질문 글의 id는 null이 될 수 없습니다.")
     private QuestionPost questionPost;
 
     @Column(length = 50000)
+    @NotNull(message = "댓글의 내용은 null이 될 수 없습니다.")
     private String content;
 
     private final LocalDateTime createdAt = LocalDateTime.now();

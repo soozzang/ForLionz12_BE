@@ -1,6 +1,7 @@
 package likelion.site.domain.questionpost.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +17,10 @@ public class ChildTag {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
+    @NotNull(message = "부모 태그의 id는 null이 될 수 없습니다.")
     private ParentTag parenttag;
 
+    @NotNull(message = "자식 태그의 이름은 null이 될 수 없습니다.")
     private String name;
 
     @Builder
