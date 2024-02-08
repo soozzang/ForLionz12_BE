@@ -1,5 +1,8 @@
 package likelion.site.domain.member.domain;
 
+import likelion.site.global.exception.BadPartException;
+import likelion.site.global.exception.CustomError;
+
 public enum Part {
     BE, FE, STAFF;
 
@@ -9,6 +12,6 @@ public enum Part {
                 return part;
             }
         }
-        return null;
+        throw new BadPartException(CustomError.BAD_PART_ERROR);
     }
 }
