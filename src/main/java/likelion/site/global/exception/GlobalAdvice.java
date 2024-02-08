@@ -34,7 +34,12 @@ public class GlobalAdvice {
     }
 
     @ExceptionHandler(DuplicateMemberError.class)
-    public ApiResponse<?> duplicateMemberException(DuplicateMemberError error) {
-        return ApiResponse.createError(ERROR_MESSAGE + error.getCustomError().getHttpStatus() + " " + error.getMessage());
+    public ApiResponse<?> duplicateMemberException(DuplicateMemberError e) {
+        return ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage());
+    }
+
+    @ExceptionHandler(BadCategoryException.class)
+    public ApiResponse<?> badCategoryException(BadCategoryException e) {
+        return ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage());
     }
 }
