@@ -7,20 +7,18 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.dto.MemberResponseDto;
 import likelion.site.domain.member.service.MemberService;
-import likelion.site.domain.notification.api.NotificationController;
-import likelion.site.domain.notification.domain.Notification;
 import likelion.site.global.ApiResponse;
+import likelion.site.global.exception.exceptions.BadFileFormatException;
+import likelion.site.global.exception.CustomError;
 import likelion.site.global.util.SecurityUtil;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,8 +87,7 @@ public class MemberController {
             memberService.updateImageUrl(SecurityUtil.getCurrentMemberId(),fileUrl);
             return ApiResponse.createSuccess(fileUrl);
         } catch (IOException e) {
-            e.printStackTrace();
-            return ApiResponse.createError("이미지 파일 형식 오류");
+            throw new BadFileFormatException(CustomError.BAD_FILE_EXCEPTION);
         }
     }
 
