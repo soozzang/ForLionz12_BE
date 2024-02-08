@@ -1,5 +1,8 @@
 package likelion.site.domain.assignment.domain;
 
+import likelion.site.global.exception.BadCategoryException;
+import likelion.site.global.exception.CustomError;
+
 public enum AssignmentMainContent {
     HTML , REACT , DJANGO , AWS , JS , CSS , Docker, Git, PYTHON;
 
@@ -9,6 +12,6 @@ public enum AssignmentMainContent {
                 return assignmentMainContent;
             }
         }
-        return null;
+        throw new BadCategoryException(CustomError.BAD_CATEGORY_ERROR);
     }
 }
