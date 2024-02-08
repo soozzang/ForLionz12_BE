@@ -42,4 +42,9 @@ public class GlobalAdvice {
     public ApiResponse<?> badCategoryException(BadCategoryException e) {
         return ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage());
     }
+
+    @ExceptionHandler(BadPartException.class)
+    public ApiResponse<?> badCategoryException(BadPartException e) {
+        return ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage());
+    }
 }
