@@ -1,5 +1,6 @@
-package likelion.site.global.exception;
+package likelion.site.global.exception.exceptions;
 
+import likelion.site.global.exception.CustomError;
 import lombok.Getter;
 
 @Getter

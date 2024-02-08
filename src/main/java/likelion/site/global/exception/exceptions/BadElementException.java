@@ -1,9 +1,12 @@
-package likelion.site.global.exception;
+package likelion.site.global.exception.exceptions;
 
+import likelion.site.global.exception.CustomError;
 import lombok.Getter;
 
+import java.util.NoSuchElementException;
+
 @Getter
-public class BadElementException extends java.util.NoSuchElementException {
+public class BadElementException extends NoSuchElementException {
 
     private final CustomError customError;
     private final String message;
