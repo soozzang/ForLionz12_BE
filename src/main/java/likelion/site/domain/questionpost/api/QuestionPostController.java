@@ -3,19 +3,17 @@ package likelion.site.domain.questionpost.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.member.domain.Member;
-import likelion.site.domain.questionpost.domain.Comment;
 import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.member.service.MemberService;
+import likelion.site.domain.questionpost.dto.request.QuestionPostRequestDto;
+import likelion.site.domain.questionpost.dto.response.question.QuestionPostIdResponseDto;
+import likelion.site.domain.questionpost.dto.response.question.QuestionPostResponseDto;
 import likelion.site.domain.questionpost.service.QuestionPostService;
 import likelion.site.global.ApiResponse;
 import likelion.site.global.util.SecurityUtil;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +32,8 @@ public class QuestionPostController {
         Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
         QuestionPost questionPost = QuestionPost.builder()
                 .member(member)
-                .title(request.title)
-                .content(request.content)
+                .title(request.getTitle())
+                .content(request.getContent())
                 .build();
         Long id = questionPostService.addQuestionPost(questionPost);
         return ApiResponse.createSuccess(new QuestionPostIdResponseDto(id));
@@ -77,46 +75,5 @@ public class QuestionPostController {
     public void deleteQuestionPost(@PathVariable("id") Long id) {
         QuestionPost questionPost = questionPostService.findQuestionPostById(id);
         questionPostService.delete(questionPost);
-    }
-
-    @Data
-    public static class QuestionPostResponseDto {
-        Long id;
-        Long memberId;
-        String title;
-        String content;
-        LocalDateTime createdAt;
-        List<Comment> comments;
-
-        QuestionPostResponseDto(QuestionPost questionPost) {
-            id = questionPost.getId();
-            memberId = questionPost.getMember().getId();
-            title = questionPost.getTitle();
-            content = questionPost.getContent();
-            createdAt = questionPost.getCreatedAt();
-            comments = questionPost.getComments();
-        }
-    }
-
-
-    @Data
-    public static class QuestionPostIdResponseDto {
-        Long id;
-
-        QuestionPostIdResponseDto(Long id) {
-            this.id = id;
-        }
-    }
-
-    @Data
-    public static class QuestionPostRequestDto {
-        String title;
-        String content;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class Result<T> {
-        private T data;
     }
 }

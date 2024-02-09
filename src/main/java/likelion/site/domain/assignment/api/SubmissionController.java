@@ -3,6 +3,9 @@ package likelion.site.domain.assignment.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.assignment.domain.Assignment;
+import likelion.site.domain.assignment.dto.request.SubmissionRequestDto;
+import likelion.site.domain.assignment.dto.request.SubmissionUpdateRequestDto;
+import likelion.site.domain.assignment.dto.response.SubmissionIdResponseDto;
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.domain.Part;
 import likelion.site.domain.assignment.domain.Submission;
@@ -32,7 +35,7 @@ public class SubmissionController {
     @PostMapping
     public ApiResponse<?> createSubmission(@RequestBody SubmissionRequestDto request) {
         Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
-        Assignment assignment = assignmentService.findAssignmentById(request.assignmentId);
+        Assignment assignment = assignmentService.findAssignmentById(request.getAssignmentId());
         if (member.getPart() == Part.BE || member.getPart() == Part.FE) {
             if (submissionService.findByAssignmentAndMember(assignment, member)!=null) {
                 throw new OverSubmissionException(CustomError.OVER_SUBMISSION_EXCEPTION);
@@ -40,8 +43,8 @@ public class SubmissionController {
             Submission submission = Submission.builder()
                     .member(member)
                     .assignment(assignment)
-                    .description(request.description)
-                    .assignmentLink(request.assignmentLink)
+                    .description(request.getDescription())
+                    .assignmentLink(request.getAssignmentLink())
                     .build();
             Long id = submissionService.addSubmission(submission);
             return ApiResponse.createSuccess(new SubmissionIdResponseDto(id));
@@ -56,35 +59,5 @@ public class SubmissionController {
         Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
         submissionService.updateSubmission(assignment, member, request.getDescription() , request.getAssignmentLink());
         return ApiResponse.createSuccess(new SubmissionIdResponseDto(id));
-    }
-
-
-
-    @Data
-    public static class SubmissionIdResponseDto {
-        Long id;
-
-        SubmissionIdResponseDto(Long id) {
-            this.id = id;
-        }
-    }
-
-    @Data
-    public static class SubmissionRequestDto {
-        Long assignmentId;
-        String description;
-        String assignmentLink;
-    }
-
-    @Data
-    public static class SubmissionUpdateRequestDto {
-        String description;
-        String assignmentLink;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class Result<T> {
-        private T data;
     }
 }

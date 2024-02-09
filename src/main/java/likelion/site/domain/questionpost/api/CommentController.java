@@ -5,18 +5,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.questionpost.domain.Comment;
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.questionpost.domain.QuestionPost;
+import likelion.site.domain.questionpost.dto.request.CommentRequestDto;
+import likelion.site.domain.questionpost.dto.response.comment.CommentResponseDto;
+import likelion.site.domain.questionpost.dto.response.comment.CommentResponseIdDto;
 import likelion.site.domain.questionpost.service.CommentService;
 import likelion.site.domain.member.service.MemberService;
 import likelion.site.domain.questionpost.service.QuestionPostService;
 import likelion.site.global.ApiResponse;
 import likelion.site.global.util.SecurityUtil;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.lang.model.type.ArrayType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,11 +33,11 @@ public class CommentController {
     @PostMapping
     public ApiResponse<CommentResponseIdDto> createComment(@RequestBody CommentRequestDto request) {
         Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
-        QuestionPost questionPost = questionPostService.findQuestionPostById(request.questionPostId);
+        QuestionPost questionPost = questionPostService.findQuestionPostById(request.getQuestionPostId());
         Comment comment = Comment.builder()
                 .member(member)
                 .questionPost(questionPost)
-                .content(request.content)
+                .content(request.getContent())
                 .build();
         Long id = commentService.addComment(comment);
         return ApiResponse.createSuccess(new CommentResponseIdDto(comment));
@@ -58,39 +57,4 @@ public class CommentController {
 
         return ApiResponse.createSuccess(commentResponseDtos);
     }
-
-    @Data
-    public static class CommentResponseDto {
-        Long id;
-        Long memberId;
-        String content;
-
-        public CommentResponseDto(Comment comment) {
-            this.id = comment.getId();
-            this.memberId = comment.getMember().getId();
-            this.content = comment.getContent();
-        }
-    }
-
-    @Data
-    public static class CommentResponseIdDto {
-        Long id;
-
-        public CommentResponseIdDto(Comment comment) {
-            this.id = comment.getId();
-        }
-    }
-
-    @Data
-    public static class CommentRequestDto {
-        String content;
-        Long questionPostId;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class Result<T> {
-        private T data;
-    }
-
 }

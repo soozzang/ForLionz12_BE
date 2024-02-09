@@ -5,15 +5,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.questionpost.domain.ChildTag;
 import likelion.site.domain.questionpost.domain.ParentTag;
 import likelion.site.domain.member.domain.Part;
+import likelion.site.domain.questionpost.dto.request.ChildTagRequestDto;
+import likelion.site.domain.questionpost.dto.response.tag.ChildTagResponseDto;
+import likelion.site.domain.questionpost.dto.response.tag.ChildTagResponseIdDto;
 import likelion.site.domain.questionpost.service.ChildTagService;
 import likelion.site.domain.member.service.MemberService;
 import likelion.site.domain.questionpost.service.ParentTagService;
 import likelion.site.global.ApiResponse;
 import likelion.site.global.util.SecurityUtil;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -33,9 +33,9 @@ public class ChildTagController {
     @PostMapping
     public ApiResponse<ChildTagResponseIdDto> createChildTag(@RequestBody ChildTagRequestDto request) {
         if (memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId()).getPart() == Part.STAFF) {
-            ParentTag parentTag = parentTagService.findById(request.parentTagId);
+            ParentTag parentTag = parentTagService.findById(request.getParentTagId());
             ChildTag childTag = ChildTag.builder()
-                    .name(request.name)
+                    .name(request.getName())
                     .parentTag(parentTag)
                     .build();
             Long id = childTagService.addChildTag(childTag);
@@ -58,38 +58,5 @@ public class ChildTagController {
         }
 
         return ApiResponse.createSuccess(childTagResponseDtos);
-    }
-
-
-    @Data
-    public static class ChildTagResponseIdDto {
-        Long id;
-
-        public ChildTagResponseIdDto(ChildTag childTag) {
-            this.id = childTag.getId();
-        }
-    }
-
-    @Data
-    public static class ChildTagResponseDto {
-        Long id;
-        String name;
-
-        public ChildTagResponseDto(ChildTag childTag) {
-            this.id = childTag.getId();
-            this.name = childTag.getName();
-        }
-    }
-
-    @Data
-    public static class ChildTagRequestDto {
-        String name;
-        Long parentTagId;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class Result<T> {
-        private T data;
     }
 }

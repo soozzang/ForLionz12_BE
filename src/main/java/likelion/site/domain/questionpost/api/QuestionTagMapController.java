@@ -5,14 +5,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.questionpost.domain.ChildTag;
 import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.questionpost.domain.QuestionTagMap;
+import likelion.site.domain.questionpost.dto.request.QuestionTagMapRequestDto;
+import likelion.site.domain.questionpost.dto.response.tag.QuestionTagMapResponseDto;
+import likelion.site.domain.questionpost.dto.response.tag.QuestionTagMapResponseIdDto;
 import likelion.site.domain.questionpost.service.ChildTagService;
 import likelion.site.domain.questionpost.service.QuestionPostService;
 import likelion.site.domain.questionpost.service.QuestionTagMapService;
 import likelion.site.global.ApiResponse;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -31,8 +31,8 @@ public class QuestionTagMapController {
     @Operation(summary = "질문 글 생성시 특정 태그들과 매핑")
     @PostMapping
     public ApiResponse<QuestionTagMapResponseIdDto> createQuestionTagMap(@RequestBody QuestionTagMapRequestDto request) {
-        QuestionPost questionPost = questionPostService.findQuestionPostById(request.questionPostId);
-        ChildTag childTag = childTagService.findById(request.childTagId);
+        QuestionPost questionPost = questionPostService.findQuestionPostById(request.getQuestionPostId());
+        ChildTag childTag = childTagService.findById(request.getChildTagId());
         QuestionTagMap questionTagMap = QuestionTagMap.builder()
                 .questionPost(questionPost)
                 .childTag(childTag)
@@ -54,39 +54,5 @@ public class QuestionTagMapController {
         }
 
         return ApiResponse.createSuccess(questionTagMapResponseDtos);
-    }
-
-    @Data
-    public static class QuestionTagMapResponseIdDto {
-        Long id;
-
-        public QuestionTagMapResponseIdDto(QuestionTagMap questionTagMap) {
-            this.id = questionTagMap.getId();
-        }
-    }
-
-    @Data
-    public static class QuestionTagMapResponseDto {
-        Long id;
-        Long childTagId;
-        Long questionPostId;
-
-        public QuestionTagMapResponseDto(QuestionTagMap questionTagMap) {
-            this.id = questionTagMap.getId();
-            this.childTagId = questionTagMap.getChildTag().getId();
-            this.questionPostId = questionTagMap.getQuestionPost().getId();
-        }
-    }
-
-    @Data
-    public static class QuestionTagMapRequestDto {
-        Long questionPostId;
-        Long childTagId;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class Result<T> {
-        private T data;
     }
 }

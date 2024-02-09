@@ -3,7 +3,7 @@ package likelion.site.global.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import likelion.site.domain.member.dto.TokenDto;
+import likelion.site.domain.member.dto.request.TokenDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
