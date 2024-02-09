@@ -20,6 +20,8 @@ import likelion.site.global.util.SecurityUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -117,13 +119,16 @@ public class AssignmentController {
 
     @Operation(summary = "특정 과제의 id로 현재 접속한 사용자의 제출물을 확인", description = "제출물이 없다면, 제출물이 없다는 메시지를 응답합니다")
     @GetMapping("{id}/mysubmission")
-    public ApiResponse<?> getMySubmission(@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse<?>> getMySubmission(@PathVariable("id") Long id) {
         Assignment assignment = assignmentService.findAssignmentById(id);
         Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
         try{
-            return ApiResponse.createSuccess(new SubmissionResponseDto(submissionService.findByAssignmentAndMember(assignment,member)));
+            if(member.getPart() == Part.STAFF){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.createError("스태프는 과제가 없습니다."));
+            }
+            return ResponseEntity.ok().body(ApiResponse.createSuccess(new SubmissionResponseDto(submissionService.findByAssignmentAndMember(assignment,member))));
         } catch (NullPointerException e){
-            return ApiResponse.createSuccessWithNoContent("해당과제에 접속 유저의 제출물이 없습니다.");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.createSuccessWithNoContent("해당과제에 접속 유저의 제출물이 없습니다."));
         }
     }
 }
