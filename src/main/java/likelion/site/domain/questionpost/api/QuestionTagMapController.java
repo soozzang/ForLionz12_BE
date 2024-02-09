@@ -56,7 +56,7 @@ public class QuestionTagMapController {
     }
 
     @Operation(summary = "모든 자식태그-게시글 매핑 데이터 조회")
-    @GetMapping
+    @GetMapping("all")
     public ApiResponse<List<QuestionTagMapResponseDto>> getAllQuestionTagMap() {
         List<QuestionTagMapResponseDto> questionTagMapResponseDtos = new ArrayList<>();
         List<QuestionTagMap> questionTagMaps = questionTagMapService.findAllTagMap();
