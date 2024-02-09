@@ -1,4 +1,4 @@
-package likelion.site.domain.member.dto;
+package likelion.site.domain.member.dto.request;
 
 import likelion.site.domain.member.domain.Authority;
 import likelion.site.domain.member.domain.Member;
@@ -27,9 +27,7 @@ public class MemberRequestDto {
                 .password(passwordEncoder.encode(password))
                 .authority(Authority.ROLE_USER)
                 .part(part)
-//                .image(new Image("https://lionz.kro.kr/member/img/DefaultProfile.png","DefaultProfile.png","/home/img/DefaultProfile.png"))
                 .build();
-
     }
 
     public UsernamePasswordAuthenticationToken toAuthentication() {

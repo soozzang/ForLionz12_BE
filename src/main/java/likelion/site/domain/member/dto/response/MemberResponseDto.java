@@ -1,4 +1,4 @@
-package likelion.site.domain.member.dto;
+package likelion.site.domain.member.dto.response;
 
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.domain.Part;
