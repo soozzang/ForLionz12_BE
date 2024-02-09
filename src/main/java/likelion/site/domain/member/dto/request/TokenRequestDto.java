@@ -1,4 +1,4 @@
-package likelion.site.domain.member.dto;
+package likelion.site.domain.member.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

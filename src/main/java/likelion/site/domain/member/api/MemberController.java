@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.dto.request.GithubAddressUpdateRequestDto;
-import likelion.site.domain.member.dto.request.InstagramIdUpdateRequest;
+import likelion.site.domain.member.dto.request.InstagramIdUpdateRequestDto;
 import likelion.site.domain.member.dto.request.IntroductionUpdateRequestDto;
 import likelion.site.domain.member.dto.request.PasswordUpdateRequestDto;
 import likelion.site.domain.member.dto.response.MemberIdResponseDto;
@@ -97,7 +97,7 @@ public class MemberController {
 
     @Operation(summary = "나의 인스타그램 아이디 업데이트", description = "해당 토큰의 사용자의 인스타그램 아이디를 업데이트 합니다.")
     @PutMapping("/instagram")
-    public ApiResponse<MemberIdResponseDto> updateMemberInstagramId(@RequestBody InstagramIdUpdateRequest request) {
+    public ApiResponse<MemberIdResponseDto> updateMemberInstagramId(@RequestBody InstagramIdUpdateRequestDto request) {
         Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
         memberService.updateInstagramId(member.getId(), request.getInstagramId());
         return ApiResponse.createSuccess(new MemberIdResponseDto(member));
