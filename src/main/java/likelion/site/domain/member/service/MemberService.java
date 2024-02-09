@@ -1,7 +1,7 @@
 package likelion.site.domain.member.service;
 
 import likelion.site.domain.member.domain.Member;
-import likelion.site.domain.member.dto.MemberResponseDto;
+import likelion.site.domain.member.dto.response.MemberResponseDto;
 import likelion.site.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
