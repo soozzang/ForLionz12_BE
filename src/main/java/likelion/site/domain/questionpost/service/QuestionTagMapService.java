@@ -22,6 +22,10 @@ public class QuestionTagMapService {
         return questionTagMap.getId();
     }
 
+    public List<QuestionTagMap> findAllTagMap() {
+        return questionTagMapRepository.findAll();
+    }
+
     public List<QuestionTagMap> findByChildTag(ChildTag childTag) {
         return questionTagMapRepository.findByChildTag(childTag);
     }

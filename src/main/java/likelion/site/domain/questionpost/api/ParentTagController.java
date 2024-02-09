@@ -3,11 +3,14 @@ package likelion.site.domain.questionpost.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.member.domain.Part;
+import likelion.site.domain.questionpost.domain.ChildTag;
 import likelion.site.domain.questionpost.domain.ParentTag;
 import likelion.site.domain.member.service.MemberService;
 import likelion.site.domain.questionpost.dto.request.ParentTagRequestDto;
+import likelion.site.domain.questionpost.dto.response.tag.ChildTagResponseDto;
 import likelion.site.domain.questionpost.dto.response.tag.ParentTagResponseDto;
 import likelion.site.domain.questionpost.dto.response.tag.ParentTagResponseIdDto;
+import likelion.site.domain.questionpost.service.ChildTagService;
 import likelion.site.domain.questionpost.service.ParentTagService;
 import likelion.site.global.ApiResponse;
 import likelion.site.global.util.SecurityUtil;
@@ -24,6 +27,7 @@ import java.util.List;
 public class ParentTagController {
 
     private final ParentTagService parentTagService;
+    private final ChildTagService childTagService;
     private final MemberService memberService;
 
     @Operation(summary = "부모태그 생성", description = "STAFF만 가능합니다.")
@@ -46,7 +50,14 @@ public class ParentTagController {
         List<ParentTagResponseDto> parentTagResponseDtos = new ArrayList<>();
 
         for (ParentTag parentTag : parentTags) {
-            ParentTagResponseDto dto = new ParentTagResponseDto(parentTag);
+            List<ChildTag> childTags = childTagService.findChildTagsByParentTag(parentTag);
+            List<ChildTagResponseDto> childDtos = new ArrayList<>();
+            for (ChildTag childTag : childTags) {
+                ChildTagResponseDto dto = new ChildTagResponseDto(childTag);
+                childDtos.add(dto);
+            }
+
+            ParentTagResponseDto dto = new ParentTagResponseDto(parentTag , childDtos);
             parentTagResponseDtos.add(dto);
         }
 

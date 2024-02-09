@@ -13,10 +13,12 @@ public class ParentTagResponseDto {
 
     Long id;
     String name;
-    List<ChildTag> childTags;
+//    List<ChildTag> childTags;
+    List<ChildTagResponseDto> childTagResponseDto;
 
-    public ParentTagResponseDto(ParentTag parentTag) {
+    public ParentTagResponseDto(ParentTag parentTag, List<ChildTagResponseDto> childTagResponseDto) {
         this.id = parentTag.getId();
         this.name = parentTag.getName();
+        this.childTagResponseDto = childTagResponseDto;
     }
 }
