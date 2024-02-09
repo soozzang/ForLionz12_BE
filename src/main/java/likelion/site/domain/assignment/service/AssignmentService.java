@@ -48,7 +48,6 @@ public class AssignmentService {
     public void updateAssignment(Long id, AssignmentMainContent assignmentMainContent, String title, String content, AssignmentPart assignmentPart, LocalDateTime expireAt, List<String> tags) {
         Assignment assignment = assignmentRepository.findById(id).get();
         assignment.updateAssignment(title,content,assignmentMainContent,assignmentPart,expireAt,tags);
-        addAssignment(assignment);
     }
 
     @Transactional
