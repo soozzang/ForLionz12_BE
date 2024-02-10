@@ -64,4 +64,9 @@ public class GlobalAdvice {
     public ResponseEntity<ApiResponse<?>> badFileFormatException(BadFileFormatException e) {
         return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
     }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<ApiResponse<?>> authorizationException(AuthorizationException e) {
+        return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
+    }
 }
