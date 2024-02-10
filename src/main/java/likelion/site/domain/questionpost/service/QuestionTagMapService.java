@@ -1,6 +1,7 @@
 package likelion.site.domain.questionpost.service;
 
 import likelion.site.domain.questionpost.domain.ChildTag;
+import likelion.site.domain.questionpost.domain.ParentTag;
 import likelion.site.domain.questionpost.domain.QuestionTagMap;
 import likelion.site.domain.questionpost.repository.QuestionTagMapRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,4 @@ public class QuestionTagMapService {
     public List<QuestionTagMap> findByChildTag(ChildTag childTag) {
         return questionTagMapRepository.findByChildTag(childTag);
     }
-
 }

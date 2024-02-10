@@ -15,7 +15,6 @@ public class QuestionPostResponseDto {
     String title;
     String content;
     LocalDateTime createdAt;
-    List<Comment> comments;
 
     public QuestionPostResponseDto(QuestionPost questionPost) {
         id = questionPost.getId();
@@ -23,6 +22,5 @@ public class QuestionPostResponseDto {
         title = questionPost.getTitle();
         content = questionPost.getContent();
         createdAt = questionPost.getCreatedAt();
-        comments = questionPost.getComments();
     }
 }

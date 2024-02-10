@@ -44,19 +44,4 @@ public class ChildTagController {
         }
         return null;
     }
-
-    @Operation(summary = "특정 부모 태그에 대한 자식태그들 조회")
-    @GetMapping
-    public ApiResponse<List<ChildTagResponseDto>> getChildTags(@RequestParam Long parentTagId) {
-        ParentTag parentTag = parentTagService.findById(parentTagId);
-        List<ChildTag> childTags = childTagService.findChildTagsByParentTag(parentTag);
-        List<ChildTagResponseDto> childTagResponseDtos = new ArrayList<>();
-
-        for (ChildTag childTag : childTags) {
-            ChildTagResponseDto dto = new ChildTagResponseDto(childTag);
-            childTagResponseDtos.add(dto);
-        }
-
-        return ApiResponse.createSuccess(childTagResponseDtos);
-    }
 }
