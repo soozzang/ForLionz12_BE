@@ -8,10 +8,12 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class NotificationResponseDto {
+public class NotificationDetailResponse {
 
     Long id;
     String title;
@@ -21,11 +23,21 @@ public class NotificationResponseDto {
     LocalDateTime createdAt;
 
     @Builder
-    public NotificationResponseDto(Notification notification) {
+    public NotificationDetailResponse(Notification notification) {
         this.id = notification.getId();
         this.title = notification.getTitle();
         this.content = notification.getContent();
         this.part = notification.getNotificationPart();
         this.createdAt = notification.getCreatedAt();
+    }
+
+    public static List<NotificationDetailResponse> to(List<Notification> notifications) {
+        List<NotificationDetailResponse> notificationDtoList = new ArrayList<>();
+
+        for (Notification notification : notifications) {
+            NotificationDetailResponse dto = new NotificationDetailResponse(notification);
+            notificationDtoList.add(dto);
+        }
+        return notificationDtoList;
     }
 }
