@@ -14,4 +14,8 @@ public enum Part {
         }
         throw new BadPartException(CustomError.BAD_PART_ERROR);
     }
+
+    public boolean isStaff() {
+        return this == Part.STAFF;
+    }
 }
