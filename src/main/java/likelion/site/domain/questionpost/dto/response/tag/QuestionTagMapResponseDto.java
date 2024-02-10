@@ -1,6 +1,5 @@
 package likelion.site.domain.questionpost.dto.response.tag;
 
-import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.questionpost.domain.QuestionTagMap;
 import lombok.Getter;
 

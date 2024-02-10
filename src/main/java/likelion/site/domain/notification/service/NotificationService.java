@@ -4,8 +4,8 @@ import likelion.site.domain.member.repository.MemberRepository;
 import likelion.site.domain.notification.domain.Notification;
 import likelion.site.domain.notification.domain.NotificationPart;
 import likelion.site.domain.notification.dto.request.NotificationRequest;
-import likelion.site.domain.notification.dto.response.NotificationDetailResponse;
 import likelion.site.domain.notification.dto.response.NotificationIdResponse;
+import likelion.site.domain.notification.dto.response.NotificationDetailResponse;
 import likelion.site.domain.notification.repository.NotificationRepository;
 import likelion.site.global.exception.CustomError;
 import likelion.site.global.exception.exceptions.AuthorizationException;
@@ -24,35 +24,35 @@ public class NotificationService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public NotificationDetailResponse addNotification(NotificationRequest request, Long memberId){
+    public NotificationIdResponse addNotification(NotificationRequest request, Long memberId){
         if (memberRepository.findById(memberId).get().getPart().isStaff()){
             Notification notification = request.toEntity();
             notificationRepository.save(notification);
-            return new NotificationDetailResponse(notification);
+            return new NotificationIdResponse(notification);
         }
         throw new AuthorizationException(CustomError.AUTHORIZATION_EXCEPTION);
     }
 
-    public NotificationIdResponse findNotificationById(Long notificationId) {
+    public NotificationDetailResponse findNotificationById(Long notificationId) {
         Notification notification = notificationRepository.findById(notificationId).get();
-        return new NotificationIdResponse(notification);
+        return new NotificationDetailResponse(notification);
     }
 
-    public List<NotificationIdResponse> findAllNotifications() {
-        return NotificationIdResponse.to(notificationRepository.findAll());
+    public List<NotificationDetailResponse> findAllNotifications() {
+        return NotificationDetailResponse.to(notificationRepository.findAll());
     }
 
-    public List<NotificationIdResponse> findByNotificationPart(String partName) {
+    public List<NotificationDetailResponse> findByNotificationPart(String partName) {
         NotificationPart notificationPart = NotificationPart.findByName(partName);
-        return NotificationIdResponse.to(notificationRepository.findByNotificationPart(notificationPart));
+        return NotificationDetailResponse.to(notificationRepository.findByNotificationPart(notificationPart));
     }
 
     @Transactional
-    public NotificationDetailResponse update(Long id, NotificationRequest request) {
+    public NotificationIdResponse update(Long id, NotificationRequest request) {
         NotificationPart notificationPart = NotificationPart.findByName(request.getPart());
         Notification notification = notificationRepository.findById(id).get();
         notification.updateNotification(request.getTitle(), request.getContent(), notificationPart);
-        return new NotificationDetailResponse(notification);
+        return new NotificationIdResponse(notification);
     }
 
     @Transactional
