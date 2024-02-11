@@ -10,9 +10,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.expression.spel.ast.Assign;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface SubmissionRepository extends JpaRepository<Submission, Long> {
 
 
-    public Submission findSubmissionByAssignmentAndMember(Assignment assignment , Member member);
+    public Optional<Submission> findSubmissionByAssignmentAndMember(Assignment assignment , Member member);
 }
