@@ -1,5 +1,7 @@
 package likelion.site.domain.questionpost.service;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.repository.MemberRepository;
 import likelion.site.domain.questionpost.domain.QuestionPost;
@@ -11,12 +13,16 @@ import likelion.site.global.exception.exceptions.AuthorizationException;
 import likelion.site.global.exception.exceptions.BadElementException;
 import likelion.site.global.exception.CustomError;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,13 +31,53 @@ public class QuestionPostService {
 
     private final QuestionPostRepository questionPostRepository;
     private final MemberRepository memberRepository;
+    private final AmazonS3Client amazonS3Client;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     @Transactional
-    public QuestionPostIdResponseDto addQuestionPost(Long id, QuestionPostRequestDto request){
+    public QuestionPostIdResponseDto addQuestionPost(Long id, QuestionPostRequestDto request) {
         Member member = memberRepository.findById(id).get();
-        QuestionPost questionPost = request.toEntity(member);
+        List<String> fileUrlList = getFileUrlList(request);
+        QuestionPost questionPost = request.toEntity(member,fileUrlList);
         questionPostRepository.save(questionPost);
         return new QuestionPostIdResponseDto(questionPost);
+    }
+
+    @Transactional
+    public QuestionPostIdResponseDto update(Long questionId, Long memberId, QuestionPostRequestDto request) {
+        Optional<QuestionPost> questionPost = questionPostRepository.findById(questionId);
+        Member member = memberRepository.findById(memberId).get();
+
+        if (questionPost.isEmpty()) {
+            throw new BadElementException(CustomError.BAD_ELEMENT_ERROR);
+        }
+        if (member != questionPost.get().getMember()) {
+            throw new AuthorizationException(CustomError.AUTHORIZATION_EXCEPTION);
+        }
+        List<String> fileUrlList = getFileUrlList(request);
+        questionPost.get().updateQuestionPost(request.getTitle(),request.getContent(), fileUrlList);
+        questionPostRepository.save(questionPost.get());
+        return new QuestionPostIdResponseDto(questionPost.get());
+    }
+
+    private List<String> getFileUrlList(QuestionPostRequestDto request) {
+        List<String> fileUrlList = new ArrayList<>();
+        IntStream.range(0, request.getFile().size()).forEach(i -> {
+            MultipartFile file = request.getFile().get(i);
+            String fileName = file.getOriginalFilename() + "." + request.getTitle() + "." + i;
+            String fileUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + fileName;
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
+            try {
+                amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
+            } catch (IOException ignored) {
+            }
+            fileUrlList.add(fileUrl);
+        });
+        return fileUrlList;
     }
 
     public List<QuestionPostResponseDto> findAllQuestionPosts() {
@@ -52,22 +98,6 @@ public class QuestionPostService {
             return new QuestionPostResponseDto(questionPost.get());
         }
         throw new BadElementException(CustomError.BAD_ELEMENT_ERROR);
-    }
-
-    @Transactional
-    public QuestionPostIdResponseDto update(Long questionId, Long memberId, QuestionPostRequestDto request) {
-        Optional<QuestionPost> questionPost = questionPostRepository.findById(questionId);
-        Member member = memberRepository.findById(memberId).get();
-
-        if (questionPost.isEmpty()) {
-            throw new BadElementException(CustomError.BAD_ELEMENT_ERROR);
-        }
-        if (member != questionPost.get().getMember()) {
-            throw new AuthorizationException(CustomError.AUTHORIZATION_EXCEPTION);
-        }
-        questionPost.get().updateQuestionPost(request.getTitle(),request.getContent());
-        questionPostRepository.save(questionPost.get());
-        return new QuestionPostIdResponseDto(questionPost.get());
     }
 
     @Transactional

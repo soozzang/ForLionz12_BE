@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,15 +36,20 @@ public class QuestionPost {
     @OneToMany(mappedBy = "questionPost")
     private List<Comment> comments;
 
+    @ElementCollection
+    private List<String> imageUrl = new ArrayList<>();
+
     @Builder
-    public QuestionPost(Member member, String title, String content) {
+    public QuestionPost(Member member, String title, String content, List<String> imageUrl) {
         this.member = member;
         this.title = title;
         this.content = content;
+        this.imageUrl = imageUrl;
     }
 
-    public void updateQuestionPost(String title, String content) {
+    public void updateQuestionPost(String title, String content, List<String> imageUrl) {
         this.title = title;
         this.content = content;
+        this.imageUrl = imageUrl;
     }
 }

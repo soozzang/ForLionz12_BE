@@ -2,20 +2,20 @@ package likelion.site.domain.questionpost.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import likelion.site.domain.member.domain.Member;
-import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.member.service.MemberService;
-import likelion.site.domain.questionpost.domain.success.QuestionPostSuccess;
 import likelion.site.domain.questionpost.dto.request.QuestionPostRequestDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostIdResponseDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostResponseDto;
 import likelion.site.domain.questionpost.service.QuestionPostService;
 import likelion.site.global.ApiResponse;
+import likelion.site.global.exception.exceptions.BadFileFormatException;
 import likelion.site.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 import static likelion.site.domain.questionpost.domain.success.QuestionPostSuccess.*;
@@ -30,7 +30,9 @@ public class QuestionPostController {
     private final MemberService memberService;
 
     @Operation(summary = "질문글 생성", description = "STAFF는 불가능합니다.")
-    @PostMapping
+    @PostMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ApiResponse<QuestionPostIdResponseDto> createQuestionPost(@RequestBody QuestionPostRequestDto request) {
         return ApiResponse.createSuccess(QUESTION_POST_CREATED_SUCCESS,questionPostService.addQuestionPost(SecurityUtil.getCurrentMemberId(),request));
     }
@@ -48,7 +50,9 @@ public class QuestionPostController {
     }
 
     @Operation(summary = "특정 id의 질문글 수정", description = "접속 중인 사용자 본인의 글만 수정할 수 있습니다.")
-    @PutMapping("{id}")
+    @PutMapping(value = "{id}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ApiResponse<QuestionPostIdResponseDto> updateQuestionPost(@PathVariable("id") Long id, @RequestBody QuestionPostRequestDto request) {
         return ApiResponse.createSuccess(QUESTION_POST_UPDATED_SUCCESS,questionPostService.update(id, SecurityUtil.getCurrentMemberId(), request));
     }

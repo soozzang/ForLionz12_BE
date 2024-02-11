@@ -15,6 +15,7 @@ import likelion.site.global.ApiResponse;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,23 +37,23 @@ public class AuthController {
 
     @Operation(summary = "회원가입", description = "partName에는 BE/FE/ALL이 들어갈 수 있습니다.")
     @PostMapping("/signup")
-    public ApiResponse<?> signup(@RequestBody MemberRequest memberRequestDto) {
-        return ApiResponse.createSuccess(MEMBER_CREATED_SUCCESS,authService.signup(memberRequestDto));
+    public ResponseEntity<ApiResponse<?>> signup(@RequestBody MemberRequest memberRequestDto) {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(MEMBER_CREATED_SUCCESS,authService.signup(memberRequestDto)));
     }
 
     @Operation(summary = "로그인")
     @PostMapping("/login")
-    public ApiResponse<TokenDto> login(@RequestBody LoginRequestDto loginRequestDto) {
-        return ApiResponse.createSuccess(LOGIN_SUCCESS, authService.login(loginRequestDto));
+    public ResponseEntity<ApiResponse<TokenDto>> login(@RequestBody LoginRequestDto loginRequestDto) {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(LOGIN_SUCCESS, authService.login(loginRequestDto)));
     }
 
     @Operation(summary = "토큰 재발급")
     @PostMapping("/reissue")
-    public ApiResponse<TokenDto> reissue(@RequestBody accessDTO accessDTO) {
+    public ResponseEntity<ApiResponse<TokenDto>> reissue(@RequestBody accessDTO accessDTO) {
         TokenRequestDto tokenRequestDto = new TokenRequestDto();
         tokenRequestDto.setAccessToken(accessDTO.accessToken);
         tokenRequestDto.setRefreshToken(refreshTokenRepository.findByAccessToken(accessDTO.getAccessToken()).get().getValue());
-        return ApiResponse.createSuccess(TOKEN_CREATE_SUCCESS, authService.reissue(tokenRequestDto));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(TOKEN_CREATE_SUCCESS, authService.reissue(tokenRequestDto)));
     }
 
     @Data

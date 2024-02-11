@@ -34,32 +34,32 @@ public class MemberController {
 
     @Operation(summary = "내 정보 조회", description = "해당 토큰의 사용자의 정보를 조회합니다.")
     @GetMapping("/me")
-    public ApiResponse<MemberResponseDto> findMyInfo() {
-        return ApiResponse.createSuccess(GET_MEMBER_SUCCESS,memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId()));
+    public ResponseEntity<ApiResponse<MemberResponseDto>> findMyInfo() {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(GET_MEMBER_SUCCESS,memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId())));
     }
 
     @Operation(summary = "id를 통해 특정 멤버를 조회")
     @GetMapping
-    public ApiResponse<MemberResponseDto> findMemberInfoById(@RequestParam Long id) {
-        return ApiResponse.createSuccess(GET_MEMBER_SUCCESS,memberService.findMemberInfoById(id));
+    public ResponseEntity<ApiResponse<MemberResponseDto>> findMemberInfoById(@RequestParam Long id) {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(GET_MEMBER_SUCCESS,memberService.findMemberInfoById(id)));
     }
 
     @Operation(summary = "나의 한 줄 소개 업데이트", description = "해당 토큰의 사용자의 한 줄 소개를 업데이트 합니다.")
     @PutMapping("/comment")
-    public ApiResponse<MemberIdResponseDto> updateMemberIntroduction(@RequestBody IntroductionUpdateRequest request) {
-        return ApiResponse.createSuccess(MEMBER_UPDATED_SUCCESS,memberService.updateIntroduction(SecurityUtil.getCurrentMemberId(),request));
+    public ResponseEntity<ApiResponse<MemberIdResponseDto>> updateMemberIntroduction(@RequestBody IntroductionUpdateRequest request) {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(MEMBER_UPDATED_SUCCESS,memberService.updateIntroduction(SecurityUtil.getCurrentMemberId(),request)));
     }
 
     @Operation(summary = "나의 깃허브 주소 업데이트", description = "해당 토큰의 사용자의 깃허브 주소를 업데이트 합니다.")
     @PutMapping("/github")
-    public ApiResponse<MemberIdResponseDto> updateMemberGithubAddress(@RequestBody GithubAddressUpdateRequest request) {
-        return ApiResponse.createSuccess(MEMBER_UPDATED_SUCCESS, memberService.updateGithubAddress(SecurityUtil.getCurrentMemberId(), request));
+    public ResponseEntity<ApiResponse<MemberIdResponseDto>> updateMemberGithubAddress(@RequestBody GithubAddressUpdateRequest request) {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(MEMBER_UPDATED_SUCCESS, memberService.updateGithubAddress(SecurityUtil.getCurrentMemberId(), request)));
     }
 
     @Operation(summary = "비밀번호 변경", description = "해당 토큰의 사용자의 비밀번호를 업데이트 합니다.")
     @PutMapping("/password")
-    public ApiResponse<MemberIdResponseDto> updateMemberPassword(@RequestBody PasswordUpdateRequest request) {
-        return ApiResponse.createSuccess(MEMBER_UPDATED_SUCCESS, memberService.updatePassword(SecurityUtil.getCurrentMemberId(), request));
+    public ResponseEntity<ApiResponse<MemberIdResponseDto>> updateMemberPassword(@RequestBody PasswordUpdateRequest request) {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(MEMBER_UPDATED_SUCCESS, memberService.updatePassword(SecurityUtil.getCurrentMemberId(), request)));
     }
 
     @Operation(summary = "프로필 사진 업로드", description = "해당 토큰의 사용자의 프로필 이미자를 업로드 합니다.")
@@ -75,8 +75,8 @@ public class MemberController {
 
     @Operation(summary = "나의 인스타그램 아이디 업데이트", description = "해당 토큰의 사용자의 인스타그램 아이디를 업데이트 합니다.")
     @PutMapping("/instagram")
-    public ApiResponse<MemberIdResponseDto> updateMemberInstagramId(@RequestBody InstagramIdUpdateRequest request) {
-        return ApiResponse.createSuccess(MEMBER_UPDATED_SUCCESS,memberService.updateInstagramId(SecurityUtil.getCurrentMemberId(), request));
+    public ResponseEntity<ApiResponse<MemberIdResponseDto>> updateMemberInstagramId(@RequestBody InstagramIdUpdateRequest request) {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(MEMBER_UPDATED_SUCCESS,memberService.updateInstagramId(SecurityUtil.getCurrentMemberId(), request)));
     }
 
     @Operation(summary = "모든 멤버 조회")
