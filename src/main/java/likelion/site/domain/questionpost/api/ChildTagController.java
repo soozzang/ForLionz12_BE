@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.questionpost.domain.ChildTag;
 import likelion.site.domain.questionpost.domain.ParentTag;
 import likelion.site.domain.member.domain.Part;
+import likelion.site.domain.questionpost.domain.success.CommentSuccess;
 import likelion.site.domain.questionpost.dto.request.ChildTagRequestDto;
 import likelion.site.domain.questionpost.dto.response.tag.ChildTagResponseDto;
 import likelion.site.domain.questionpost.dto.response.tag.ChildTagResponseIdDto;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static likelion.site.domain.questionpost.domain.success.CommentSuccess.COMMENT_CREATED_SUCCESS;
+
 @Tag(name = "ChildTag", description = "자식태그")
 @RestController
 @RequiredArgsConstructor
@@ -32,16 +35,6 @@ public class ChildTagController {
     @Operation(summary = "자식태그 생성")
     @PostMapping
     public ApiResponse<ChildTagResponseIdDto> createChildTag(@RequestBody ChildTagRequestDto request) {
-        if (memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId()).getPart() == Part.STAFF) {
-            ParentTag parentTag = parentTagService.findById(request.getParentTagId());
-            ChildTag childTag = ChildTag.builder()
-                    .name(request.getName())
-                    .parentTag(parentTag)
-                    .build();
-            Long id = childTagService.addChildTag(childTag);
-            parentTag.addChildTag(childTag);
-            return ApiResponse.createSuccess(new ChildTagResponseIdDto(childTag));
-        }
-        return null;
+        return ApiResponse.createSuccess(COMMENT_CREATED_SUCCESS, childTagService.addChildTag(request));
     }
 }

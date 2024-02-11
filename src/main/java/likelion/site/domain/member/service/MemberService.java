@@ -1,12 +1,20 @@
 package likelion.site.domain.member.service;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import likelion.site.domain.member.domain.Member;
+import likelion.site.domain.member.dto.request.*;
+import likelion.site.domain.member.dto.response.MemberIdResponseDto;
 import likelion.site.domain.member.dto.response.MemberResponseDto;
 import likelion.site.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +24,10 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final AmazonS3Client amazonS3Client;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     public List<Member> findMembers() {
         return memberRepository.findAll();
@@ -35,46 +47,68 @@ public class MemberService {
     }
 
     @Transactional
-    public Long updateIntroduction(Long id, String introduction) {
-        Member member = findMemberById(id).get();
-        member.updateIntroduction(introduction);
+    public MemberIdResponseDto updateIntroduction(Long id, IntroductionUpdateRequest request) {
+        Member member = memberRepository.findById(id).get();
+        member.updateIntroduction(request.getIntroduction());
         memberRepository.save(member);
-        return member.getId();
+        return new MemberIdResponseDto(member);
     }
 
     @Transactional
-    public Long updateGithubAddress(Long id, String githubAddress) {
-        Member member = findMemberById(id).get();
-        member.updateGithubAddress(githubAddress);
+    public MemberIdResponseDto updateGithubAddress(Long id, GithubAddressUpdateRequest request) {
+        Member member = memberRepository.findById(id).get();
+        member.updateGithubAddress(request.getGithubAddress());
         memberRepository.save(member);
-        return member.getId();
+        return new MemberIdResponseDto(member);
     }
 
     @Transactional
-    public Long updatePassword(Long id, String password) {
-        Member member = findMemberById(id).get();
-        member.updatePassword(password);
+    public MemberIdResponseDto updatePassword(Long id, PasswordUpdateRequest request) {
+        Member member = memberRepository.findById(id).get();
+        member.updatePassword(request.getPassword());
         memberRepository.save(member);
-        return member.getId();
+        return new MemberIdResponseDto(member);
     }
 
     @Transactional
-    public Long updateInstagramId(Long id, String instagramId) {
-        Member member = findMemberById(id).get();
-        member.updateInstagramId(instagramId);
+    public MemberIdResponseDto updateInstagramId(Long id, InstagramIdUpdateRequest request) {
+        Member member = memberRepository.findById(id).get();
+        member.updateInstagramId(request.getInstagramId());
         memberRepository.save(member);
-        return member.getId();
+        return new MemberIdResponseDto(member);
     }
 
     @Transactional
-    public Long updateImageUrl(Long id, String imageUrl) {
-        Member member = findMemberById(id).get();
-        member.updateImageUrl(imageUrl);
+    public MemberIdResponseDto updateImageUrl(Long id, MultipartFile file) throws IOException {
+        Member member = memberRepository.findById(id).get();
+        String fileName = file.getOriginalFilename() + "." + member.getName();
+        String fileUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + fileName;
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(file.getContentType());
+        metadata.setContentLength(file.getSize());
+
+        amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
+        member.updateImageUrl(fileUrl);
         memberRepository.save(member);
-        return member.getId();
+        return new MemberIdResponseDto(member);
     }
 
-    public List<Member> findAll() {
-        return memberRepository.findAll();
+    @Transactional
+    public MemberIdResponseDto updateImageUrl(Long id, ImageUrlUpdateRequest request) {
+        Member member = memberRepository.findById(id).get();
+        member.updateImageUrl(request.getImageUrl());
+        memberRepository.save(member);
+        return new MemberIdResponseDto(member);
+    }
+
+    public List<MemberResponseDto> findAll() {
+        List<Member> memberList = memberRepository.findAll();
+        List<MemberResponseDto> memberResponseDtos = new ArrayList<>();
+
+        for (Member member : memberList) {
+            MemberResponseDto dto = new MemberResponseDto(member);
+            memberResponseDtos.add(dto);
+        }
+        return memberResponseDtos;
     }
 }

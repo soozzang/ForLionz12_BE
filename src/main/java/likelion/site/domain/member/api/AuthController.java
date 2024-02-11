@@ -3,7 +3,9 @@ package likelion.site.domain.member.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import likelion.site.domain.member.dto.request.MemberRequestDto;
+import likelion.site.domain.member.domain.success.MemberSuccess;
+import likelion.site.domain.member.domain.success.TokenSuccess;
+import likelion.site.domain.member.dto.request.MemberRequest;
 import likelion.site.domain.member.dto.request.TokenDto;
 import likelion.site.domain.member.dto.request.TokenRequestDto;
 import likelion.site.domain.member.repository.RefreshTokenRepository;
@@ -19,6 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static likelion.site.domain.member.domain.success.MemberSuccess.LOGIN_SUCCESS;
+import static likelion.site.domain.member.domain.success.MemberSuccess.MEMBER_CREATED_SUCCESS;
+import static likelion.site.domain.member.domain.success.TokenSuccess.TOKEN_CREATE_SUCCESS;
+
 @Tag(name = "Auth", description = "회원가입/로그인/토큰재발급")
 @RestController
 @RequestMapping("/auth")
@@ -30,14 +36,14 @@ public class AuthController {
 
     @Operation(summary = "회원가입", description = "partName에는 BE/FE/ALL이 들어갈 수 있습니다.")
     @PostMapping("/signup")
-    public ApiResponse<?> signup(@RequestBody MemberRequestDto memberRequestDto) {
-        return ApiResponse.createSuccess(authService.signup(memberRequestDto));
+    public ApiResponse<?> signup(@RequestBody MemberRequest memberRequestDto) {
+        return ApiResponse.createSuccess(MEMBER_CREATED_SUCCESS,authService.signup(memberRequestDto));
     }
 
     @Operation(summary = "로그인")
     @PostMapping("/login")
     public ApiResponse<TokenDto> login(@RequestBody LoginRequestDto loginRequestDto) {
-        return ApiResponse.createSuccess(authService.login(loginRequestDto));
+        return ApiResponse.createSuccess(LOGIN_SUCCESS, authService.login(loginRequestDto));
     }
 
     @Operation(summary = "토큰 재발급")
@@ -46,7 +52,7 @@ public class AuthController {
         TokenRequestDto tokenRequestDto = new TokenRequestDto();
         tokenRequestDto.setAccessToken(accessDTO.accessToken);
         tokenRequestDto.setRefreshToken(refreshTokenRepository.findByAccessToken(accessDTO.getAccessToken()).get().getValue());
-        return ApiResponse.createSuccess(authService.reissue(tokenRequestDto));
+        return ApiResponse.createSuccess(TOKEN_CREATE_SUCCESS, authService.reissue(tokenRequestDto));
     }
 
     @Data

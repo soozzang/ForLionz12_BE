@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.questionpost.domain.ChildTag;
 import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.questionpost.domain.QuestionTagMap;
+import likelion.site.domain.questionpost.domain.success.MapSuccess;
 import likelion.site.domain.questionpost.dto.request.QuestionTagMapRequestDto;
 import likelion.site.domain.questionpost.dto.response.tag.QuestionTagMapResponseDto;
 import likelion.site.domain.questionpost.dto.response.tag.QuestionTagMapResponseIdDto;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static likelion.site.domain.questionpost.domain.success.MapSuccess.GET_MAP_SUCCESS;
+import static likelion.site.domain.questionpost.domain.success.MapSuccess.MAP_CREATED_SUCCESS;
 
 @Tag(name = "QuestionTagMap", description = "질문글-태그 중계모델, 태그로 조회 + 질문글 생성시 해당 질문 글에 특정 태그들 매핑")
 @RestController
@@ -31,39 +35,24 @@ public class QuestionTagMapController {
     @Operation(summary = "질문 글 생성시 특정 태그들과 매핑")
     @PostMapping
     public ApiResponse<QuestionTagMapResponseIdDto> createQuestionTagMap(@RequestBody QuestionTagMapRequestDto request) {
-        QuestionPost questionPost = questionPostService.findQuestionPostById(request.getQuestionPostId());
-        ChildTag childTag = childTagService.findById(request.getChildTagId());
-        QuestionTagMap questionTagMap = QuestionTagMap.builder()
-                .questionPost(questionPost)
-                .childTag(childTag)
-                .build();
-        Long id = questionTagMapService.addQuestionTagMap(questionTagMap);
-        return ApiResponse.createSuccess(new QuestionTagMapResponseIdDto(questionTagMap));
+        return ApiResponse.createSuccess(MAP_CREATED_SUCCESS,questionTagMapService.addQuestionTagMap(request));
     }
 
-    @Operation(summary = "특정 자식태그id에 해당하는 자식태그와 매핑된 질문글 리스트 조회")
+    @Operation(summary = "특정 자식태그id(들)에 해당하는 자식태그와 매핑된 질문글 리스트 조회", description = "1,2,3 형태의 쿼리 파라미터 형태로 요청하세요.")
     @GetMapping
-    public ApiResponse<List<QuestionTagMapResponseDto>> getQuestionTagMap(@RequestParam Long childTagId) {
-        ChildTag childTag = childTagService.findById(childTagId);
-        List<QuestionTagMap> questionTagMaps = questionTagMapService.findByChildTag(childTag);
-        List<QuestionTagMapResponseDto> questionTagMapResponseDtos = new ArrayList<>();
-
-        for (QuestionTagMap questionTagMap : questionTagMaps) {
-            QuestionTagMapResponseDto dto = new QuestionTagMapResponseDto(questionTagMap);
-            questionTagMapResponseDtos.add(dto);
-        }
-        return ApiResponse.createSuccess(questionTagMapResponseDtos);
+    public ApiResponse<List<QuestionTagMapResponseDto>> getQuestionTagMap(@RequestParam List<Long> childTagIds) {
+        return ApiResponse.createSuccess(GET_MAP_SUCCESS,questionTagMapService.findByChildTag(childTagIds));
     }
-
-    @Operation(summary = "모든 자식태그-게시글 매핑 데이터 조회")
-    @GetMapping("all")
-    public ApiResponse<List<QuestionTagMapResponseDto>> getAllQuestionTagMap() {
-        List<QuestionTagMapResponseDto> questionTagMapResponseDtos = new ArrayList<>();
-        List<QuestionTagMap> questionTagMaps = questionTagMapService.findAllTagMap();
-        for (QuestionTagMap questionTagMap : questionTagMaps) {
-            QuestionTagMapResponseDto dto = new QuestionTagMapResponseDto(questionTagMap);
-            questionTagMapResponseDtos.add(dto);
-        }
-        return ApiResponse.createSuccess(questionTagMapResponseDtos);
-    }
+//
+//    @Operation(summary = "모든 자식태그-게시글 매핑 데이터 조회")
+//    @GetMapping("all")
+//    public ApiResponse<List<QuestionTagMapResponseDto>> getAllQuestionTagMap() {
+//        List<QuestionTagMapResponseDto> questionTagMapResponseDtos = new ArrayList<>();
+//        List<QuestionTagMap> questionTagMaps = questionTagMapService.findAllTagMap();
+//        for (QuestionTagMap questionTagMap : questionTagMaps) {
+//            QuestionTagMapResponseDto dto = new QuestionTagMapResponseDto(questionTagMap);
+//            questionTagMapResponseDtos.add(dto);
+//        }
+//        return ApiResponse.createSuccess(questionTagMapResponseDtos);
+//    }
 }

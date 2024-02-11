@@ -3,9 +3,10 @@ package likelion.site.domain.assignment.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.assignment.domain.Assignment;
-import likelion.site.domain.assignment.dto.request.SubmissionRequestDto;
-import likelion.site.domain.assignment.dto.request.SubmissionUpdateRequestDto;
-import likelion.site.domain.assignment.dto.response.SubmissionIdResponseDto;
+import likelion.site.domain.assignment.domain.success.SubmissionSuccess;
+import likelion.site.domain.assignment.dto.request.SubmissionRequest;
+import likelion.site.domain.assignment.dto.request.SubmissionUpdateRequest;
+import likelion.site.domain.assignment.dto.response.SubmissionIdResponse;
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.domain.Part;
 import likelion.site.domain.assignment.domain.Submission;
@@ -16,10 +17,11 @@ import likelion.site.global.ApiResponse;
 import likelion.site.global.exception.CustomError;
 import likelion.site.global.exception.exceptions.OverSubmissionException;
 import likelion.site.global.util.SecurityUtil;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import static likelion.site.domain.assignment.domain.success.SubmissionSuccess.SUBMISSION_CREATED_SUCCESS;
+import static likelion.site.domain.assignment.domain.success.SubmissionSuccess.SUBMISSION_UPDATED_SUCCESS;
 
 @Tag(name = "Submission", description = "과제 제출")
 @RestController
@@ -33,31 +35,13 @@ public class SubmissionController {
 
     @Operation(summary = "과제 제출하기")
     @PostMapping
-    public ApiResponse<?> createSubmission(@RequestBody SubmissionRequestDto request) {
-        Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
-        Assignment assignment = assignmentService.findAssignmentById(request.getAssignmentId());
-        if (member.getPart() == Part.BE || member.getPart() == Part.FE) {
-            if (submissionService.findByAssignmentAndMember(assignment, member)!=null) {
-                throw new OverSubmissionException(CustomError.OVER_SUBMISSION_EXCEPTION);
-            }
-            Submission submission = Submission.builder()
-                    .member(member)
-                    .assignment(assignment)
-                    .description(request.getDescription())
-                    .assignmentLink(request.getAssignmentLink())
-                    .build();
-            Long id = submissionService.addSubmission(submission);
-            return ApiResponse.createSuccess(new SubmissionIdResponseDto(id));
-        }
-        return null;
+    public ApiResponse<?> createSubmission(@RequestBody SubmissionRequest request) {
+        return ApiResponse.createSuccess(SUBMISSION_CREATED_SUCCESS, submissionService.addSubmission(SecurityUtil.getCurrentMemberId(), request));
     }
 
     @Operation(summary = "특정id에 해당하는 제출란 업데이트")
     @PutMapping("{id}")
-    public ApiResponse<SubmissionIdResponseDto> updateSubmission(@PathVariable("id") Long id, @RequestBody SubmissionUpdateRequestDto request) {
-        Assignment assignment = assignmentService.findAssignmentById(id);
-        Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
-        submissionService.updateSubmission(assignment, member, request.getDescription() , request.getAssignmentLink());
-        return ApiResponse.createSuccess(new SubmissionIdResponseDto(id));
+    public ApiResponse<SubmissionIdResponse> updateSubmission(@PathVariable("id") Long id, @RequestBody SubmissionUpdateRequest request) {
+        return ApiResponse.createSuccess(SUBMISSION_UPDATED_SUCCESS,submissionService.updateSubmission(id,SecurityUtil.getCurrentMemberId(),request));
     }
 }

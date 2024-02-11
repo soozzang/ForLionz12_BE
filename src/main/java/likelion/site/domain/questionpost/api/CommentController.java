@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.questionpost.domain.Comment;
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.questionpost.domain.QuestionPost;
+import likelion.site.domain.questionpost.domain.success.CommentSuccess;
 import likelion.site.domain.questionpost.dto.request.CommentRequestDto;
 import likelion.site.domain.questionpost.dto.response.comment.CommentResponseDto;
 import likelion.site.domain.questionpost.dto.response.comment.CommentResponseIdDto;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static likelion.site.domain.questionpost.domain.success.CommentSuccess.COMMENT_CREATED_SUCCESS;
+import static likelion.site.domain.questionpost.domain.success.CommentSuccess.GET_COMMENT_SUCCESS;
+
 @Tag(name = "Comment", description = "댓글")
 @RestController
 @RequiredArgsConstructor
@@ -32,29 +36,12 @@ public class CommentController {
     @Operation(summary = "댓글 생성")
     @PostMapping
     public ApiResponse<CommentResponseIdDto> createComment(@RequestBody CommentRequestDto request) {
-        Member member = memberService.findMemberById(SecurityUtil.getCurrentMemberId()).get();
-        QuestionPost questionPost = questionPostService.findQuestionPostById(request.getQuestionPostId());
-        Comment comment = Comment.builder()
-                .member(member)
-                .questionPost(questionPost)
-                .content(request.getContent())
-                .build();
-        Long id = commentService.addComment(comment);
-        return ApiResponse.createSuccess(new CommentResponseIdDto(comment));
+        return ApiResponse.createSuccess(COMMENT_CREATED_SUCCESS,commentService.addComment(SecurityUtil.getCurrentMemberId(),request));
     }
 
     @Operation(summary = "특정 질문글에 대한 모든 댓글 조회")
-    @GetMapping("questionPostId")
+    @GetMapping("{questionPostId}")
     public ApiResponse<List<CommentResponseDto>> getAllComments(@PathVariable Long questionPostId) {
-        QuestionPost questionPost = questionPostService.findQuestionPostById(questionPostId);
-        List<Comment> comments = commentService.findCommentsByQuestionPost(questionPost);
-        List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
-
-        for (Comment comment : comments) {
-            CommentResponseDto dto = new CommentResponseDto(comment);
-            commentResponseDtos.add(dto);
-        }
-
-        return ApiResponse.createSuccess(commentResponseDtos);
+        return ApiResponse.createSuccess(GET_COMMENT_SUCCESS,commentService.findCommentsByQuestionPost(questionPostId));
     }
 }

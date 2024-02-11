@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import likelion.site.domain.member.api.AuthController;
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.domain.RefreshToken;
-import likelion.site.domain.member.dto.request.MemberRequestDto;
+import likelion.site.domain.member.dto.request.MemberRequest;
 import likelion.site.domain.member.dto.response.MemberResponseDto;
 import likelion.site.domain.member.dto.request.TokenDto;
 import likelion.site.domain.member.dto.request.TokenRequestDto;
@@ -31,7 +31,7 @@ public class AuthService {
     private final MemberService memberService;
 
     @Transactional
-    public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
+    public MemberResponseDto signup(MemberRequest memberRequestDto) {
         if (memberRepository.existsByEmail(memberRequestDto.getEmail())) {
             throw new DuplicateMemberError(CustomError.DUPLICATE_MEMBER_ERROR);
         }
