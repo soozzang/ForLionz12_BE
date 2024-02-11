@@ -3,7 +3,7 @@ package likelion.site.domain.member.dto.request;
 import lombok.Getter;
 
 @Getter
-public class PasswordUpdateRequestDto {
+public class PasswordUpdateRequest {
 
     String password;
 }

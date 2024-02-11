@@ -3,7 +3,7 @@ package likelion.site.domain.member.dto.request;
 import lombok.Getter;
 
 @Getter
-public class GithubAddressUpdateRequestDto {
+public class InstagramIdUpdateRequest {
 
-    String githubAddress;
+    String instagramId;
 }

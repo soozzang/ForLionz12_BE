@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
-public class SubmissionResponseDto {
+public class SubmissionResponse {
 
     Long id;
     Long memberId;
@@ -18,7 +18,7 @@ public class SubmissionResponseDto {
     String description;
     String assignmentLink;
 
-    public SubmissionResponseDto(Submission submission) {
+    public SubmissionResponse(Submission submission) {
         id = submission.getId();
         memberId = submission.getMember().getId();
         memberName = submission.getMember().getName();

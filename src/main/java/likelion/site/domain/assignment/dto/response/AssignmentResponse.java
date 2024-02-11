@@ -13,7 +13,7 @@ import static java.util.stream.Collectors.toList;
 
 @Getter
 @AllArgsConstructor
-public class AssignmentResponseDto {
+public class AssignmentResponse {
 
     Long id;
     AssignmentMainContent category;
@@ -21,12 +21,12 @@ public class AssignmentResponseDto {
     String content;
     LocalDateTime createdAt;
     LocalDateTime expireAt;
-    List<SubmissionResponseDto> submissions;
+    List<SubmissionResponse> submissions;
     List<String> tags;
     Integer submissionCount;
     AssignmentPart part;
 
-    public AssignmentResponseDto(Assignment assignment) {
+    public AssignmentResponse(Assignment assignment) {
         this.id = assignment.getId();
         this.category = assignment.getAssignmentMainContent();
         this.title = assignment.getTitle();
@@ -35,7 +35,7 @@ public class AssignmentResponseDto {
         this.createdAt = assignment.getCreatedAt();
         this.expireAt = assignment.getExpireAt();
         this.submissions = assignment.getSubmissions().stream()
-                .map(SubmissionResponseDto::new)
+                .map(SubmissionResponse::new)
                 .collect(toList());
         this.tags = assignment.getTags();
         this.submissionCount = assignment.getSubmissions().size();
