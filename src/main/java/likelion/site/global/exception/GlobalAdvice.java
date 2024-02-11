@@ -20,7 +20,7 @@ public class GlobalAdvice {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ApiResponse<?> constraintViolationException(ConstraintViolationException e) {
-        return ApiResponse.createError(ERROR_MESSAGE + extractErrorMessage(e));
+        return ApiResponse.createError(HttpStatus.BAD_REQUEST,extractErrorMessage(e));
     }
 
     private String extractErrorMessage(ConstraintViolationException e) {
@@ -32,41 +32,36 @@ public class GlobalAdvice {
 
     @ExceptionHandler(CurrentMemberException.class)
     public ResponseEntity<ApiResponse<?>> currentMemberException(CurrentMemberException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.createError(e.getCustomError().getHttpStatus() ,e.getMessage()));
     }
 
     @ExceptionHandler(DuplicateMemberError.class)
     public ResponseEntity<ApiResponse<?>> duplicateMemberException(DuplicateMemberError e) {
-        return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
+        return ResponseEntity.badRequest().body(ApiResponse.createError(e.getCustomError().getHttpStatus() , e.getMessage()));
     }
 
     @ExceptionHandler(BadCategoryException.class)
     public ResponseEntity<ApiResponse<?>> badCategoryException(BadCategoryException e) {
-        return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
+        return ResponseEntity.badRequest().body(ApiResponse.createError(e.getCustomError().getHttpStatus() , e.getMessage()));
     }
 
     @ExceptionHandler(BadPartException.class)
     public ResponseEntity<ApiResponse<?>> badPartException(BadPartException e) {
-        return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
+        return ResponseEntity.badRequest().body(ApiResponse.createError(e.getCustomError().getHttpStatus(), e.getMessage()));
     }
 
     @ExceptionHandler(BadElementException.class)
     public ResponseEntity<ApiResponse<?>> noSuchElementException(BadElementException e) {
-        return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
+        return ResponseEntity.badRequest().body(ApiResponse.createError(e.getCustomError().getHttpStatus() ,e.getMessage()));
     }
 
     @ExceptionHandler(OverSubmissionException.class)
     public ResponseEntity<ApiResponse<?>> overSubmissionException(OverSubmissionException e) {
-        return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
-    }
-
-    @ExceptionHandler(BadFileFormatException.class)
-    public ResponseEntity<ApiResponse<?>> badFileFormatException(BadFileFormatException e) {
-        return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
+        return ResponseEntity.badRequest().body(ApiResponse.createError(e.getCustomError().getHttpStatus() ,e.getMessage()));
     }
 
     @ExceptionHandler(AuthorizationException.class)
     public ResponseEntity<ApiResponse<?>> authorizationException(AuthorizationException e) {
-        return ResponseEntity.badRequest().body(ApiResponse.createError(ERROR_MESSAGE + e.getCustomError().getHttpStatus() + " " + e.getMessage()));
+        return ResponseEntity.badRequest().body(ApiResponse.createError(e.getCustomError().getHttpStatus(), e.getMessage()));
     }
 }
