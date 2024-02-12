@@ -87,5 +87,4 @@ public class QuestionPostService {
         questionPostRepository.delete(questionPost);
         return new QuestionPostIdResponseDto(questionPost);
     }
-
 }

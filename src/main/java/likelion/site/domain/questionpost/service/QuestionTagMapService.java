@@ -6,6 +6,7 @@ import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.questionpost.domain.QuestionTagMap;
 import likelion.site.domain.questionpost.dto.request.ChildTagRequestDto;
 import likelion.site.domain.questionpost.dto.request.QuestionTagMapRequestDto;
+import likelion.site.domain.questionpost.dto.response.question.QuestionPostResponseDto;
 import likelion.site.domain.questionpost.dto.response.tag.QuestionTagMapResponseDto;
 import likelion.site.domain.questionpost.dto.response.tag.QuestionTagMapResponseIdDto;
 import likelion.site.domain.questionpost.repository.ChildTagRepository;
@@ -41,27 +42,47 @@ public class QuestionTagMapService {
         return questionTagMapRepository.findAll();
     }
 
-    public List<QuestionTagMapResponseDto> findByChildTag(List<Long> ids) {
+    public List<QuestionPostResponseDto> findByChildTag(List<Long> ids) {
         List<ChildTag> childTags = new ArrayList<>();
+        List<QuestionPost> questionPosts = new ArrayList<>();
+        List<QuestionTagMap> questionTagMaps = new ArrayList<>();
 
         for (Long id : ids) {
             childTags.add(childTagRepository.findById(id).get());
         }
 
-        HashSet<QuestionTagMap> questionTagMaps = new HashSet<>();
-
         for (ChildTag childTag : childTags) {
             List<QuestionTagMap> questionTagMapList = questionTagMapRepository.findByChildTag(childTag);
             questionTagMaps.addAll(questionTagMapList);
+            for (QuestionTagMap questionTagMap : questionTagMapList) {
+                QuestionPost questionPost = questionTagMap.getQuestionPost();
+                if (!questionPosts.contains(questionPost)) {
+                    questionPosts.add(questionPost);
+                }
+            }
         }
 
-        List<QuestionTagMapResponseDto> questionTagMapResponseDtos = new ArrayList<>();
+        List<QuestionPost> filteredQuestionPosts = new ArrayList<>();
 
-        for (QuestionTagMap questionTagMap : questionTagMaps) {
-            QuestionTagMapResponseDto dto = new QuestionTagMapResponseDto(questionTagMap);
-            questionTagMapResponseDtos.add(dto);
+        for (QuestionPost questionPost : questionPosts) {
+            int cnt = 0;
+            for (QuestionTagMap questionTagMap : questionTagMaps) {
+                if (questionPost == questionTagMap.getQuestionPost()) {
+                    cnt++;
+                }
+            }
+            if (cnt == ids.size()) {
+                filteredQuestionPosts.add(questionPost);
+            }
         }
 
-        return questionTagMapResponseDtos;
+        List<QuestionPostResponseDto> questionPostResponseDtos = new ArrayList<>();
+
+        for (QuestionPost questionPost : filteredQuestionPosts) {
+            QuestionPostResponseDto dto = new QuestionPostResponseDto(questionPost);
+            questionPostResponseDtos.add(dto);
+        }
+
+        return questionPostResponseDtos;
     }
 }

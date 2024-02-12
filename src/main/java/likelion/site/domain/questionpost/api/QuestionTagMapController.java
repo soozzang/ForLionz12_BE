@@ -7,6 +7,7 @@ import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.questionpost.domain.QuestionTagMap;
 import likelion.site.domain.questionpost.domain.success.MapSuccess;
 import likelion.site.domain.questionpost.dto.request.QuestionTagMapRequestDto;
+import likelion.site.domain.questionpost.dto.response.question.QuestionPostResponseDto;
 import likelion.site.domain.questionpost.dto.response.tag.QuestionTagMapResponseDto;
 import likelion.site.domain.questionpost.dto.response.tag.QuestionTagMapResponseIdDto;
 import likelion.site.domain.questionpost.service.ChildTagService;
@@ -40,7 +41,7 @@ public class QuestionTagMapController {
 
     @Operation(summary = "특정 자식태그id(들)에 해당하는 자식태그와 매핑된 질문글 리스트 조회", description = "1,2,3 형태의 쿼리 파라미터 형태로 요청하세요.")
     @GetMapping
-    public ApiResponse<List<QuestionTagMapResponseDto>> getQuestionTagMap(@RequestParam List<Long> childTagIds) {
+    public ApiResponse<List<QuestionPostResponseDto>> getQuestionTagMap(@RequestParam List<Long> childTagIds) {
         return ApiResponse.createSuccess(GET_MAP_SUCCESS,questionTagMapService.findByChildTag(childTagIds));
     }
 //
