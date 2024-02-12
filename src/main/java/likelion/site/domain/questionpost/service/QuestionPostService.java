@@ -3,6 +3,7 @@ package likelion.site.domain.questionpost.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import likelion.site.domain.member.domain.Member;
+import likelion.site.domain.member.dto.response.MemberIdResponseDto;
 import likelion.site.domain.member.repository.MemberRepository;
 import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.questionpost.dto.request.QuestionPostRequestDto;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +41,6 @@ public class QuestionPostService {
     @Transactional
     public QuestionPostIdResponseDto addQuestionPost(Long id, QuestionPostRequestDto request) {
         Member member = memberRepository.findById(id).get();
-//        List<String> fileUrlList = getFileUrlList(request);
         QuestionPost questionPost = request.toEntity(member);
         questionPostRepository.save(questionPost);
         return new QuestionPostIdResponseDto(questionPost);
@@ -76,7 +77,7 @@ public class QuestionPostService {
         if (member != questionPost.get().getMember()) {
             throw new AuthorizationException(CustomError.AUTHORIZATION_EXCEPTION);
         }
-        questionPost.get().updateQuestionPost(request.getTitle(),request.getContent());
+        questionPost.get().updateQuestionPost(request.getTitle(),request.getContent(),request.getPostImageUrls());
         questionPostRepository.save(questionPost.get());
         return new QuestionPostIdResponseDto(questionPost.get());
     }
@@ -86,5 +87,16 @@ public class QuestionPostService {
         QuestionPost questionPost = questionPostRepository.findById(questionPostId).get();
         questionPostRepository.delete(questionPost);
         return new QuestionPostIdResponseDto(questionPost);
+    }
+
+    public String convertFile(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename() + "Q&A" + LocalDateTime.now();
+        String fileUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + fileName;
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(file.getContentType());
+        metadata.setContentLength(file.getSize());
+
+        amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
+        return fileName;
     }
 }

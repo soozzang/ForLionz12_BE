@@ -36,15 +36,20 @@ public class QuestionPost {
     @OneToMany(mappedBy = "questionPost")
     private List<Comment> comments;
 
+    @ElementCollection
+    private List<String> imageUrls;
+
     @Builder
-    public QuestionPost(Member member, String title, String content) {
+    public QuestionPost(Member member, String title, String content, List<String> imageUrls) {
         this.member = member;
         this.title = title;
         this.content = content;
+        this.imageUrls = imageUrls;
     }
 
-    public void updateQuestionPost(String title, String content) {
+    public void updateQuestionPost(String title, String content, List<String> imageUrls) {
         this.title = title;
         this.content = content;
+        this.imageUrls = imageUrls;
     }
 }

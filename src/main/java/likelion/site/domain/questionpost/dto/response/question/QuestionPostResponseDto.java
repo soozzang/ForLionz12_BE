@@ -13,13 +13,15 @@ public class QuestionPostResponseDto {
     Long questionId;
     Long memberId;
     String name;
+    String memberImageUrl;
     String title;
     String content;
-    String memberImageUrl;
+    List<String> postImageUrls;
     LocalDateTime createdAt;
 
     public QuestionPostResponseDto(QuestionPost questionPost) {
         questionId = questionPost.getId();
+        postImageUrls = questionPost.getImageUrls();
         memberId = questionPost.getMember().getId();
         title = questionPost.getTitle();
         name = questionPost.getMember().getName();

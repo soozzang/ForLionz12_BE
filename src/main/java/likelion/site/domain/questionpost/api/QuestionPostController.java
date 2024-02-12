@@ -14,10 +14,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 
+import static likelion.site.domain.member.domain.success.MemberSuccess.MEMBER_UPDATED_SUCCESS;
 import static likelion.site.domain.questionpost.domain.success.QuestionPostSuccess.*;
 
 @Tag(name = "QuestionPost", description = "질문글(Q&A)")
@@ -50,11 +52,16 @@ public class QuestionPostController {
     }
 
     @Operation(summary = "특정 id의 질문글 수정", description = "접속 중인 사용자 본인의 글만 수정할 수 있습니다.")
-    @PutMapping(value = "{id}",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE
-    )
+    @PutMapping("{id}")
     public ApiResponse<QuestionPostIdResponseDto> updateQuestionPost(@PathVariable("id") Long id, @RequestBody QuestionPostRequestDto request) {
         return ApiResponse.createSuccess(QUESTION_POST_UPDATED_SUCCESS,questionPostService.update(id, SecurityUtil.getCurrentMemberId(), request));
+    }
+
+    @Operation(summary = "파일 url 응답")
+    @PostMapping(value = "/image",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<String>> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(FILE_CONVERT_SUCCESS, questionPostService.convertFile(file)));
     }
 
     @Operation(summary = "특정 id의 질문글 삭제", description = "접속 중인 사용자 본인의 글만 삭제할 수 있습니다.")

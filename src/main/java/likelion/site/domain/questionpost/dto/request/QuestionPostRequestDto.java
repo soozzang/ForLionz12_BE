@@ -13,11 +13,13 @@ public class QuestionPostRequestDto {
 
     String title;
     String content;
+    List<String> postImageUrls;
 
     public QuestionPost toEntity(Member member) {
         return QuestionPost.builder()
                 .title(title)
                 .content(content)
+                .imageUrls(postImageUrls)
                 .member(member)
                 .build();
     }
