@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 public class QuestionPostResponseDto {
 
-    Long id;
+    Long questionId;
     Long memberId;
     String name;
     String title;
@@ -19,7 +19,7 @@ public class QuestionPostResponseDto {
     LocalDateTime createdAt;
 
     public QuestionPostResponseDto(QuestionPost questionPost) {
-        id = questionPost.getId();
+        questionId = questionPost.getId();
         memberId = questionPost.getMember().getId();
         title = questionPost.getTitle();
         name = questionPost.getMember().getName();
