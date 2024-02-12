@@ -4,17 +4,23 @@ import likelion.site.domain.questionpost.domain.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @AllArgsConstructor
 public class CommentResponseDto {
 
-    Long id;
-    Long memberId;
+    Long commentId;
+    String name;
+    String memberImageUrl;
+    LocalDateTime createdAt;
     String content;
 
     public CommentResponseDto(Comment comment) {
-        this.id = comment.getId();
-        this.memberId = comment.getMember().getId();
+        this.commentId = comment.getId();
+        this.name = comment.getMember().getName();
+        this.memberImageUrl = comment.getMember().getImageUrl();
+        this.createdAt = comment.getCreatedAt();
         this.content = comment.getContent();
     }
 }
