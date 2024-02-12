@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 public class QuestionTagMapResponseIdDto {
 
-    Long id;
+    Long mapId;
 
     public QuestionTagMapResponseIdDto(QuestionTagMap questionTagMap) {
-        this.id = questionTagMap.getId();
+        this.mapId = questionTagMap.getId();
     }
 }

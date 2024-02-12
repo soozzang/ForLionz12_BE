@@ -12,7 +12,7 @@ public class QuestionTagMapResponseDto {
     Long questionPostId;
     String title;
     String content;
-    String author;
+    String name;
     String memberImageUrl;
     LocalDateTime createdAt;
 
@@ -22,7 +22,7 @@ public class QuestionTagMapResponseDto {
         this.title = questionTagMap.getQuestionPost().getTitle();
         this.memberImageUrl = questionTagMap.getQuestionPost().getMember().getImageUrl();
         this.content = questionTagMap.getQuestionPost().getContent();
-        this.author = questionTagMap.getQuestionPost().getMember().getName();
+        this.name = questionTagMap.getQuestionPost().getMember().getName();
         this.createdAt = questionTagMap.getQuestionPost().getCreatedAt();
     }
 }

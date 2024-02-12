@@ -10,6 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 public class SearchByParentTagResponse {
 
-    List<ChildTagResponseDto> chidTags;
+    List<ChildTagResponseDto> childTags;
     List<QuestionPostResponseDto> questionPosts;
 }

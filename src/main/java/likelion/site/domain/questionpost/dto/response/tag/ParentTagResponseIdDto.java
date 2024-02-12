@@ -8,9 +8,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ParentTagResponseIdDto {
 
-    Long id;
+    Long parentTagId;
 
     public ParentTagResponseIdDto(ParentTag parentTag) {
-        this.id = parentTag.getId();
+        this.parentTagId = parentTag.getId();
     }
 }

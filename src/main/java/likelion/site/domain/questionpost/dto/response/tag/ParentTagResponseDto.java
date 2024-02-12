@@ -11,11 +11,11 @@ import java.util.List;
 @AllArgsConstructor
 public class ParentTagResponseDto {
 
-    Long id;
+    Long parentTagId;
     String name;
 
     public ParentTagResponseDto(ParentTag parentTag) {
-        this.id = parentTag.getId();
+        this.parentTagId = parentTag.getId();
         this.name = parentTag.getName();
     }
 }

@@ -8,10 +8,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ChildTagResponseIdDto {
 
-    Long id;
+    Long childTagId;
 
     public ChildTagResponseIdDto(ChildTag childTag) {
-        this.id = childTag.getId();
+        this.childTagId = childTag.getId();
     }
 }
 
