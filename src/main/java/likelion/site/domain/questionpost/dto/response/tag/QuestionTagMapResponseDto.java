@@ -13,12 +13,14 @@ public class QuestionTagMapResponseDto {
     String title;
     String content;
     String author;
+    String memberImageUrl;
     LocalDateTime createdAt;
 
     public QuestionTagMapResponseDto(QuestionTagMap questionTagMap) {
         this.childTagId = questionTagMap.getChildTag().getId();
         this.questionPostId = questionTagMap.getQuestionPost().getId();
         this.title = questionTagMap.getQuestionPost().getTitle();
+        this.memberImageUrl = questionTagMap.getQuestionPost().getMember().getImageUrl();
         this.content = questionTagMap.getQuestionPost().getContent();
         this.author = questionTagMap.getQuestionPost().getMember().getName();
         this.createdAt = questionTagMap.getQuestionPost().getCreatedAt();
