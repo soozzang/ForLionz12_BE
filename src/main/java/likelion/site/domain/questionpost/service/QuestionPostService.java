@@ -97,6 +97,6 @@ public class QuestionPostService {
         metadata.setContentLength(file.getSize());
 
         amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
-        return fileName;
+        return fileUrl;
     }
 }
