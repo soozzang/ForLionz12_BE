@@ -72,7 +72,7 @@ public class AuthService {
                 .secure(true)
                 .sameSite("None")
                 .maxAge(1000 * 24 * 60 * 60)
-                .path("/*")
+                .path("/https://lionz12.netlify.app")
                 .build();
     }
 
