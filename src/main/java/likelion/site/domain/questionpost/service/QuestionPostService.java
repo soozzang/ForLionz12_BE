@@ -56,7 +56,7 @@ public class QuestionPostService {
         List<QuestionPostResponseDto> questionPostResponseDtos = new ArrayList<>();
 
         for (QuestionPost questionPost : questionPosts) {
-            List<ChildTag> childTags = getChildTags(questionPost);
+            List<String> childTags = getChildTags(questionPost);
             QuestionPostResponseDto dto = new QuestionPostResponseDto(questionPost,childTags);
             questionPostResponseDtos.add(dto);
         }
@@ -64,11 +64,11 @@ public class QuestionPostService {
         return questionPostResponseDtos;
     }
 
-    private List<ChildTag> getChildTags(QuestionPost questionPost) {
+    private List<String> getChildTags(QuestionPost questionPost) {
         List<QuestionTagMap> questionTagMaps = questionTagMapRepository.findByQuestionPost(questionPost);
-        List<ChildTag> childTags = new ArrayList<>();
+        List<String> childTags = new ArrayList<>();
         for (QuestionTagMap questionTagMap : questionTagMaps) {
-            childTags.add(questionTagMap.getChildTag());
+            childTags.add(questionTagMap.getChildTag().getName());
         }
         return childTags;
     }

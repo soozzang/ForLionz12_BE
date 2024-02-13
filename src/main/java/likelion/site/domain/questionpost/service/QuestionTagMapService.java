@@ -86,11 +86,11 @@ public class QuestionTagMapService {
         return questionPostResponseDtos;
     }
 
-    private List<ChildTag> getChildTags(QuestionPost questionPost) {
+    private List<String> getChildTags(QuestionPost questionPost) {
         List<QuestionTagMap> questionTagMaps = questionTagMapRepository.findByQuestionPost(questionPost);
-        List<ChildTag> childTags = new ArrayList<>();
+        List<String> childTags = new ArrayList<>();
         for (QuestionTagMap questionTagMap : questionTagMaps) {
-            childTags.add(questionTagMap.getChildTag());
+            childTags.add(questionTagMap.getChildTag().getName());
         }
         return childTags;
     }

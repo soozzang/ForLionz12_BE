@@ -19,9 +19,9 @@ public class QuestionPostResponseDto {
     String content;
     List<String> postImageUrls;
     LocalDateTime createdAt;
-    List<ChildTag> childTags;
+    List<String> childTags;
 
-    public QuestionPostResponseDto(QuestionPost questionPost, List<ChildTag> childTag) {
+    public QuestionPostResponseDto(QuestionPost questionPost, List<String> childTag) {
         questionId = questionPost.getId();
         postImageUrls = questionPost.getImageUrls();
         memberId = questionPost.getMember().getId();
