@@ -13,7 +13,8 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("*");
+        config.addAllowedOriginPattern("https://lionz12.netlify.app");
+        config.addAllowedOrigin("https://lionz12.netlify.app");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
