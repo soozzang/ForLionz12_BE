@@ -1,5 +1,6 @@
 package likelion.site.domain.member.service;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.transaction.Transactional;
 import likelion.site.domain.member.api.AuthController;
 import likelion.site.domain.member.domain.Member;
@@ -52,26 +53,33 @@ public class AuthService {
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         TokenResponse tokenDto = tokenProvider.generateTokenDto(authentication);
 
-        // 4. RefreshToken 저장
-        RefreshToken refreshToken = RefreshToken.builder()
-                .key(authentication.getName())
-                .value(tokenDto.getRefreshToken())
-                .build();
-        refreshTokenRepository.save(refreshToken);
+        if(refreshTokenRepository.findByKey(authentication.getName()).isEmpty()) {
+            RefreshToken refreshToken = RefreshToken.builder()
+                    .key(authentication.getName())
+                    .value(tokenDto.getRefreshToken())
+                    .build();
+            refreshTokenRepository.save(refreshToken);
+        }
 
         // 5. 토큰 발급
         return tokenDto;
     }
 
+    public Cookie makeCookie(String refreshToken) {
+        Cookie cookie = new Cookie("refreshToken", refreshToken);
+        cookie.setDomain("https://lionz12.netlify.app"); cookie.setMaxAge(10000 * 24 * 60 * 60); cookie.setSecure(true);
+        return cookie;
+    }
+
     @Transactional
-    public TokenResponse reissue(TokenRequest tokenRequestDto) {
+    public TokenResponse reissue(String refreshToken) {
         // 1. Refresh Token 검증
-        if (!tokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
+        if (!tokenProvider.validateToken(refreshToken)) {
             throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
         }
 
         // 2. Access Token 에서 Member ID 가져오기
-        Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getRefreshToken());
+        Authentication authentication = tokenProvider.getAuthentication(refreshToken);
 
 
 
