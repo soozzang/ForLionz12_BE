@@ -60,6 +60,10 @@ public class CommentService {
     public List<CommentResponseDto> findCommentsByQuestionPost(Long questionPostId) {
         QuestionPost questionPost = questionPostRepository.findById(questionPostId).get();
         List<Comment> comments = commentRepository.findByQuestionPost(questionPost);
+        return getCommentResponseDtos(comments);
+    }
+
+    private static List<CommentResponseDto> getCommentResponseDtos(List<Comment> comments) {
         List<CommentResponseDto> commentResponses = new ArrayList<>();
 
         for (Comment comment : comments) {

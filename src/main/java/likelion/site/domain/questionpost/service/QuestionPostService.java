@@ -53,6 +53,10 @@ public class QuestionPostService {
 
     public List<QuestionPostResponseDto> findAllQuestionPosts() {
         List<QuestionPost> questionPosts = questionPostRepository.findAll();
+        return getQuestionPostResponseDtos(questionPosts);
+    }
+
+    private List<QuestionPostResponseDto> getQuestionPostResponseDtos(List<QuestionPost> questionPosts) {
         List<QuestionPostResponseDto> questionPostResponseDtos = new ArrayList<>();
 
         for (QuestionPost questionPost : questionPosts) {
@@ -60,7 +64,6 @@ public class QuestionPostService {
             QuestionPostResponseDto dto = new QuestionPostResponseDto(questionPost,childTags);
             questionPostResponseDtos.add(dto);
         }
-
         return questionPostResponseDtos;
     }
 

@@ -83,14 +83,18 @@ public class MemberService {
         Member member = memberRepository.findById(id).get();
         String fileName = file.getOriginalFilename() + "." + member.getName();
         String fileUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + fileName;
+        putBucket(file, fileName);
+        member.updateImageUrl(fileUrl);
+        memberRepository.save(member);
+        return new MemberIdResponseDto(member);
+    }
+
+    private void putBucket(MultipartFile file, String fileName) throws IOException {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
         metadata.setContentLength(file.getSize());
 
         amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
-        member.updateImageUrl(fileUrl);
-        memberRepository.save(member);
-        return new MemberIdResponseDto(member);
     }
 
     @Transactional

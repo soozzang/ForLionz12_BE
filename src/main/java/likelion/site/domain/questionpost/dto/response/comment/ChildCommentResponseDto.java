@@ -13,12 +13,14 @@ public class ChildCommentResponseDto {
     Long childCommentId;
     String name;
     String memberImageUrl;
+    String part;
     LocalDateTime createdAt;
     String content;
 
     public ChildCommentResponseDto(ChildComment childComment) {
         this.childCommentId = childComment.getId();
         this.name = childComment.getMember().getName();
+        this.part = childComment.getMember().getPart().toString();
         this.memberImageUrl = childComment.getMember().getImageUrl();
         this.createdAt = childComment.getCreatedAt();
         this.content = childComment.getContent();

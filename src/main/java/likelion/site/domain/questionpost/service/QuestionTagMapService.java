@@ -46,24 +46,26 @@ public class QuestionTagMapService {
         List<ChildTag> childTags = new ArrayList<>();
         List<QuestionPost> questionPosts = new ArrayList<>();
         List<QuestionTagMap> questionTagMaps = new ArrayList<>();
+        List<QuestionPost> filteredQuestionPosts = new ArrayList<>();
+        List<QuestionPostResponseDto> questionPostResponseDtos = new ArrayList<>();
 
         for (Long id : ids) {
             childTags.add(childTagRepository.findById(id).get());
         }
+        fillMaps(childTags, questionTagMaps, questionPosts);
+        filterQuestionPost(ids, questionPosts, questionTagMaps, filteredQuestionPosts);
+        toDto(filteredQuestionPosts, questionPostResponseDtos);
+        return questionPostResponseDtos;
+    }
 
-        for (ChildTag childTag : childTags) {
-            List<QuestionTagMap> questionTagMapList = questionTagMapRepository.findByChildTag(childTag);
-            questionTagMaps.addAll(questionTagMapList);
-            for (QuestionTagMap questionTagMap : questionTagMapList) {
-                QuestionPost questionPost = questionTagMap.getQuestionPost();
-                if (!questionPosts.contains(questionPost)) {
-                    questionPosts.add(questionPost);
-                }
-            }
+    private void toDto(List<QuestionPost> filteredQuestionPosts, List<QuestionPostResponseDto> questionPostResponseDtos) {
+        for (QuestionPost questionPost : filteredQuestionPosts) {
+            QuestionPostResponseDto dto = new QuestionPostResponseDto(questionPost,getChildTags(questionPost));
+            questionPostResponseDtos.add(dto);
         }
+    }
 
-        List<QuestionPost> filteredQuestionPosts = new ArrayList<>();
-
+    private static void filterQuestionPost(List<Long> ids, List<QuestionPost> questionPosts, List<QuestionTagMap> questionTagMaps, List<QuestionPost> filteredQuestionPosts) {
         for (QuestionPost questionPost : questionPosts) {
             int cnt = 0;
             for (QuestionTagMap questionTagMap : questionTagMaps) {
@@ -75,15 +77,23 @@ public class QuestionTagMapService {
                 filteredQuestionPosts.add(questionPost);
             }
         }
+    }
 
-        List<QuestionPostResponseDto> questionPostResponseDtos = new ArrayList<>();
-
-        for (QuestionPost questionPost : filteredQuestionPosts) {
-            QuestionPostResponseDto dto = new QuestionPostResponseDto(questionPost,getChildTags(questionPost));
-            questionPostResponseDtos.add(dto);
+    private void fillMaps(List<ChildTag> childTags, List<QuestionTagMap> questionTagMaps, List<QuestionPost> questionPosts) {
+        for (ChildTag childTag : childTags) {
+            List<QuestionTagMap> questionTagMapList = questionTagMapRepository.findByChildTag(childTag);
+            questionTagMaps.addAll(questionTagMapList);
+            fillQuestionPosts(questionPosts, questionTagMapList);
         }
+    }
 
-        return questionPostResponseDtos;
+    private static void fillQuestionPosts(List<QuestionPost> questionPosts, List<QuestionTagMap> questionTagMapList) {
+        for (QuestionTagMap questionTagMap : questionTagMapList) {
+            QuestionPost questionPost = questionTagMap.getQuestionPost();
+            if (!questionPosts.contains(questionPost)) {
+                questionPosts.add(questionPost);
+            }
+        }
     }
 
     private List<String> getChildTags(QuestionPost questionPost) {

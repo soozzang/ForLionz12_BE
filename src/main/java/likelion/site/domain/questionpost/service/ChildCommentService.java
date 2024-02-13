@@ -46,6 +46,10 @@ public class ChildCommentService {
             throw new BadElementException(CustomError.BAD_ELEMENT_ERROR);
         }
         List<ChildComment> childComments = childCommentRepository.findByComment(comment.get());
+        return getChildCommentResponseDtos(childComments);
+    }
+
+    private static List<ChildCommentResponseDto> getChildCommentResponseDtos(List<ChildComment> childComments) {
         List<ChildCommentResponseDto> childCommentResponses = new ArrayList<>();
 
         for (ChildComment childComment : childComments) {

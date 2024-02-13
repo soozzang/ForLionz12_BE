@@ -66,6 +66,20 @@ public class ParentTagService {
         List<QuestionPostResponseDto> questionPostResponseDtos = new ArrayList<>();
         HashSet<QuestionPost> questionPosts = new HashSet<>();
 
+        makeQuestionPostList(childTags, childTagResponseDtos, questionPosts);
+        toDto(questionPosts, questionPostResponseDtos);
+
+        return new SearchByParentTagResponse(childTagResponseDtos, questionPostResponseDtos);
+    }
+
+    private void toDto(HashSet<QuestionPost> questionPosts, List<QuestionPostResponseDto> questionPostResponseDtos) {
+        for (QuestionPost questionPost : questionPosts) {
+            QuestionPostResponseDto dto = new QuestionPostResponseDto(questionPost, getChildTags(questionPost));
+            questionPostResponseDtos.add(dto);
+        }
+    }
+
+    private void makeQuestionPostList(List<ChildTag> childTags, List<ChildTagResponseDto> childTagResponseDtos, HashSet<QuestionPost> questionPosts) {
         for (ChildTag childTag : childTags) {
             ChildTagResponseDto dto = new ChildTagResponseDto(childTag);
             childTagResponseDtos.add(dto);
@@ -76,13 +90,6 @@ public class ParentTagService {
                 questionPosts.add(questionPost);
             }
         }
-
-        for (QuestionPost questionPost : questionPosts) {
-            QuestionPostResponseDto dto = new QuestionPostResponseDto(questionPost, getChildTags(questionPost));
-            questionPostResponseDtos.add(dto);
-        }
-
-        return new SearchByParentTagResponse(childTagResponseDtos, questionPostResponseDtos);
     }
 
     private List<String> getChildTags(QuestionPost questionPost) {

@@ -13,6 +13,7 @@ public class CommentResponseDto {
     Long commentId;
     String name;
     String memberImageUrl;
+    String part;
     LocalDateTime createdAt;
     String content;
 
@@ -20,6 +21,7 @@ public class CommentResponseDto {
         this.commentId = comment.getId();
         this.name = comment.getMember().getName();
         this.memberImageUrl = comment.getMember().getImageUrl();
+        this.part = comment.getMember().getPart().toString();
         this.createdAt = comment.getCreatedAt();
         this.content = comment.getContent();
     }
