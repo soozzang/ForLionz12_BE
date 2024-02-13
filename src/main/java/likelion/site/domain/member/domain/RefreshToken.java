@@ -17,18 +17,14 @@ public class RefreshToken {
     @Column(name = "rt_value")
     private String value;
 
-    @Column(name = "rt_access")
-    private String accessToken;
     @Builder
-    public RefreshToken(String key, String value, String accessToken) {
+    public RefreshToken(String key, String value) {
         this.key = key;
         this.value = value;
-        this.accessToken = accessToken;
     }
 
-    public RefreshToken updateValue(String token, String accessToken) {
+    public RefreshToken updateValue(String token) {
         this.value = token;
-        this.accessToken = accessToken;
         return this;
     }
 }

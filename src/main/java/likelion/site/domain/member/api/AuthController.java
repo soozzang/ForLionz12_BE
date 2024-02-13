@@ -3,11 +3,9 @@ package likelion.site.domain.member.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import likelion.site.domain.member.domain.success.MemberSuccess;
-import likelion.site.domain.member.domain.success.TokenSuccess;
 import likelion.site.domain.member.dto.request.MemberRequest;
-import likelion.site.domain.member.dto.request.TokenDto;
-import likelion.site.domain.member.dto.request.TokenRequestDto;
+import likelion.site.domain.member.dto.response.TokenResponse;
+import likelion.site.domain.member.dto.request.TokenRequest;
 import likelion.site.domain.member.repository.RefreshTokenRepository;
 import likelion.site.domain.member.service.AuthService;
 import likelion.site.domain.member.service.MemberService;
@@ -43,24 +41,21 @@ public class AuthController {
 
     @Operation(summary = "로그인")
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<TokenDto>> login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<ApiResponse<TokenResponse>> login(@RequestBody LoginRequestDto loginRequestDto) {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(LOGIN_SUCCESS, authService.login(loginRequestDto)));
     }
 
     @Operation(summary = "토큰 재발급")
     @PostMapping("/reissue")
-    public ResponseEntity<ApiResponse<TokenDto>> reissue(@RequestBody accessDTO accessDTO) {
-        TokenRequestDto tokenRequestDto = new TokenRequestDto();
-        tokenRequestDto.setAccessToken(accessDTO.accessToken);
-        tokenRequestDto.setRefreshToken(refreshTokenRepository.findByAccessToken(accessDTO.getAccessToken()).get().getValue());
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(TOKEN_CREATE_SUCCESS, authService.reissue(tokenRequestDto)));
+    public ResponseEntity<ApiResponse<TokenResponse>> reissue(@RequestBody TokenRequest refreshToken) {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(TOKEN_CREATE_SUCCESS, authService.reissue(refreshToken)));
     }
 
-    @Data
-    @NoArgsConstructor
-    static class accessDTO {
-        String accessToken;
-    }
+//    @Data
+//    @NoArgsConstructor
+//    static class accessDTO {
+//        String r;
+//    }
 
     @Data
     public static class LoginRequestDto {

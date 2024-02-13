@@ -1,4 +1,4 @@
-package likelion.site.domain.member.dto.request;
+package likelion.site.domain.member.dto.response;
 
 import lombok.*;
 
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TokenDto {
+public class TokenResponse {
 
     private String grantType;
     private String accessToken;
