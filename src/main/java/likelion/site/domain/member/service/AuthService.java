@@ -15,6 +15,7 @@ import likelion.site.global.jwt.TokenProvider;
 import likelion.site.domain.member.repository.MemberRepository;
 import likelion.site.domain.member.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -65,10 +66,13 @@ public class AuthService {
         return tokenDto;
     }
 
-    public Cookie makeCookie(String refreshToken) {
-        Cookie cookie = new Cookie("refreshToken", refreshToken);
-        cookie.setDomain("https://lionz12.netlify.app"); cookie.setMaxAge(10000 * 24 * 60 * 60); cookie.setSecure(true);
-        return cookie;
+    public ResponseCookie makeCookie(String refreshToken) {
+        return ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/*")
+                .build();
     }
 
     @Transactional

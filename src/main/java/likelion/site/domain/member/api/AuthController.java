@@ -14,6 +14,7 @@ import likelion.site.global.ApiResponse;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<TokenResponse>> login(@RequestBody LoginRequestDto loginRequestDto) {
         TokenResponse tokenResponse = authService.login(loginRequestDto);
-        Cookie cookie = authService.makeCookie(tokenResponse.getRefreshToken());
+        ResponseCookie cookie = authService.makeCookie(tokenResponse.getRefreshToken());
         return ResponseEntity.ok()
                 .header("Set-Cookie", cookie.toString())
                 .body(ApiResponse.createSuccess(LOGIN_SUCCESS, tokenResponse));
