@@ -78,10 +78,19 @@ public class ParentTagService {
         }
 
         for (QuestionPost questionPost : questionPosts) {
-            QuestionPostResponseDto dto = new QuestionPostResponseDto(questionPost);
+            QuestionPostResponseDto dto = new QuestionPostResponseDto(questionPost, getChildTags(questionPost));
             questionPostResponseDtos.add(dto);
         }
 
         return new SearchByParentTagResponse(childTagResponseDtos, questionPostResponseDtos);
+    }
+
+    private List<ChildTag> getChildTags(QuestionPost questionPost) {
+        List<QuestionTagMap> questionTagMaps = questionTagMapRepository.findByQuestionPost(questionPost);
+        List<ChildTag> childTags = new ArrayList<>();
+        for (QuestionTagMap questionTagMap : questionTagMaps) {
+            childTags.add(questionTagMap.getChildTag());
+        }
+        return childTags;
     }
 }

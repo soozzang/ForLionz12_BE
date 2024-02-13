@@ -36,7 +36,7 @@ public class QuestionPost {
     @OneToMany(mappedBy = "questionPost")
     private List<Comment> comments;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     private List<String> imageUrls;
 
     @Builder

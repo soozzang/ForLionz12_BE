@@ -5,11 +5,14 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.dto.response.MemberIdResponseDto;
 import likelion.site.domain.member.repository.MemberRepository;
+import likelion.site.domain.questionpost.domain.ChildTag;
 import likelion.site.domain.questionpost.domain.QuestionPost;
+import likelion.site.domain.questionpost.domain.QuestionTagMap;
 import likelion.site.domain.questionpost.dto.request.QuestionPostRequestDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostIdResponseDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostResponseDto;
 import likelion.site.domain.questionpost.repository.QuestionPostRepository;
+import likelion.site.domain.questionpost.repository.QuestionTagMapRepository;
 import likelion.site.global.exception.exceptions.AuthorizationException;
 import likelion.site.global.exception.exceptions.BadElementException;
 import likelion.site.global.exception.CustomError;
@@ -23,6 +26,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -33,6 +37,7 @@ public class QuestionPostService {
 
     private final QuestionPostRepository questionPostRepository;
     private final MemberRepository memberRepository;
+    private final QuestionTagMapRepository questionTagMapRepository;
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -51,17 +56,27 @@ public class QuestionPostService {
         List<QuestionPostResponseDto> questionPostResponseDtos = new ArrayList<>();
 
         for (QuestionPost questionPost : questionPosts) {
-            QuestionPostResponseDto dto = new QuestionPostResponseDto(questionPost);
+            List<ChildTag> childTags = getChildTags(questionPost);
+            QuestionPostResponseDto dto = new QuestionPostResponseDto(questionPost,childTags);
             questionPostResponseDtos.add(dto);
         }
 
         return questionPostResponseDtos;
     }
 
+    private List<ChildTag> getChildTags(QuestionPost questionPost) {
+        List<QuestionTagMap> questionTagMaps = questionTagMapRepository.findByQuestionPost(questionPost);
+        List<ChildTag> childTags = new ArrayList<>();
+        for (QuestionTagMap questionTagMap : questionTagMaps) {
+            childTags.add(questionTagMap.getChildTag());
+        }
+        return childTags;
+    }
+
     public QuestionPostResponseDto findQuestionPostById(Long questionPostId) {
         Optional<QuestionPost> questionPost = questionPostRepository.findById(questionPostId);
         if (questionPost.isPresent()) {
-            return new QuestionPostResponseDto(questionPost.get());
+            return new QuestionPostResponseDto(questionPost.get(),getChildTags(questionPost.get()));
         }
         throw new BadElementException(CustomError.BAD_ELEMENT_ERROR);
     }
@@ -90,7 +105,7 @@ public class QuestionPostService {
     }
 
     public String convertFile(MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename() + "Q&A" + LocalDateTime.now();
+        String fileName = Objects.requireNonNull(file.getOriginalFilename()).replaceAll(" ", "_") + "Q&A" + LocalDateTime.now();
         String fileUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + fileName;
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());

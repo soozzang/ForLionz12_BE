@@ -8,7 +8,6 @@ import likelion.site.domain.questionpost.dto.response.question.QuestionPostIdRes
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostResponseDto;
 import likelion.site.domain.questionpost.service.QuestionPostService;
 import likelion.site.global.ApiResponse;
-import likelion.site.global.exception.exceptions.BadFileFormatException;
 import likelion.site.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -19,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-import static likelion.site.domain.member.domain.success.MemberSuccess.MEMBER_UPDATED_SUCCESS;
 import static likelion.site.domain.questionpost.domain.success.QuestionPostSuccess.*;
 
 @Tag(name = "QuestionPost", description = "질문글(Q&A)")
@@ -32,9 +30,7 @@ public class QuestionPostController {
     private final MemberService memberService;
 
     @Operation(summary = "질문글 생성", description = "STAFF는 불가능합니다.")
-    @PostMapping(
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE
-    )
+    @PostMapping
     public ApiResponse<QuestionPostIdResponseDto> createQuestionPost(@RequestBody QuestionPostRequestDto request) {
         return ApiResponse.createSuccess(QUESTION_POST_CREATED_SUCCESS,questionPostService.addQuestionPost(SecurityUtil.getCurrentMemberId(),request));
     }
