@@ -42,9 +42,9 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<TokenResponse>> login(@RequestBody LoginRequestDto loginRequestDto) {
         TokenResponse tokenResponse = authService.login(loginRequestDto);
-        ResponseCookie cookie = authService.makeCookie(tokenResponse.getRefreshToken());
+//        ResponseCookie cookie = authService.makeCookie(tokenResponse.getRefreshToken());
         return ResponseEntity.ok()
-                .header("Set-Cookie", cookie.toString())
+//                .header("Set-Cookie", cookie.toString())
                 .body(ApiResponse.createSuccess(LOGIN_SUCCESS, tokenResponse));
     }
 
