@@ -1,4 +1,4 @@
-package likelion.site.domain.questionpost.service;
+package likelion.site.domain.questionpost.service.comment;
 
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.repository.MemberRepository;

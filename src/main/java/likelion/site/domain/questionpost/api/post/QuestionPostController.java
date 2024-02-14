@@ -1,4 +1,4 @@
-package likelion.site.domain.questionpost.api;
+package likelion.site.domain.questionpost.api.post;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -6,7 +6,7 @@ import likelion.site.domain.member.service.MemberService;
 import likelion.site.domain.questionpost.dto.request.QuestionPostRequestDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostIdResponseDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostResponseDto;
-import likelion.site.domain.questionpost.service.QuestionPostService;
+import likelion.site.domain.questionpost.service.post.QuestionPostService;
 import likelion.site.global.ApiResponse;
 import likelion.site.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package likelion.site.domain.questionpost.service;
+package likelion.site.domain.questionpost.service.tag;
 
 import likelion.site.domain.questionpost.domain.ChildTag;
 import likelion.site.domain.questionpost.domain.ParentTag;

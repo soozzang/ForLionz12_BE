@@ -1,13 +1,13 @@
-package likelion.site.domain.questionpost.api;
+package likelion.site.domain.questionpost.api.tag;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.questionpost.dto.request.QuestionTagMapRequestDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostResponseDto;
 import likelion.site.domain.questionpost.dto.response.tag.QuestionTagMapResponseIdDto;
-import likelion.site.domain.questionpost.service.ChildTagService;
-import likelion.site.domain.questionpost.service.QuestionPostService;
-import likelion.site.domain.questionpost.service.QuestionTagMapService;
+import likelion.site.domain.questionpost.service.tag.ChildTagService;
+import likelion.site.domain.questionpost.service.post.QuestionPostService;
+import likelion.site.domain.questionpost.service.tag.QuestionTagMapService;
 import likelion.site.global.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,16 +1,12 @@
-package likelion.site.domain.questionpost.api;
+package likelion.site.domain.questionpost.api.comment;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import likelion.site.domain.questionpost.domain.ChildComment;
-import likelion.site.domain.questionpost.domain.Comment;
-import likelion.site.domain.member.domain.Member;
-import likelion.site.domain.questionpost.domain.success.CommentSuccess;
 import likelion.site.domain.questionpost.dto.request.ChildCommentRequestDto;
 import likelion.site.domain.questionpost.dto.response.comment.ChildCommentIdResponseDto;
 import likelion.site.domain.questionpost.dto.response.comment.ChildCommentResponseDto;
-import likelion.site.domain.questionpost.service.ChildCommentService;
-import likelion.site.domain.questionpost.service.CommentService;
+import likelion.site.domain.questionpost.service.comment.ChildCommentService;
+import likelion.site.domain.questionpost.service.comment.CommentService;
 import likelion.site.domain.member.service.MemberService;
 import likelion.site.global.ApiResponse;
 import likelion.site.global.util.SecurityUtil;
@@ -19,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static likelion.site.domain.questionpost.domain.success.CommentSuccess.COMMENT_CREATED_SUCCESS;

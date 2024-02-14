@@ -1,17 +1,13 @@
-package likelion.site.domain.questionpost.api;
+package likelion.site.domain.questionpost.api.comment;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import likelion.site.domain.questionpost.domain.Comment;
-import likelion.site.domain.member.domain.Member;
-import likelion.site.domain.questionpost.domain.QuestionPost;
-import likelion.site.domain.questionpost.domain.success.CommentSuccess;
 import likelion.site.domain.questionpost.dto.request.CommentRequestDto;
 import likelion.site.domain.questionpost.dto.response.comment.CommentResponseDto;
 import likelion.site.domain.questionpost.dto.response.comment.CommentResponseIdDto;
-import likelion.site.domain.questionpost.service.CommentService;
+import likelion.site.domain.questionpost.service.comment.CommentService;
 import likelion.site.domain.member.service.MemberService;
-import likelion.site.domain.questionpost.service.QuestionPostService;
+import likelion.site.domain.questionpost.service.post.QuestionPostService;
 import likelion.site.global.ApiResponse;
 import likelion.site.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static likelion.site.domain.questionpost.domain.success.CommentSuccess.COMMENT_CREATED_SUCCESS;

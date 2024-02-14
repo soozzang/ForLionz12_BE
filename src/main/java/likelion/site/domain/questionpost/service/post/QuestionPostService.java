@@ -1,4 +1,4 @@
-package likelion.site.domain.questionpost.service;
+package likelion.site.domain.questionpost.service.post;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
