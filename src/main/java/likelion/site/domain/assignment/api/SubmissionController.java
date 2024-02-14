@@ -18,6 +18,7 @@ import likelion.site.global.exception.CustomError;
 import likelion.site.global.exception.exceptions.OverSubmissionException;
 import likelion.site.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static likelion.site.domain.assignment.domain.success.SubmissionSuccess.SUBMISSION_CREATED_SUCCESS;
@@ -35,13 +36,13 @@ public class SubmissionController {
 
     @Operation(summary = "과제 제출하기")
     @PostMapping
-    public ApiResponse<?> createSubmission(@RequestBody SubmissionRequest request) {
-        return ApiResponse.createSuccess(SUBMISSION_CREATED_SUCCESS, submissionService.addSubmission(SecurityUtil.getCurrentMemberId(), request));
+    public ResponseEntity<ApiResponse<?>> createSubmission(@RequestBody SubmissionRequest request) {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(SUBMISSION_CREATED_SUCCESS, submissionService.addSubmission(SecurityUtil.getCurrentMemberId(), request)));
     }
 
     @Operation(summary = "특정id에 해당하는 제출란 업데이트")
     @PutMapping("{id}")
-    public ApiResponse<SubmissionIdResponse> updateSubmission(@PathVariable("id") Long id, @RequestBody SubmissionUpdateRequest request) {
-        return ApiResponse.createSuccess(SUBMISSION_UPDATED_SUCCESS,submissionService.updateSubmission(id,SecurityUtil.getCurrentMemberId(),request));
+    public ResponseEntity<ApiResponse<SubmissionIdResponse>> updateSubmission(@PathVariable("id") Long id, @RequestBody SubmissionUpdateRequest request) {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(SUBMISSION_UPDATED_SUCCESS,submissionService.updateSubmission(id,SecurityUtil.getCurrentMemberId(),request)));
     }
 }

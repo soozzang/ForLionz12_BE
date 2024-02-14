@@ -4,13 +4,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.member.service.MemberService;
 import likelion.site.domain.questionpost.dto.request.ParentTagRequestDto;
-import likelion.site.domain.questionpost.dto.response.tag.*;
+import likelion.site.domain.questionpost.dto.response.tag.ParentTagResponseDto;
+import likelion.site.domain.questionpost.dto.response.tag.ParentTagResponseIdDto;
+import likelion.site.domain.questionpost.dto.response.tag.SearchByParentTagResponse;
 import likelion.site.domain.questionpost.service.ChildTagService;
 import likelion.site.domain.questionpost.service.ParentTagService;
 import likelion.site.domain.questionpost.service.QuestionTagMapService;
 import likelion.site.global.ApiResponse;
-import likelion.site.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,19 +34,19 @@ public class ParentTagController {
 
     @Operation(summary = "부모태그 생성", description = "STAFF만 가능합니다.")
     @PostMapping
-    public ApiResponse<ParentTagResponseIdDto> createParentTag(@RequestBody ParentTagRequestDto request) {
-        return ApiResponse.createSuccess(TAG_CREATED_SUCCESS,parentTagService.addParentTag(request));
+    public ResponseEntity<ApiResponse<ParentTagResponseIdDto>> createParentTag(@RequestBody ParentTagRequestDto request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.createSuccess(TAG_CREATED_SUCCESS,parentTagService.addParentTag(request)));
     }
 
     @Operation(summary = "특정 부모 태그에 대한 자식태그들&게시글 조회")
     @GetMapping
-    public ApiResponse<SearchByParentTagResponse> getChildTags(@RequestParam Long parentTagId) {
-        return ApiResponse.createSuccess(GET_TAG_SUCCESS,parentTagService.findChildsAndPosts(parentTagId));
+    public ResponseEntity<ApiResponse<SearchByParentTagResponse>> getChildTags(@RequestParam Long parentTagId) {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(GET_TAG_SUCCESS,parentTagService.findChildsAndPosts(parentTagId)));
     }
 
     @Operation(summary = "모든 부모태그 조회")
     @GetMapping("all")
-    public ApiResponse<List<ParentTagResponseDto>> getAllParentTags() {
-        return ApiResponse.createSuccess(GET_TAG_SUCCESS,parentTagService.findAll());
+    public ResponseEntity<ApiResponse<List<ParentTagResponseDto>>> getAllParentTags() {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(GET_TAG_SUCCESS,parentTagService.findAll()));
     }
 }

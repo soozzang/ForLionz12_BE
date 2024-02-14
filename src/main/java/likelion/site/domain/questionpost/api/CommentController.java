@@ -15,6 +15,8 @@ import likelion.site.domain.questionpost.service.QuestionPostService;
 import likelion.site.global.ApiResponse;
 import likelion.site.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -35,13 +37,13 @@ public class CommentController {
 
     @Operation(summary = "댓글 생성")
     @PostMapping
-    public ApiResponse<CommentResponseIdDto> createComment(@RequestBody CommentRequestDto request) {
-        return ApiResponse.createSuccess(COMMENT_CREATED_SUCCESS,commentService.addComment(SecurityUtil.getCurrentMemberId(),request));
+    public ResponseEntity<ApiResponse<CommentResponseIdDto>> createComment(@RequestBody CommentRequestDto request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.createSuccess(COMMENT_CREATED_SUCCESS,commentService.addComment(SecurityUtil.getCurrentMemberId(),request)));
     }
 
     @Operation(summary = "특정 질문글에 대한 모든 댓글 조회")
     @GetMapping("{questionPostId}")
-    public ApiResponse<List<CommentResponseDto>> getAllComments(@PathVariable Long questionPostId) {
-        return ApiResponse.createSuccess(GET_COMMENT_SUCCESS,commentService.findCommentsByQuestionPost(questionPostId));
+    public ResponseEntity<ApiResponse<List<CommentResponseDto>>> getAllComments(@PathVariable Long questionPostId) {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(GET_COMMENT_SUCCESS,commentService.findCommentsByQuestionPost(questionPostId)));
     }
 }

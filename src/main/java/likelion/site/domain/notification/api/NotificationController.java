@@ -47,8 +47,8 @@ public class NotificationController {
 
     @Operation(summary = "파트 별 공지사항 조회", description = "partName에는 BE/FE/ALL이 들어갈 수 있습니다.")
     @GetMapping("part/{part}")
-    public ApiResponse<List<NotificationDetailResponse>> findNotificationByPart(@PathVariable("part") String part) {
-        return ApiResponse.createSuccess(GET_NOTIFICATION_SUCCESS,notificationService.findByNotificationPart(part));
+    public ResponseEntity<ApiResponse<List<NotificationDetailResponse>>> findNotificationByPart(@PathVariable("part") String part) {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(GET_NOTIFICATION_SUCCESS,notificationService.findByNotificationPart(part)));
     }
 
     @Operation(summary = "특정 id의 공지사항 업데이트")
