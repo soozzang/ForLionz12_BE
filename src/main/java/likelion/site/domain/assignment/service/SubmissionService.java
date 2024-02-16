@@ -37,7 +37,7 @@ public class SubmissionService {
         if(submissionRepository.findSubmissionByAssignmentAndMember(assignment.get(),member).isEmpty()){
             throw new OverSubmissionException(CustomError.OVER_SUBMISSION_EXCEPTION);
         }
-        Submission submission = request.toEntity(assignment.get());
+        Submission submission = request.toEntity(assignment.get(),member);
         submissionRepository.save(submission);
         return new SubmissionIdResponse(submission);
     }
