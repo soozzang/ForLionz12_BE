@@ -1,6 +1,5 @@
 package likelion.site.domain.assignment.service;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import likelion.site.domain.assignment.domain.Assignment;
 import likelion.site.domain.assignment.domain.Submission;
 import likelion.site.domain.assignment.dto.request.SubmissionRequest;

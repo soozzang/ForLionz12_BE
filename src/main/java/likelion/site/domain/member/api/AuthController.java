@@ -3,18 +3,14 @@ package likelion.site.domain.member.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.Cookie;
 import likelion.site.domain.member.dto.request.MemberRequest;
 import likelion.site.domain.member.dto.response.TokenResponse;
-import likelion.site.domain.member.dto.request.TokenRequest;
 import likelion.site.domain.member.repository.RefreshTokenRepository;
 import likelion.site.domain.member.service.AuthService;
 import likelion.site.domain.member.service.MemberService;
 import likelion.site.global.ApiResponse;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -48,10 +44,10 @@ public class AuthController {
                 .body(ApiResponse.createSuccess(LOGIN_SUCCESS, tokenResponse));
     }
 
-    @CrossOrigin(origins = "https://lionz12.netlify.app/", allowCredentials = "true" )
+//    @CrossOrigin(origins = "https://lionz12.netlify.app/", allowCredentials = "true" )
     @Operation(summary = "토큰 재발급")
     @PostMapping("/reissue")
-    public ResponseEntity<ApiResponse<TokenResponse>> reissue(@CookieValue("refreshToken") String refreshToken) {
+    public ResponseEntity<ApiResponse<TokenResponse>> reissue(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(TOKEN_CREATE_SUCCESS, authService.reissue(refreshToken)));
     }
 

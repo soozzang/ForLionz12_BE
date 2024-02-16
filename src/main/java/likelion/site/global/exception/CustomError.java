@@ -15,7 +15,8 @@ public enum CustomError {
     BAD_ELEMENT_ERROR(HttpStatus.BAD_REQUEST, "없는 데이터에 대한 요청입니다."),
     OVER_SUBMISSION_EXCEPTION(HttpStatus.BAD_REQUEST, "한 과제물 당 하나의 제출물만 제출 가능합니다"),
     BAD_FILE_EXCEPTION(HttpStatus.BAD_REQUEST, "이미지 파일 형식이 올바르지 않습니다."),
-    AUTHORIZATION_EXCEPTION(HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
+    AUTHORIZATION_EXCEPTION(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
+    REFRESHTOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "유효하지 않은 Refresh토큰입니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

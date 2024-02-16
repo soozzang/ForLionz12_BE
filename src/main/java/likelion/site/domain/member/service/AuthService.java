@@ -1,6 +1,5 @@
 package likelion.site.domain.member.service;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.transaction.Transactional;
 import likelion.site.domain.member.api.AuthController;
 import likelion.site.domain.member.domain.Member;
@@ -8,12 +7,11 @@ import likelion.site.domain.member.domain.RefreshToken;
 import likelion.site.domain.member.dto.request.MemberRequest;
 import likelion.site.domain.member.dto.response.MemberResponseDto;
 import likelion.site.domain.member.dto.response.TokenResponse;
-import likelion.site.domain.member.dto.request.TokenRequest;
+import likelion.site.domain.member.repository.MemberRepository;
+import likelion.site.domain.member.repository.RefreshTokenRepository;
 import likelion.site.global.exception.CustomError;
 import likelion.site.global.exception.exceptions.DuplicateMemberError;
 import likelion.site.global.jwt.TokenProvider;
-import likelion.site.domain.member.repository.MemberRepository;
-import likelion.site.domain.member.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
