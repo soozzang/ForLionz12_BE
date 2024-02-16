@@ -45,7 +45,7 @@ public class TokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        long now = (new Date()).getTime();
+        long now = new Date(System.currentTimeMillis()).getTime();
 
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
@@ -79,7 +79,7 @@ public class TokenProvider {
                 .build();
     }
 
-    public TokenResponse generateAccessTokenDto(Authentication authentication) {
+    public TokenResponse generateAccessTokenDto(Authentication authentication, String refreshToken) {
         // 권한들 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -99,6 +99,7 @@ public class TokenProvider {
         return TokenResponse.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .accessTokenExpiresIn(new java.sql.Timestamp(accessTokenExpiresIn.getTime()).toLocalDateTime())
                 .build();
     }

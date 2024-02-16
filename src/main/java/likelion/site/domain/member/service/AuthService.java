@@ -81,16 +81,8 @@ public class AuthService {
             throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
         }
 
-        // 2. Access Token 에서 Member ID 가져오기
         Authentication authentication = tokenProvider.getAuthentication(refreshToken);
 
-
-
-        // 5. 새로운 토큰 생성
-
-        // 6. 저장소 정보 업데이트
-
-        // 토큰 발급
-        return tokenProvider.generateAccessTokenDto(authentication);
+        return tokenProvider.generateAccessTokenDto(authentication,refreshToken);
     }
 }
