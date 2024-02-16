@@ -16,11 +16,11 @@ import likelion.site.domain.member.repository.MemberRepository;
 import likelion.site.global.exception.CustomError;
 import likelion.site.global.exception.exceptions.AuthorizationException;
 import likelion.site.global.exception.exceptions.BadElementException;
+import likelion.site.global.exception.exceptions.NoSubmissionException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -105,8 +105,8 @@ public class AssignmentService {
         if (member.getPart() == Part.STAFF) {
             throw new AuthorizationException(CustomError.AUTHORIZATION_EXCEPTION);
         }
-        if(submissionRepository.findSubmissionByAssignmentAndMember(assignment, member).isEmpty()) {
-            throw new BadElementException(CustomError.BAD_ELEMENT_ERROR);
+        if (submissionRepository.findSubmissionByAssignmentAndMember(assignment, member).isEmpty()) {
+            throw new NoSubmissionException(CustomError.NO_SUBMISSION_EXCEPTION);
         };
         return new SubmissionResponse(submissionRepository.findSubmissionByAssignmentAndMember(assignment, member).get());
 
