@@ -34,7 +34,7 @@ public class SubmissionService {
         if(assignment.isEmpty()) {
             throw new BadElementException(CustomError.BAD_ELEMENT_ERROR);
         };
-        if(submissionRepository.findSubmissionByAssignmentAndMember(assignment.get(),member).isEmpty()){
+        if(submissionRepository.findSubmissionByAssignmentAndMember(assignment.get(),member).isPresent()){
             throw new OverSubmissionException(CustomError.OVER_SUBMISSION_EXCEPTION);
         }
         Submission submission = request.toEntity(assignment.get(),member);
