@@ -3,9 +3,7 @@ package likelion.site.domain.questionpost.service.post;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import likelion.site.domain.member.domain.Member;
-import likelion.site.domain.member.dto.response.MemberIdResponseDto;
 import likelion.site.domain.member.repository.MemberRepository;
-import likelion.site.domain.questionpost.domain.ChildTag;
 import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.questionpost.domain.QuestionTagMap;
 import likelion.site.domain.questionpost.dto.request.QuestionPostRequestDto;
@@ -13,9 +11,10 @@ import likelion.site.domain.questionpost.dto.response.question.QuestionPostIdRes
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostResponseDto;
 import likelion.site.domain.questionpost.repository.QuestionPostRepository;
 import likelion.site.domain.questionpost.repository.QuestionTagMapRepository;
+import likelion.site.global.exception.CustomError;
 import likelion.site.global.exception.exceptions.AuthorizationException;
 import likelion.site.global.exception.exceptions.BadElementException;
-import likelion.site.global.exception.CustomError;
+import likelion.site.global.exception.exceptions.NoContentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.IntStream;
 
 @Service
 @Transactional(readOnly = true)
@@ -78,6 +76,9 @@ public class QuestionPostService {
 
     public QuestionPostResponseDto findQuestionPostById(Long questionPostId) {
         Optional<QuestionPost> questionPost = questionPostRepository.findById(questionPostId);
+        if (questionPostId == 0) {
+            throw new NoContentException(CustomError.NO_CONTENT_EXCEPTION);
+        }
         if (questionPost.isPresent()) {
             return new QuestionPostResponseDto(questionPost.get(),getChildTags(questionPost.get()));
         }
