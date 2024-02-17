@@ -32,6 +32,7 @@ public class AssignmentRequest {
                 .title(title)
                 .content(content)
                 .assignmentPart(assignmentPart)
+                .expireAt(expireAt)
                 .tags(tags)
                 .assignmentMainContent(assignmentMainContent)
                 .build();

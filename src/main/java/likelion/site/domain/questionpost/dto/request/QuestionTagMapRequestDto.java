@@ -5,11 +5,13 @@ import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.questionpost.domain.QuestionTagMap;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class QuestionTagMapRequestDto {
 
     Long questionPostId;
-    Long childTagId;
+    List<Long> childTagId;
 
     public QuestionTagMap toEntity(QuestionPost questionPost, ChildTag childTag) {
         return QuestionTagMap.builder()

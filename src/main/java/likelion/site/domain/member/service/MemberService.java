@@ -79,6 +79,14 @@ public class MemberService {
     }
 
     @Transactional
+    public MemberIdResponseDto deleteImage(Long id) {
+        Member member = memberRepository.findById(id).get();
+        member.updateInstagramId(null);
+        memberRepository.save(member);
+        return new MemberIdResponseDto(member);
+    }
+
+    @Transactional
     public MemberIdResponseDto updateImageUrl(Long id, MultipartFile file) throws IOException {
         Member member = memberRepository.findById(id).get();
         String fileName = file.getOriginalFilename() + "." + member.getName();

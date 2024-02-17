@@ -16,6 +16,7 @@ import likelion.site.domain.member.repository.MemberRepository;
 import likelion.site.global.exception.CustomError;
 import likelion.site.global.exception.exceptions.AuthorizationException;
 import likelion.site.global.exception.exceptions.BadElementException;
+import likelion.site.global.exception.exceptions.NoContentException;
 import likelion.site.global.exception.exceptions.NoSubmissionException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,9 @@ public class AssignmentService {
 
     public AssignmentResponse findAssignmentById(Long assignmentId) {
         Optional<Assignment> assignment = assignmentRepository.findById(assignmentId);
+        if (assignmentId == 0) {
+            throw new NoContentException(CustomError.NO_CONTENT_EXCEPTION);
+        }
         if(assignment.isPresent()){
             return new AssignmentResponse(assignment.get());
         }

@@ -73,6 +73,12 @@ public class MemberController {
         return ResponseEntity.badRequest().body(ApiResponse.createError(e.getCustomError().getHttpStatus() ,e.getMessage()));
     }
 
+    @Operation(summary = "프사 내리기")
+    @PutMapping("/instagram")
+    public ResponseEntity<ApiResponse<MemberIdResponseDto>> deleteProfileImage() {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(MEMBER_UPDATED_SUCCESS,memberService.deleteImage(SecurityUtil.getCurrentMemberId())));
+    }
+
     @Operation(summary = "나의 인스타그램 아이디 업데이트", description = "해당 토큰의 사용자의 인스타그램 아이디를 업데이트 합니다.")
     @PutMapping("/instagram")
     public ResponseEntity<ApiResponse<MemberIdResponseDto>> updateMemberInstagramId(@RequestBody InstagramIdUpdateRequest request) {

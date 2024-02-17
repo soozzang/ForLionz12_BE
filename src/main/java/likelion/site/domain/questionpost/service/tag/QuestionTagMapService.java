@@ -1,14 +1,10 @@
 package likelion.site.domain.questionpost.service.tag;
 
 import likelion.site.domain.questionpost.domain.ChildTag;
-import likelion.site.domain.questionpost.domain.ParentTag;
 import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.questionpost.domain.QuestionTagMap;
-import likelion.site.domain.questionpost.dto.request.ChildTagRequestDto;
 import likelion.site.domain.questionpost.dto.request.QuestionTagMapRequestDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostResponseDto;
-import likelion.site.domain.questionpost.dto.response.tag.QuestionTagMapResponseDto;
-import likelion.site.domain.questionpost.dto.response.tag.QuestionTagMapResponseIdDto;
 import likelion.site.domain.questionpost.repository.ChildTagRepository;
 import likelion.site.domain.questionpost.repository.QuestionPostRepository;
 import likelion.site.domain.questionpost.repository.QuestionTagMapRepository;
@@ -17,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -30,12 +25,14 @@ public class QuestionTagMapService {
     private final ChildTagRepository childTagRepository;
 
     @Transactional
-    public QuestionTagMapResponseIdDto addQuestionTagMap(QuestionTagMapRequestDto request) {
+    public void addQuestionTagMap(QuestionTagMapRequestDto request) {
         QuestionPost questionPost = questionPostRepository.findById(request.getQuestionPostId()).get();
-        ChildTag childTag = childTagRepository.findById(request.getChildTagId()).get();
-        QuestionTagMap questionTagMap = request.toEntity(questionPost, childTag);
-        questionTagMapRepository.save(questionTagMap);
-        return new QuestionTagMapResponseIdDto(questionTagMap);
+        for (Long id : request.getChildTagId()) {
+            ChildTag childTag = childTagRepository.findById(id).get();
+            QuestionTagMap questionTagMap = request.toEntity(questionPost, childTag);
+            questionTagMapRepository.save(questionTagMap);
+        }
+        return;
     }
 
     public List<QuestionTagMap> findAllTagMap() {

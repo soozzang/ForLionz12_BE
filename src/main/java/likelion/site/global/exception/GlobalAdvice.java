@@ -69,4 +69,9 @@ public class GlobalAdvice {
     public ResponseEntity<ApiResponse<?>> noSubmissionException(NoSubmissionException e) {
         return ResponseEntity.ok().body(ApiResponse.createError(e.getCustomError().getHttpStatus(), e.getMessage()));
     }
+
+    @ExceptionHandler(NoContentException.class)
+    public ResponseEntity<ApiResponse<?>> noSubmissionException(NoContentException e) {
+        return ResponseEntity.ok().body(ApiResponse.createError(e.getCustomError().getHttpStatus(), e.getMessage()));
+    }
 }
