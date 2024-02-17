@@ -81,7 +81,7 @@ public class MemberService {
     @Transactional
     public MemberIdResponseDto deleteImage(Long id) {
         Member member = memberRepository.findById(id).get();
-        member.updateInstagramId(null);
+        member.updateImageUrl(null);
         memberRepository.save(member);
         return new MemberIdResponseDto(member);
     }
