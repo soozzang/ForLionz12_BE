@@ -96,6 +96,7 @@ public class QuestionPostService {
         if (member != questionPost.get().getMember()) {
             throw new AuthorizationException(CustomError.AUTHORIZATION_EXCEPTION);
         }
+        questionTagMapRepository.deleteAll(questionTagMapRepository.findByQuestionPost(questionPost.get()));
         questionPost.get().updateQuestionPost(request.getTitle(),request.getContent(),request.getPostImageUrls());
         questionPostRepository.save(questionPost.get());
         return new QuestionPostIdResponseDto(questionPost.get());

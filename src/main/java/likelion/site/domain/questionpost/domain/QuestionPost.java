@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,7 +32,7 @@ public class QuestionPost {
 
     private final LocalDateTime createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
 
-    @OneToMany(mappedBy = "questionPost")
+    @OneToMany(mappedBy = "questionPost", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
     @ElementCollection(fetch = FetchType.LAZY)
