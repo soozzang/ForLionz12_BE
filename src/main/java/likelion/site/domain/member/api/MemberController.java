@@ -74,7 +74,7 @@ public class MemberController {
     }
 
     @Operation(summary = "프사 내리기")
-    @PutMapping("/instagram")
+    @PutMapping("/imageDelete")
     public ResponseEntity<ApiResponse<MemberIdResponseDto>> deleteProfileImage() {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(MEMBER_UPDATED_SUCCESS,memberService.deleteImage(SecurityUtil.getCurrentMemberId())));
     }
