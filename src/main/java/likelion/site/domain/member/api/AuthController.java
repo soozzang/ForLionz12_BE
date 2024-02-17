@@ -47,8 +47,7 @@ public class AuthController {
 //    @CrossOrigin(origins = "https://lionz12.netlify.app/", allowCredentials = "true" )
     @Operation(summary = "토큰 재발급")
     @PostMapping("/reissue")
-    public ResponseEntity<ApiResponse<TokenResponse>> reissue(@RequestHeader("accept") String refreshToken) {
-        System.out.println(refreshToken);
+    public ResponseEntity<ApiResponse<TokenResponse>> reissue(@RequestParam String refreshToken) {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(TOKEN_CREATE_SUCCESS, authService.reissue(refreshToken)));
     }
 
