@@ -106,6 +106,7 @@ public class QuestionPostService {
     public QuestionPostIdResponseDto delete(Long questionPostId) {
         QuestionPost questionPost = questionPostRepository.findById(questionPostId).get();
         questionPostRepository.delete(questionPost);
+        questionTagMapRepository.deleteAll(questionTagMapRepository.findByQuestionPost(questionPost));
         return new QuestionPostIdResponseDto(questionPost);
     }
 
