@@ -1,11 +1,8 @@
 package likelion.site.global;
 
-import likelion.site.global.exception.CustomError;
 import likelion.site.global.exception.SuccessDefault;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Getter
@@ -29,5 +26,9 @@ public class ApiResponse<T> {
 
     public static ApiResponse<?> createError(HttpStatus status, String message) {
         return new ApiResponse<>(status, null, message);
+    }
+
+    public static ApiResponse<?> noContent(String success) {
+        return new ApiResponse<>(HttpStatus.NO_CONTENT,null, success);
     }
 }

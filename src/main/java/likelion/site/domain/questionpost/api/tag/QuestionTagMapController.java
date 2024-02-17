@@ -30,7 +30,8 @@ public class QuestionTagMapController {
     @Operation(summary = "질문 글 생성시 특정 태그들과 매핑")
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createQuestionTagMap(@RequestBody QuestionTagMapRequestDto request) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        questionTagMapService.addQuestionTagMap(request);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.noContent("OK"));
     }
 
     @Operation(summary = "특정 자식태그id(들)에 해당하는 자식태그와 매핑된 질문글 리스트 조회", description = "1,2,3 형태의 쿼리 파라미터 형태로 요청하세요.")
