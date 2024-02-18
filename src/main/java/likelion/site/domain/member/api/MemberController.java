@@ -7,6 +7,7 @@ import likelion.site.domain.member.dto.request.InstagramIdUpdateRequest;
 import likelion.site.domain.member.dto.request.IntroductionUpdateRequest;
 import likelion.site.domain.member.dto.request.PasswordUpdateRequest;
 import likelion.site.domain.member.dto.response.MemberIdResponseDto;
+import likelion.site.domain.member.dto.response.MemberMyInfoResponse;
 import likelion.site.domain.member.dto.response.MemberResponseDto;
 import likelion.site.domain.member.service.MemberService;
 import likelion.site.global.ApiResponse;
@@ -34,8 +35,8 @@ public class MemberController {
 
     @Operation(summary = "내 정보 조회", description = "해당 토큰의 사용자의 정보를 조회합니다.")
     @GetMapping("/me")
-    public ResponseEntity<ApiResponse<MemberResponseDto>> findMyInfo() {
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(GET_MEMBER_SUCCESS,memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId())));
+    public ResponseEntity<ApiResponse<MemberMyInfoResponse>> findMyInfo() {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(GET_MEMBER_SUCCESS,memberService.findMyinfo(SecurityUtil.getCurrentMemberId())));
     }
 
     @Operation(summary = "id를 통해 특정 멤버를 조회")

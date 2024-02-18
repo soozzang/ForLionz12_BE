@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.dto.request.*;
 import likelion.site.domain.member.dto.response.MemberIdResponseDto;
+import likelion.site.domain.member.dto.response.MemberMyInfoResponse;
 import likelion.site.domain.member.dto.response.MemberResponseDto;
 import likelion.site.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,11 @@ public class MemberService {
     public MemberResponseDto findMemberInfoById(Long memberId) {
         Member member =  memberRepository.findById(memberId).get();
         return new MemberResponseDto(member);
+    }
+
+    public MemberMyInfoResponse findMyinfo(Long memberId) {
+        Member member =  memberRepository.findById(memberId).get();
+        return new MemberMyInfoResponse(member);
     }
 
     public Optional<Member> findById(Long id) {
