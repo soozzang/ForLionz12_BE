@@ -10,6 +10,7 @@ import likelion.site.domain.member.dto.response.MemberResponseDto;
 import likelion.site.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -71,7 +73,7 @@ public class MemberService {
     @Transactional
     public MemberIdResponseDto updatePassword(Long id, PasswordUpdateRequest request) {
         Member member = memberRepository.findById(id).get();
-        member.updatePassword(request.getPassword());
+        member.updatePassword(passwordEncoder.encode(request.getPassword()));
         memberRepository.save(member);
         return new MemberIdResponseDto(member);
     }
