@@ -9,12 +9,13 @@ import likelion.site.domain.notification.dto.response.NotificationIdResponse;
 import likelion.site.domain.notification.repository.NotificationRepository;
 import likelion.site.global.exception.CustomError;
 import likelion.site.global.exception.exceptions.AuthorizationException;
-import likelion.site.global.exception.exceptions.NoContentException;
+import likelion.site.global.exception.exceptions.BadElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,11 +36,11 @@ public class NotificationService {
     }
 
     public NotificationDetailResponse findNotificationById(Long notificationId) {
-        if (notificationId == null) {
-            throw new NoContentException(CustomError.NO_CONTENT_EXCEPTION);
+        Optional<Notification> notification = notificationRepository.findById(notificationId);
+        if (notification.isPresent()) {
+            return new NotificationDetailResponse(notification.get());
         }
-        Notification notification = notificationRepository.findById(notificationId).get();
-        return new NotificationDetailResponse(notification);
+        throw new BadElementException(CustomError.BAD_ELEMENT_ERROR);
     }
 
     public List<NotificationDetailResponse> findAllNotifications() {

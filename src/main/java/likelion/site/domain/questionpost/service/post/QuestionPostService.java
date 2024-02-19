@@ -14,7 +14,6 @@ import likelion.site.domain.questionpost.repository.QuestionTagMapRepository;
 import likelion.site.global.exception.CustomError;
 import likelion.site.global.exception.exceptions.AuthorizationException;
 import likelion.site.global.exception.exceptions.BadElementException;
-import likelion.site.global.exception.exceptions.NoContentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -75,9 +74,6 @@ public class QuestionPostService {
     }
 
     public QuestionPostResponseDto findQuestionPostById(Long questionPostId) {
-        if (questionPostId == null) {
-            throw new NoContentException(CustomError.NO_CONTENT_EXCEPTION);
-        }
         Optional<QuestionPost> questionPost = questionPostRepository.findById(questionPostId);
         if (questionPost.isPresent()) {
             return new QuestionPostResponseDto(questionPost.get(),getChildTags(questionPost.get()));

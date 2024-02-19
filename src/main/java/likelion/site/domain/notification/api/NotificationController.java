@@ -34,7 +34,7 @@ public class NotificationController {
 
     @Operation(summary = "id를 통해 특정 공지사항 상세 조회")
     @GetMapping("{id}")
-    public ResponseEntity<ApiResponse<NotificationDetailResponse>> getNotificationDetail(@PathVariable(value = "id", required = false) Long id) {
+    public ResponseEntity<ApiResponse<NotificationDetailResponse>> getNotificationDetail(@PathVariable Long id) {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(GET_NOTIFICATION_SUCCESS,notificationService.findNotificationById(id)));
     }
 

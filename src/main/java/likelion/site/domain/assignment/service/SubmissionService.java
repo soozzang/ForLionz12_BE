@@ -11,7 +11,6 @@ import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.repository.MemberRepository;
 import likelion.site.global.exception.CustomError;
 import likelion.site.global.exception.exceptions.BadElementException;
-import likelion.site.global.exception.exceptions.NoContentException;
 import likelion.site.global.exception.exceptions.OverSubmissionException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,9 +29,6 @@ public class SubmissionService {
 
     @Transactional
     public SubmissionIdResponse addSubmission(Long id,SubmissionRequest request) {
-        if (request.getAssignmentId() == 0) {
-            throw new NoContentException(CustomError.NO_CONTENT_EXCEPTION);
-        }
         Optional<Assignment> assignment = assignmentRepository.findById(request.getAssignmentId());
         Member member = memberRepository.findById(id).get();
         if(assignment.isEmpty()) {

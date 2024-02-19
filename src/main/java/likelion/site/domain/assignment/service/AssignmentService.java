@@ -11,6 +11,7 @@ import likelion.site.domain.assignment.dto.response.SubmissionResponse;
 import likelion.site.domain.assignment.repository.AssignmentRepository;
 import likelion.site.domain.assignment.repository.SubmissionRepository;
 import likelion.site.domain.member.domain.Member;
+import likelion.site.domain.member.domain.Part;
 import likelion.site.domain.member.repository.MemberRepository;
 import likelion.site.global.exception.CustomError;
 import likelion.site.global.exception.exceptions.BadElementException;
@@ -53,9 +54,6 @@ public class AssignmentService {
     }
 
     public AssignmentResponse findAssignmentById(Long assignmentId) {
-        if (assignmentId == null) {
-            throw new NoContentException(CustomError.NO_CONTENT_EXCEPTION);
-        }
         Optional<Assignment> assignment = assignmentRepository.findById(assignmentId);
         if(assignment.isPresent()){
             return new AssignmentResponse(assignment.get());
@@ -103,7 +101,7 @@ public class AssignmentService {
 
     public SubmissionResponse findByAssignmentAndMember(Long assignmentId, Long memberId) {
         Member member = memberRepository.findById(memberId).get();
-        if (assignmentId == null) {
+        if (member.getPart() == Part.STAFF) {
             throw new NoContentException(CustomError.NO_CONTENT_EXCEPTION);
         }
         Assignment assignment = assignmentRepository.findById(assignmentId).get();

@@ -59,7 +59,7 @@ public class AssignmentController {
 
     @Operation(summary = "id로 과제공지 상세 조회")
     @GetMapping("{id}")
-    public ResponseEntity<ApiResponse<AssignmentResponse>> getAssignmentDetail(@PathVariable(value = "id", required = false) Long id) {
+    public ResponseEntity<ApiResponse<AssignmentResponse>> getAssignmentDetail(@PathVariable Long id) {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(GET_ASSIGNMENT_SUCCESS, assignmentService.findAssignmentById(id)));
     }
 
@@ -71,7 +71,7 @@ public class AssignmentController {
 
     @Operation(summary = "특정 과제의 id로 현재 접속한 사용자의 제출물을 확인", description = "제출물이 없다면, 제출물이 없다는 메시지를 응답합니다")
     @GetMapping("{id}/mysubmission")
-    public ResponseEntity<ApiResponse<?>> getMySubmission(@PathVariable(value = "id", required = false) Long id) {
+    public ResponseEntity<ApiResponse<?>> getMySubmission(@PathVariable Long id) {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(GET_ASSIGNMENT_SUCCESS,assignmentService.findByAssignmentAndMember(id, SecurityUtil.getCurrentMemberId())));
     }
 }

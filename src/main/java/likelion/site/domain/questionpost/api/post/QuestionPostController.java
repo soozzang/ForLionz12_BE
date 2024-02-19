@@ -44,7 +44,7 @@ public class QuestionPostController {
 
     @Operation(summary = "id를 통해 질문글 상세 조회")
     @GetMapping
-    public ResponseEntity<ApiResponse<QuestionPostResponseDto>> getQuestionPostDetail(@RequestParam(required = false) Long id) {
+    public ResponseEntity<ApiResponse<QuestionPostResponseDto>> getQuestionPostDetail(@RequestParam Long id) {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(GET_QUESTION_POST_SUCCESS,questionPostService.findQuestionPostById(id)));
     }
 
