@@ -2,7 +2,6 @@ package likelion.site.domain.questionpost.service.post;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import jakarta.annotation.Nullable;
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.repository.MemberRepository;
 import likelion.site.domain.questionpost.domain.QuestionPost;
@@ -75,7 +74,7 @@ public class QuestionPostService {
         return childTags;
     }
 
-    public QuestionPostResponseDto findQuestionPostById(@Nullable Long questionPostId) {
+    public QuestionPostResponseDto findQuestionPostById(Long questionPostId) {
         if (questionPostId == null) {
             throw new NoContentException(CustomError.NO_CONTENT_EXCEPTION);
         }

@@ -1,6 +1,5 @@
 package likelion.site.domain.assignment.service;
 
-import jakarta.annotation.Nullable;
 import likelion.site.domain.assignment.domain.Assignment;
 import likelion.site.domain.assignment.domain.AssignmentMainContent;
 import likelion.site.domain.assignment.domain.AssignmentPart;
@@ -53,7 +52,7 @@ public class AssignmentService {
         return assignmentResponses;
     }
 
-    public AssignmentResponse findAssignmentById(@Nullable Long assignmentId) {
+    public AssignmentResponse findAssignmentById(Long assignmentId) {
         if (assignmentId == null) {
             throw new NoContentException(CustomError.NO_CONTENT_EXCEPTION);
         }
@@ -102,7 +101,7 @@ public class AssignmentService {
         return new AssignmentIdResponse(assignment);
     }
 
-    public SubmissionResponse findByAssignmentAndMember(@Nullable Long assignmentId, Long memberId) {
+    public SubmissionResponse findByAssignmentAndMember(Long assignmentId, Long memberId) {
         Member member = memberRepository.findById(memberId).get();
         if (assignmentId == null) {
             throw new NoContentException(CustomError.NO_CONTENT_EXCEPTION);

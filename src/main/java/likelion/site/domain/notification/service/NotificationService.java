@@ -1,12 +1,11 @@
 package likelion.site.domain.notification.service;
 
-import jakarta.annotation.Nullable;
 import likelion.site.domain.member.repository.MemberRepository;
 import likelion.site.domain.notification.domain.Notification;
 import likelion.site.domain.notification.domain.NotificationPart;
 import likelion.site.domain.notification.dto.request.NotificationRequest;
-import likelion.site.domain.notification.dto.response.NotificationIdResponse;
 import likelion.site.domain.notification.dto.response.NotificationDetailResponse;
+import likelion.site.domain.notification.dto.response.NotificationIdResponse;
 import likelion.site.domain.notification.repository.NotificationRepository;
 import likelion.site.global.exception.CustomError;
 import likelion.site.global.exception.exceptions.AuthorizationException;
@@ -35,7 +34,7 @@ public class NotificationService {
         throw new AuthorizationException(CustomError.AUTHORIZATION_EXCEPTION);
     }
 
-    public NotificationDetailResponse findNotificationById(@Nullable Long notificationId) {
+    public NotificationDetailResponse findNotificationById(Long notificationId) {
         if (notificationId == null) {
             throw new NoContentException(CustomError.NO_CONTENT_EXCEPTION);
         }
