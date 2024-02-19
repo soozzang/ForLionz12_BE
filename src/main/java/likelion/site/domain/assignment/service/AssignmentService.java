@@ -1,5 +1,6 @@
 package likelion.site.domain.assignment.service;
 
+import jakarta.annotation.Nullable;
 import likelion.site.domain.assignment.domain.Assignment;
 import likelion.site.domain.assignment.domain.AssignmentMainContent;
 import likelion.site.domain.assignment.domain.AssignmentPart;
@@ -11,10 +12,8 @@ import likelion.site.domain.assignment.dto.response.SubmissionResponse;
 import likelion.site.domain.assignment.repository.AssignmentRepository;
 import likelion.site.domain.assignment.repository.SubmissionRepository;
 import likelion.site.domain.member.domain.Member;
-import likelion.site.domain.member.domain.Part;
 import likelion.site.domain.member.repository.MemberRepository;
 import likelion.site.global.exception.CustomError;
-import likelion.site.global.exception.exceptions.AuthorizationException;
 import likelion.site.global.exception.exceptions.BadElementException;
 import likelion.site.global.exception.exceptions.NoContentException;
 import likelion.site.global.exception.exceptions.NoSubmissionException;
@@ -54,11 +53,11 @@ public class AssignmentService {
         return assignmentResponses;
     }
 
-    public AssignmentResponse findAssignmentById(Long assignmentId) {
-        Optional<Assignment> assignment = assignmentRepository.findById(assignmentId);
-        if (assignmentId == 0) {
+    public AssignmentResponse findAssignmentById(@Nullable Long assignmentId) {
+        if (assignmentId == null) {
             throw new NoContentException(CustomError.NO_CONTENT_EXCEPTION);
         }
+        Optional<Assignment> assignment = assignmentRepository.findById(assignmentId);
         if(assignment.isPresent()){
             return new AssignmentResponse(assignment.get());
         }
@@ -103,12 +102,12 @@ public class AssignmentService {
         return new AssignmentIdResponse(assignment);
     }
 
-    public SubmissionResponse findByAssignmentAndMember(Long assignmentId, Long memberId) {
+    public SubmissionResponse findByAssignmentAndMember(@Nullable Long assignmentId, Long memberId) {
         Member member = memberRepository.findById(memberId).get();
-        Assignment assignment = assignmentRepository.findById(assignmentId).get();
-        if (member.getPart() == Part.STAFF) {
-            throw new AuthorizationException(CustomError.AUTHORIZATION_EXCEPTION);
+        if (assignmentId == null) {
+            throw new NoContentException(CustomError.NO_CONTENT_EXCEPTION);
         }
+        Assignment assignment = assignmentRepository.findById(assignmentId).get();
         if (submissionRepository.findSubmissionByAssignmentAndMember(assignment, member).isEmpty()) {
             throw new NoSubmissionException(CustomError.NO_SUBMISSION_EXCEPTION);
         };

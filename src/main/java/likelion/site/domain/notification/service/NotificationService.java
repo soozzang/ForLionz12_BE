@@ -1,5 +1,6 @@
 package likelion.site.domain.notification.service;
 
+import jakarta.annotation.Nullable;
 import likelion.site.domain.member.repository.MemberRepository;
 import likelion.site.domain.notification.domain.Notification;
 import likelion.site.domain.notification.domain.NotificationPart;
@@ -9,6 +10,7 @@ import likelion.site.domain.notification.dto.response.NotificationDetailResponse
 import likelion.site.domain.notification.repository.NotificationRepository;
 import likelion.site.global.exception.CustomError;
 import likelion.site.global.exception.exceptions.AuthorizationException;
+import likelion.site.global.exception.exceptions.NoContentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +35,10 @@ public class NotificationService {
         throw new AuthorizationException(CustomError.AUTHORIZATION_EXCEPTION);
     }
 
-    public NotificationDetailResponse findNotificationById(Long notificationId) {
+    public NotificationDetailResponse findNotificationById(@Nullable Long notificationId) {
+        if (notificationId == null) {
+            throw new NoContentException(CustomError.NO_CONTENT_EXCEPTION);
+        }
         Notification notification = notificationRepository.findById(notificationId).get();
         return new NotificationDetailResponse(notification);
     }
