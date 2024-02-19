@@ -3,6 +3,7 @@ package likelion.site.domain.questionpost.api.comment;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.questionpost.dto.request.CommentRequestDto;
+import likelion.site.domain.questionpost.dto.request.UpdateCommentRequest;
 import likelion.site.domain.questionpost.dto.response.comment.CommentResponseDto;
 import likelion.site.domain.questionpost.dto.response.comment.CommentResponseIdDto;
 import likelion.site.domain.questionpost.service.comment.CommentService;
@@ -34,6 +35,12 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<ApiResponse<CommentResponseIdDto>> createComment(@RequestBody CommentRequestDto request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.createSuccess(COMMENT_CREATED_SUCCESS,commentService.addComment(SecurityUtil.getCurrentMemberId(),request)));
+    }
+
+    @Operation(summary = "댓글 수정")
+    @PutMapping
+    public ResponseEntity<ApiResponse<CommentResponseIdDto>> updateComment(@RequestBody UpdateCommentRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.createSuccess(COMMENT_CREATED_SUCCESS,commentService.updateComment(SecurityUtil.getCurrentMemberId(),request)));
     }
 
     @Operation(summary = "특정 질문글에 대한 모든 댓글 조회")

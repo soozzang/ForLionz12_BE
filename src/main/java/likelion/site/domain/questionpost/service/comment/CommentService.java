@@ -6,10 +6,12 @@ import likelion.site.domain.questionpost.domain.ChildComment;
 import likelion.site.domain.questionpost.domain.Comment;
 import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.questionpost.dto.request.CommentRequestDto;
+import likelion.site.domain.questionpost.dto.request.UpdateCommentRequest;
 import likelion.site.domain.questionpost.dto.response.comment.CommentResponseDto;
 import likelion.site.domain.questionpost.dto.response.comment.CommentResponseIdDto;
 import likelion.site.domain.questionpost.repository.CommentRepository;
 import likelion.site.domain.questionpost.repository.QuestionPostRepository;
+import likelion.site.global.exception.exceptions.AuthorizationException;
 import likelion.site.global.exception.exceptions.BadElementException;
 import likelion.site.global.exception.CustomError;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,21 @@ public class CommentService {
         Comment comment = request.toEntity(questionPost, member);
         commentRepository.save(comment);
         return new CommentResponseIdDto(comment);
+    }
+
+    @Transactional
+    public CommentResponseIdDto updateComment(Long memberId, UpdateCommentRequest request) {
+        Member member = memberRepository.findById(memberId).get();
+        Optional<Comment> comment = commentRepository.findById(request.getCommentId());
+        if (comment.isEmpty()) {
+            throw new BadElementException(CustomError.BAD_ELEMENT_ERROR);
+        }
+        if (member != commentRepository.findById(request.getCommentId()).get().getMember()) {
+            throw new AuthorizationException(CustomError.AUTHORIZATION_EXCEPTION);
+        }
+        comment.get().updateComment(request.getContent());
+        commentRepository.save(comment.get());
+        return new CommentResponseIdDto(comment.get());
     }
 
     @Transactional

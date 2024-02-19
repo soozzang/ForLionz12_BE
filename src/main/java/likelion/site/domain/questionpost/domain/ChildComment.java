@@ -40,4 +40,8 @@ public class ChildComment {
         this.content = content;
         this.comment = comment;
     }
+
+    public void updateChildComment(String content) {
+        this.content = content;
+    }
 }
