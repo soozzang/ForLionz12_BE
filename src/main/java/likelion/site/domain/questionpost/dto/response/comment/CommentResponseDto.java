@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class CommentResponseDto {
 
     Long commentId;
+    Long memberId;
     String name;
     String memberImageUrl;
     String part;
@@ -19,6 +20,7 @@ public class CommentResponseDto {
 
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();
+        this.memberId = comment.getMember().getId();
         this.name = comment.getMember().getName();
         this.memberImageUrl = comment.getMember().getImageUrl();
         this.part = comment.getMember().getPart().toString();

@@ -27,7 +27,7 @@ public class ChildComment {
     @NotNull(message = "댓글내용은 null이 될 수 없습니다.")
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull(message = "부모 댓글의 id는 null이 될 수 없습니다.")
     @JoinColumn(name = "parent_comment_id")
     private Comment comment;

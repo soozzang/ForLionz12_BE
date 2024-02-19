@@ -35,7 +35,7 @@ public class Comment {
 
     private final LocalDateTime createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
 
-    @OneToMany(mappedBy = "comment")
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<ChildComment> childComments = new ArrayList<>();
 
     public void addChildComment(ChildComment childToAdd) {
