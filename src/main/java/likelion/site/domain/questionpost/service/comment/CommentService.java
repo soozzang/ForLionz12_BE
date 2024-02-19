@@ -36,7 +36,7 @@ public class CommentService {
         QuestionPost questionPost = questionPostRepository.findById(request.getQuestionPostId()).get();
         Comment comment = request.toEntity(questionPost, member);
         commentRepository.save(comment);
-        return new CommentResponseIdDto(comment);
+        return new CommentResponseIdDto(comment.getId());
     }
 
     @Transactional
@@ -46,7 +46,7 @@ public class CommentService {
             throw new AuthorizationException(CustomError.AUTHORIZATION_EXCEPTION);
         }
         commentRepository.delete(commentRepository.findById(commentId).get());
-        return new CommentResponseIdDto(commentRepository.findById(commentId).get());
+        return new CommentResponseIdDto(commentId);
     }
 
 //    @Transactional
