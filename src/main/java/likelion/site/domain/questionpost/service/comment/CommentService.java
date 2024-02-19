@@ -6,14 +6,13 @@ import likelion.site.domain.questionpost.domain.ChildComment;
 import likelion.site.domain.questionpost.domain.Comment;
 import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.questionpost.dto.request.CommentRequestDto;
-import likelion.site.domain.questionpost.dto.request.UpdateCommentRequest;
 import likelion.site.domain.questionpost.dto.response.comment.CommentResponseDto;
 import likelion.site.domain.questionpost.dto.response.comment.CommentResponseIdDto;
 import likelion.site.domain.questionpost.repository.CommentRepository;
 import likelion.site.domain.questionpost.repository.QuestionPostRepository;
+import likelion.site.global.exception.CustomError;
 import likelion.site.global.exception.exceptions.AuthorizationException;
 import likelion.site.global.exception.exceptions.BadElementException;
-import likelion.site.global.exception.CustomError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,19 +40,29 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseIdDto updateComment(Long memberId, UpdateCommentRequest request) {
+    public CommentResponseIdDto deleteComment(Long memberId, Long commentId) {
         Member member = memberRepository.findById(memberId).get();
-        Optional<Comment> comment = commentRepository.findById(request.getCommentId());
-        if (comment.isEmpty()) {
-            throw new BadElementException(CustomError.BAD_ELEMENT_ERROR);
-        }
-        if (member != commentRepository.findById(request.getCommentId()).get().getMember()) {
+        if (member != commentRepository.findById(commentId).get().getMember()) {
             throw new AuthorizationException(CustomError.AUTHORIZATION_EXCEPTION);
         }
-        comment.get().updateComment(request.getContent());
-        commentRepository.save(comment.get());
-        return new CommentResponseIdDto(comment.get());
+        commentRepository.delete(commentRepository.findById(commentId).get());
+        return new CommentResponseIdDto(commentRepository.findById(commentId).get());
     }
+
+//    @Transactional
+//    public CommentResponseIdDto updateComment(Long memberId, UpdateCommentRequest request) {
+//        Member member = memberRepository.findById(memberId).get();
+//        Optional<Comment> comment = commentRepository.findById(request.getCommentId());
+//        if (comment.isEmpty()) {
+//            throw new BadElementException(CustomError.BAD_ELEMENT_ERROR);
+//        }
+//        if (member != commentRepository.findById(request.getCommentId()).get().getMember()) {
+//            throw new AuthorizationException(CustomError.AUTHORIZATION_EXCEPTION);
+//        }
+//        comment.get().updateComment(request.getContent());
+//        commentRepository.save(comment.get());
+//        return new CommentResponseIdDto(comment.get());
+//    }
 
     @Transactional
     public Long addChildComment(Comment comment, ChildComment childComment) {

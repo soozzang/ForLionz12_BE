@@ -2,13 +2,12 @@ package likelion.site.domain.questionpost.api.comment;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import likelion.site.domain.member.service.MemberService;
 import likelion.site.domain.questionpost.dto.request.ChildCommentRequestDto;
-import likelion.site.domain.questionpost.dto.request.UpdateChildCommentRequest;
 import likelion.site.domain.questionpost.dto.response.comment.ChildCommentIdResponseDto;
 import likelion.site.domain.questionpost.dto.response.comment.ChildCommentResponseDto;
 import likelion.site.domain.questionpost.service.comment.ChildCommentService;
 import likelion.site.domain.questionpost.service.comment.CommentService;
-import likelion.site.domain.member.service.MemberService;
 import likelion.site.global.ApiResponse;
 import likelion.site.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -37,11 +36,17 @@ public class ChildCommentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.createSuccess(COMMENT_CREATED_SUCCESS,childCommentService.addChildComment(SecurityUtil.getCurrentMemberId(),request)));
     }
 
-    @Operation(summary = "대댓글 수정" , description = "commentId 는 부모 댓글의 id입니다.")
-    @PutMapping
-    public ResponseEntity<ApiResponse<ChildCommentIdResponseDto>> updateChildComment(@RequestBody UpdateChildCommentRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.createSuccess(COMMENT_CREATED_SUCCESS,childCommentService.updateChildComment(SecurityUtil.getCurrentMemberId(),request)));
+    @Operation(summary = "대댓글 삭제" , description = "commentId 는 부모 댓글의 id입니다.")
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<ChildCommentIdResponseDto>> createChildComment(@RequestParam Long childCommentId) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.createSuccess(COMMENT_CREATED_SUCCESS,childCommentService.deleteChildComment(SecurityUtil.getCurrentMemberId(),childCommentId)));
     }
+
+//    @Operation(summary = "대댓글 수정" , description = "commentId 는 부모 댓글의 id입니다.")
+//    @PutMapping
+//    public ResponseEntity<ApiResponse<ChildCommentIdResponseDto>> updateChildComment(@RequestBody UpdateChildCommentRequest request) {
+//        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.createSuccess(COMMENT_CREATED_SUCCESS,childCommentService.updateChildComment(SecurityUtil.getCurrentMemberId(),request)));
+//    }
 
     @Operation(summary = "특정 댓글의 모든 대댓글 조회")
     @GetMapping("{commentId}")
