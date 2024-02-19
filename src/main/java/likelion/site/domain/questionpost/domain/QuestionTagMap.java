@@ -14,7 +14,7 @@ public class QuestionTagMap {
     @Column(name = "questiontagmap_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
     @NotNull(message = "질문 글의 id는 null이 될 수 없습니다.")
     private QuestionPost questionPost;
