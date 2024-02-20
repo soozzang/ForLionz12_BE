@@ -19,6 +19,7 @@ public class AssignmentResponse {
     AssignmentMainContent category;
     String title;
     String content;
+    String githubLink;
     LocalDateTime createdAt;
     LocalDateTime expireAt;
     List<SubmissionResponse> submissions;
@@ -31,6 +32,7 @@ public class AssignmentResponse {
         this.category = assignment.getAssignmentMainContent();
         this.title = assignment.getTitle();
         this.content = assignment.getContent();
+        this.githubLink = assignment.getGithubLink();
         this.part = assignment.getAssignmentPart();
         this.createdAt = assignment.getCreatedAt();
         this.expireAt = assignment.getExpireAt();

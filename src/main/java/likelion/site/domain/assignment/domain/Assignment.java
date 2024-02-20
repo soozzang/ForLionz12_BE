@@ -45,19 +45,23 @@ public class Assignment {
     @OneToMany(mappedBy = "assignment")
     private List<Submission> submissions = new ArrayList<Submission>();
 
+    private String githubLink;
+
     @Builder
-    public Assignment(String title, AssignmentMainContent assignmentMainContent , AssignmentPart assignmentPart, String content, LocalDateTime expireAt, List<String> tags) {
+    public Assignment(String title, String githubLink, AssignmentMainContent assignmentMainContent , AssignmentPart assignmentPart, String content, LocalDateTime expireAt, List<String> tags) {
         this.title = title;
         this.assignmentMainContent = assignmentMainContent;
         this.assignmentPart = assignmentPart;
+        this.githubLink = githubLink;
         this.content = content;
         this.expireAt = expireAt;
         this.tags = tags;
     }
 
-    public void updateAssignment(String title, String content, AssignmentMainContent assignmentMainContent ,  AssignmentPart assignmentPart, LocalDateTime expireAt, List<String> tags) {
+    public void updateAssignment(String title, String githubLink, String content, AssignmentMainContent assignmentMainContent ,  AssignmentPart assignmentPart, LocalDateTime expireAt, List<String> tags) {
         this.title = title;
         this.content = content;
+        this.githubLink = githubLink;
         this.assignmentPart = assignmentPart;
         this.assignmentMainContent = assignmentMainContent;
         this.expireAt = expireAt;

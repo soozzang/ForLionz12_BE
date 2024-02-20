@@ -94,7 +94,7 @@ public class AssignmentService {
         Assignment assignment = assignmentRepository.findById(id).get();
         AssignmentPart assignmentPart = AssignmentPart.findByName(request.getPart());
         AssignmentMainContent assignmentMainContent = AssignmentMainContent.findByName(request.getCategory());
-        assignment.updateAssignment(request.getTitle(), request.getContent(), assignmentMainContent, assignmentPart,request.getExpireAt(), request.getTags());
+        assignment.updateAssignment(request.getTitle(), request.getLink(), request.getContent(), assignmentMainContent, assignmentPart,request.getExpireAt(), request.getTags());
         assignmentRepository.save(assignment);
         return new AssignmentIdResponse(assignment);
     }
