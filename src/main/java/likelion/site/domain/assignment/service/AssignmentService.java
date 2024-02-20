@@ -109,7 +109,6 @@ public class AssignmentService {
             throw new NoSubmissionException(CustomError.NO_SUBMISSION_EXCEPTION);
         };
         return new SubmissionResponse(submissionRepository.findSubmissionByAssignmentAndMember(assignment, member).get());
-
     }
 
     @Transactional
