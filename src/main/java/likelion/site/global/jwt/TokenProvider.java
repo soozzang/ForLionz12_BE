@@ -28,7 +28,7 @@ public class TokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 24 * 60 * 60;           // 30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24 * 360;  // 7일
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24;  // 하루
 
     private final Key key;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -56,26 +56,18 @@ public class TokenProvider {
                 .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
                 .compact();
 
-        if(refreshTokenRepository.findByKey(authentication.getName()).isEmpty()){
-            // Refresh Token 생성
-            String refreshToken = Jwts.builder()
-                    .setSubject(authentication.getName())
-                    .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
-                    .claim(AUTHORITIES_KEY, authorities)
-                    .signWith(key, SignatureAlgorithm.HS512)
-                    .compact();
-            return TokenResponse.builder()
-                    .grantType(BEARER_TYPE)
-                    .accessToken(accessToken)
-                    .accessTokenExpiresIn(new java.sql.Timestamp(accessTokenExpiresIn.getTime()).toLocalDateTime())
-                    .refreshToken(refreshToken)
-                    .build();
-        }
+        // Refresh Token 생성
+        String refreshToken = Jwts.builder()
+                .setSubject(authentication.getName())
+                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
+                .claim(AUTHORITIES_KEY, authorities)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
         return TokenResponse.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
                 .accessTokenExpiresIn(new java.sql.Timestamp(accessTokenExpiresIn.getTime()).toLocalDateTime())
-                .refreshToken(refreshTokenRepository.findByKey(authentication.getName()).get().getValue())
+                .refreshToken(refreshToken)
                 .build();
     }
 
