@@ -19,7 +19,7 @@ public class AssignmentRequest {
     String category;
     String title;
     String content;
-    String Link;
+    String link;
     String part;
     List<String> tags;
 
@@ -32,7 +32,7 @@ public class AssignmentRequest {
         return Assignment.builder()
                 .title(title)
                 .content(content)
-                .githubLink(Link)
+                .githubLink(link)
                 .assignmentPart(assignmentPart)
                 .expireAt(expireAt)
                 .tags(tags)
