@@ -4,7 +4,7 @@ import likelion.site.global.exception.exceptions.BadCategoryException;
 import likelion.site.global.exception.CustomError;
 
 public enum AssignmentMainContent {
-    HTML , REACT , DJANGO , AWS , JS , CSS , Docker, Git, PYTHON;
+    HTML , REACT , DJANGO , AWS , JS , CSS , Docker, Git, PYTHON, LION;
 
     public static AssignmentMainContent findByName(String name) {
         for (AssignmentMainContent assignmentMainContent : AssignmentMainContent.values()) {
