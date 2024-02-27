@@ -1,5 +1,6 @@
 package likelion.site.domain.questionpost.dto.response.question;
 
+import likelion.site.domain.questionpost.domain.Comment;
 import likelion.site.domain.questionpost.domain.QuestionPost;
 import lombok.Getter;
 
@@ -30,6 +31,14 @@ public class QuestionPostResponseDto {
         content = questionPost.getContent();
         createdAt = questionPost.getCreatedAt();
         childTags = childTag;
-        commentCount = questionPost.getComments().size();
+        commentCount = getCommentCount(questionPost.getComments());
+    }
+
+    public int getCommentCount(List<Comment> comments) {
+        int commentCount = comments.size();
+        for (Comment comment : comments) {
+            commentCount += comment.getChildComments().size();
+        }
+        return commentCount;
     }
 }
