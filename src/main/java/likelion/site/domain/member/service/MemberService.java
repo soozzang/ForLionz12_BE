@@ -57,7 +57,7 @@ public class MemberService {
     @Transactional
     public MemberIdResponseDto updateIntroduction(Long id, IntroductionUpdateRequest request) {
         Member member = memberRepository.findById(id).get();
-        member.updateIntroduction(request.getIntroduction());
+        member.updateIntroduction("ㅎㅇ");
         memberRepository.save(member);
         return new MemberIdResponseDto(member);
     }
