@@ -30,7 +30,7 @@
 
 <br>
 
-## Contributor
+## Contributors
 | BE, Design | FE, Design |
 | :---: |:---: |
 | [@soozzang](https://github.com/soozzang) | [@wuzoo](https://github.com/wuzoo)
