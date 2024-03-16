@@ -31,8 +31,9 @@
 <br>
 
 ## Contributor
-| BE, Design |
-| :---: |
-| [@soozzang](https://github.com/soozzang) |
-| <img src="https://github.com/For-Lionz-12/ForLionz12_BE/assets/121356687/e89ad9d4-1de7-4289-8480-c71093d9b209" alt="Contributor Image" style="width: 150px;"> |
+| BE, Design | FE, Design |
+| :---: |:---: |
+| [@soozzang](https://github.com/soozzang) | [@wuzoo](https://github.com/wuzoo)
+| <img src="https://github.com/For-Lionz-12/ForLionz12_BE/assets/121356687/e89ad9d4-1de7-4289-8480-c71093d9b209" alt="Contributor Image" style="width: 150px;"> | <img src="https://github.com/For-Lionz-12/ForLionz12_BE/assets/121356687/ead14959-171e-4012-9191-f6e7d7d03ed6" alt="Contributor Image" style="width: 150px; height: 267px;">|
+
 
