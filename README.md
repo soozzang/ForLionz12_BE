@@ -10,7 +10,7 @@
 | Authentication | Spring Security, JSON Web Tokens |
 | Orm | Spring Data JPA |
 | Database | MySQL |
-| External | AWS EC2, AWS RDS, Nginx |
+| External | AWS EC2, AWS RDS, AWS S3, Nginx |
 | CI/CD | Github Action |
 | API Docs | Notion, Swagger |
 | Other Tool | Postman, Figma |
