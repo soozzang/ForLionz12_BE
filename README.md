@@ -4,7 +4,8 @@
 <br>
 
 ## Architecture
-![image](https://github.com/For-Lionz-12/ForLionz12_BE/assets/121356687/08ace198-d334-4f33-8328-71b97e37c649)
+![image](https://github.com/For-Lionz-12/ForLionz12_BE/assets/121356687/7bf8f921-dc2c-4e85-865a-10f68bb55eb8)
+
 
 <br>
 
