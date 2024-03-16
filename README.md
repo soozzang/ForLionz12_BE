@@ -26,7 +26,8 @@
 <br>
 
 ## ERD
-![image](https://github.com/For-Lionz-12/ForLionz12_BE/assets/121356687/4516a0bf-f48c-4d73-b70d-6f5056b2a5e2)
+![image](https://github.com/For-Lionz-12/ForLionz12_BE/assets/121356687/735d8bcd-0219-4208-8190-e272b2ae3f43)
+
 
 
 <br>
