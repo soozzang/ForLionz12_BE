@@ -38,6 +38,9 @@ public class QuestionPost {
     @ElementCollection(fetch = FetchType.LAZY)
     private List<String> imageUrls;
 
+    @OneToMany(mappedBy = "questionPost", cascade = CascadeType.REMOVE)
+    private List<Likes> likes;
+
     @Builder
     public QuestionPost(Member member, String title, String content, List<String> imageUrls) {
         this.member = member;

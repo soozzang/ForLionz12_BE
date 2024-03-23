@@ -4,11 +4,13 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.repository.MemberRepository;
+import likelion.site.domain.questionpost.domain.Likes;
 import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.questionpost.domain.QuestionTagMap;
 import likelion.site.domain.questionpost.dto.request.QuestionPostRequestDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostIdResponseDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostResponseDto;
+import likelion.site.domain.questionpost.repository.LikesRepository;
 import likelion.site.domain.questionpost.repository.QuestionPostRepository;
 import likelion.site.domain.questionpost.repository.QuestionTagMapRepository;
 import likelion.site.global.exception.CustomError;
@@ -36,6 +38,7 @@ public class QuestionPostService {
     private final MemberRepository memberRepository;
     private final QuestionTagMapRepository questionTagMapRepository;
     private final AmazonS3Client amazonS3Client;
+    private final LikesRepository likesRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -104,6 +107,27 @@ public class QuestionPostService {
         questionPostRepository.delete(questionPost);
         questionTagMapRepository.deleteAll(questionTagMapRepository.findByQuestionPost(questionPost));
         return new QuestionPostIdResponseDto(questionPost);
+    }
+
+    @Transactional
+    public QuestionPostIdResponseDto like(Long questionPostId, Long memberId) {
+        QuestionPost questionPost = questionPostRepository.findById(questionPostId).get();
+        Member member = memberRepository.findById(memberId).get();
+        if (likesRepository.findByQuestionPostAndMember(questionPost, member).isEmpty()) {
+            likesRepository.save(createLikes(questionPostId, memberId));
+            return new QuestionPostIdResponseDto(questionPost);
+        }
+        likesRepository.deleteLikesById(likesRepository.findByQuestionPostAndMember(questionPost,member).get().getId());
+        return new QuestionPostIdResponseDto(questionPost);
+    }
+
+    public Likes createLikes(Long questionPostId, Long memberId) {
+        QuestionPost questionPost = questionPostRepository.findById(questionPostId).get();
+        Member member = memberRepository.findById(memberId).get();
+        return Likes.builder()
+                .member(member)
+                .questionPost(questionPost)
+                .build();
     }
 
     public String convertFile(MultipartFile file) throws IOException {
