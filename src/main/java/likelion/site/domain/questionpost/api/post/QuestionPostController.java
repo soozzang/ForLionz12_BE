@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion.site.domain.member.service.MemberService;
 import likelion.site.domain.questionpost.dto.request.QuestionPostRequestDto;
+import likelion.site.domain.questionpost.dto.response.question.QuestionPostDetailResponseDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostIdResponseDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostResponseDto;
 import likelion.site.domain.questionpost.service.post.QuestionPostService;
@@ -44,8 +45,8 @@ public class QuestionPostController {
 
     @Operation(summary = "id를 통해 질문글 상세 조회")
     @GetMapping
-    public ResponseEntity<ApiResponse<QuestionPostResponseDto>> getQuestionPostDetail(@RequestParam Long id) {
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(GET_QUESTION_POST_SUCCESS, questionPostService.findQuestionPostById(id)));
+    public ResponseEntity<ApiResponse<QuestionPostDetailResponseDto>> getQuestionPostDetail(@RequestParam Long id) {
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(GET_QUESTION_POST_SUCCESS, questionPostService.findQuestionPostById(id, SecurityUtil.getCurrentMemberId())));
     }
 
     @Operation(summary = "특정 id의 질문글 수정", description = "접속 중인 사용자 본인의 글만 수정할 수 있습니다.")

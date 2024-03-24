@@ -8,6 +8,7 @@ import likelion.site.domain.questionpost.domain.Likes;
 import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.questionpost.domain.QuestionTagMap;
 import likelion.site.domain.questionpost.dto.request.QuestionPostRequestDto;
+import likelion.site.domain.questionpost.dto.response.question.QuestionPostDetailResponseDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostIdResponseDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostResponseDto;
 import likelion.site.domain.questionpost.repository.LikesRepository;
@@ -76,10 +77,11 @@ public class QuestionPostService {
         return childTags;
     }
 
-    public QuestionPostResponseDto findQuestionPostById(Long questionPostId) {
+    public QuestionPostDetailResponseDto findQuestionPostById(Long questionPostId, Long memberId) {
         Optional<QuestionPost> questionPost = questionPostRepository.findById(questionPostId);
+        Member member = memberRepository.findById(memberId).get();
         if (questionPost.isPresent()) {
-            return new QuestionPostResponseDto(questionPost.get(),getChildTags(questionPost.get()));
+            return new QuestionPostDetailResponseDto(questionPost.get(),getChildTags(questionPost.get()), isLiked(questionPost.get(),member));
         }
         throw new BadElementException(CustomError.BAD_ELEMENT_ERROR);
     }
@@ -128,6 +130,10 @@ public class QuestionPostService {
                 .member(member)
                 .questionPost(questionPost)
                 .build();
+    }
+
+    public boolean isLiked(QuestionPost questionPost, Member member) {
+        return likesRepository.findByQuestionPostAndMember(questionPost, member).isPresent();
     }
 
     public String convertFile(MultipartFile file) throws IOException {

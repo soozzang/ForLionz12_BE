@@ -1,7 +1,6 @@
 package likelion.site.domain.questionpost.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import likelion.site.domain.member.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
