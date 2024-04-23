@@ -14,6 +14,4 @@ import java.util.List;
 
 @Repository
 public interface QuestionPostRepository extends JpaRepository<QuestionPost, Long> {
-
-//    public List<QuestionPost> findQuestionPostsBy
 }

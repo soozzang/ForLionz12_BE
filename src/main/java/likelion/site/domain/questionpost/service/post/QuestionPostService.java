@@ -4,11 +4,14 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import likelion.site.domain.member.domain.Member;
 import likelion.site.domain.member.repository.MemberRepository;
+import likelion.site.domain.questionpost.domain.Likes;
 import likelion.site.domain.questionpost.domain.QuestionPost;
 import likelion.site.domain.questionpost.domain.QuestionTagMap;
 import likelion.site.domain.questionpost.dto.request.QuestionPostRequestDto;
+import likelion.site.domain.questionpost.dto.response.question.QuestionPostDetailResponseDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostIdResponseDto;
 import likelion.site.domain.questionpost.dto.response.question.QuestionPostResponseDto;
+import likelion.site.domain.questionpost.repository.LikesRepository;
 import likelion.site.domain.questionpost.repository.QuestionPostRepository;
 import likelion.site.domain.questionpost.repository.QuestionTagMapRepository;
 import likelion.site.global.exception.CustomError;
@@ -36,6 +39,7 @@ public class QuestionPostService {
     private final MemberRepository memberRepository;
     private final QuestionTagMapRepository questionTagMapRepository;
     private final AmazonS3Client amazonS3Client;
+    private final LikesRepository likesRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -73,10 +77,11 @@ public class QuestionPostService {
         return childTags;
     }
 
-    public QuestionPostResponseDto findQuestionPostById(Long questionPostId) {
+    public QuestionPostDetailResponseDto findQuestionPostById(Long questionPostId, Long memberId) {
         Optional<QuestionPost> questionPost = questionPostRepository.findById(questionPostId);
+        Member member = memberRepository.findById(memberId).get();
         if (questionPost.isPresent()) {
-            return new QuestionPostResponseDto(questionPost.get(),getChildTags(questionPost.get()));
+            return new QuestionPostDetailResponseDto(questionPost.get(),getChildTags(questionPost.get()), isLiked(questionPost.get(),member));
         }
         throw new BadElementException(CustomError.BAD_ELEMENT_ERROR);
     }
@@ -104,6 +109,31 @@ public class QuestionPostService {
         questionPostRepository.delete(questionPost);
         questionTagMapRepository.deleteAll(questionTagMapRepository.findByQuestionPost(questionPost));
         return new QuestionPostIdResponseDto(questionPost);
+    }
+
+    @Transactional
+    public QuestionPostIdResponseDto like(Long questionPostId, Long memberId) {
+        QuestionPost questionPost = questionPostRepository.findById(questionPostId).get();
+        Member member = memberRepository.findById(memberId).get();
+        if (likesRepository.findByQuestionPostAndMember(questionPost, member).isEmpty()) {
+            likesRepository.save(createLikes(questionPostId, memberId));
+            return new QuestionPostIdResponseDto(questionPost);
+        }
+        likesRepository.deleteLikesById(likesRepository.findByQuestionPostAndMember(questionPost,member).get().getId());
+        return new QuestionPostIdResponseDto(questionPost);
+    }
+
+    public Likes createLikes(Long questionPostId, Long memberId) {
+        QuestionPost questionPost = questionPostRepository.findById(questionPostId).get();
+        Member member = memberRepository.findById(memberId).get();
+        return Likes.builder()
+                .member(member)
+                .questionPost(questionPost)
+                .build();
+    }
+
+    public boolean isLiked(QuestionPost questionPost, Member member) {
+        return likesRepository.findByQuestionPostAndMember(questionPost, member).isPresent();
     }
 
     public String convertFile(MultipartFile file) throws IOException {

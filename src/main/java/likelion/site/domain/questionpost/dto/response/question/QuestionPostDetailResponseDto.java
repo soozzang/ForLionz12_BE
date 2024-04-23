@@ -1,6 +1,5 @@
 package likelion.site.domain.questionpost.dto.response.question;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import likelion.site.domain.questionpost.domain.Comment;
 import likelion.site.domain.questionpost.domain.QuestionPost;
 import lombok.Getter;
@@ -9,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-public class QuestionPostResponseDto {
+public class QuestionPostDetailResponseDto {
 
     Long questionId;
     Long memberId;
@@ -22,8 +21,9 @@ public class QuestionPostResponseDto {
     List<String> childTags;
     Integer commentCount;
     Integer likes;
+    boolean isLiked;
 
-    public QuestionPostResponseDto(QuestionPost questionPost, List<String> childTag) {
+    public QuestionPostDetailResponseDto(QuestionPost questionPost, List<String> childTag, Boolean liked) {
         questionId = questionPost.getId();
         postImageUrls = questionPost.getImageUrls();
         memberId = questionPost.getMember().getId();
@@ -35,6 +35,7 @@ public class QuestionPostResponseDto {
         childTags = childTag;
         commentCount = getCommentCount(questionPost.getComments());
         likes = questionPost.getLikes().size();
+        isLiked = liked;
     }
 
     public int getCommentCount(List<Comment> comments) {
